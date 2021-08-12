@@ -1,0 +1,7 @@
+/composer.lock
+/.git
+/Makefile
+/resources/ops/*/Dockerfile
+/node_modules/
+/vendor/
+/storage/logs/
