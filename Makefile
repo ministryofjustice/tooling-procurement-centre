@@ -20,6 +20,11 @@ db-migrate:
 test:
 	php artisan test
 
+# Remove ignored git files – e.g. composer dependencies and built theme assets
+# But keep .idea directory (PhpStorm config), and uploaded media files
+clean:
+	@if [ -d ".git" ]; then git clean -xdf --exclude ".env" --exclude ".idea" --exclude "web/app/uploads"; fi
+
 node-assets:
 	npm install
 	npm run hot
