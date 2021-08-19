@@ -1,4 +1,4 @@
-version: "3"
+version: "2.4"
 
 volumes:
     node_modules: ~
@@ -31,7 +31,7 @@ services:
             - public:/node/public
             - ./Makefile:/node/Makefile
             - ./artisan:/node/artisan
-            - ./resources:/node/resources/
+            - ./resources:/node/resources
             - ./package.json:/node/package.json
             - ./tailwind.config.js:/node/tailwind.config.js
             - ./webpack.mix.js:/node/webpack.mix.js
