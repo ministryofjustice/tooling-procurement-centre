@@ -7,6 +7,7 @@ dshell:
 	docker compose run --service-ports --rm --entrypoint=sh php
 
 setup:
+	composer install
 	php artisan key:generate
 	php artisan migrate
 	php artisan db:seed
