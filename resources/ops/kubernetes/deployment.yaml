@@ -35,9 +35,9 @@ spec:
           imagePullPolicy: Never
           envFrom:
             - configMapRef:
-                name: tp-centre
+                name: tpcentre
             - secretRef:
-                name: tp-centre
+                name: tpcentre
           command:
             - "php"
           args:
@@ -59,9 +59,9 @@ spec:
           image: tp-centre-fpm:latest
           envFrom:
             - configMapRef:
-                name: tp-centre
+                name: tpcentre
             - secretRef:
-                name: tp-centre
+                name: tpcentre
           securityContext:
             runAsUser: 82
             readOnlyRootFilesystem: true

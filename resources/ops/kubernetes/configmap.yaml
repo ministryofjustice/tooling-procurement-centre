@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: tp-centre
+  name: tpcentre
 data:
-  APP_NAME: tp-centre
+  APP_NAME: tpcentre
   APP_ENV: production
   APP_DEBUG: "true"
   APP_URL: http://localhost:8080
@@ -12,9 +12,9 @@ data:
   DB_CONNECTION: mysql
   DB_HOST: mariadb
   DB_PORT: "3306"
-  DB_DATABASE: tpc
-  DB_USERNAME: tpc
-  DB_PASSWORD: tpc
+  DB_DATABASE: "---"
+  DB_USERNAME: "---"
+  DB_PASSWORD: "---"
   BROADCAST_DRIVER: log
   CACHE_DRIVER: file
   QUEUE_CONNECTION: sync
