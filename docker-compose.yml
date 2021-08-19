@@ -9,7 +9,7 @@ services:
     nginx:
         image: nginx
         volumes:
-            - ./resources/ops/docker/nginx/server.conf:/etc/nginx/conf.d/default.conf
+            - ./resources/ops/docker/dev/server.conf:/etc/nginx/conf.d/default.conf
             - public:/var/www/html
         ports:
             - "8000:80"
@@ -20,7 +20,7 @@ services:
                 condition: service_started
 
     node:
-        image: node:15
+        image: node:16
         working_dir: /node
         entrypoint: make
         command: node-assets

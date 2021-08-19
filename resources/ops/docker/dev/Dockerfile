@@ -1,18 +1,38 @@
-FROM php:8-fpm AS base
+FROM php:8.0-fpm-alpine AS base
 
-RUN apt update && apt install -y zlib1g-dev libpng-dev git zip
+RUN apk add --update zlib-dev libpng-dev libzip-dev $PHPIZE_DEPS
+RUN docker-php-ext-install exif
+RUN docker-php-ext-install gd
+RUN docker-php-ext-install zip
+RUN docker-php-ext-install pdo_mysql
+RUN pecl install apcu
+RUN docker-php-ext-enable apcu
 
-RUN docker-php-ext-install exif gd pdo_mysql
+###
 
+
+## target: dev
 FROM base AS dev
-RUN apt update && apt install -y vim nodejs npm
 
-FROM base AS build-fpm-composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+COPY /composer.json composer.json
+COPY /app app
+COPY /bootstrap bootstrap
+COPY /config config
+COPY /artisan artisan
+
+RUN apk add --update nano nodejs npm
+
+###
+
+
+## target: production
+FROM base AS build-composer
 
 WORKDIR /var/www/html
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
 COPY ./composer.json /var/www/html/composer.json
 RUN composer install --no-dev --no-scripts --no-autoloader
 
@@ -20,23 +40,34 @@ COPY . /var/www/html
 RUN composer install --no-dev
 RUN composer dump-autoload -o
 
+###
+
+
 FROM base AS build-fpm
 
 WORKDIR /var/www/html
-COPY --from=build-fpm-composer /var/www/html /var/www/html
+COPY --from=build-composer /var/www/html /var/www/html
+
+###
+
 
 FROM build-fpm AS test
-
 RUN make test
 
-FROM node:15 AS assets-build
+###
+
+
+FROM node:16 AS assets-build
 
 WORKDIR /code
 COPY . /code/
-RUN npm i
+RUN npm ci
 RUN npm run production
 
-FROM nginx AS nginx
+###
+
+
+FROM nginx:1.19-alpine AS nginx
 
 COPY vhost-prod.conf /etc/nginx/conf.d/default.conf
 COPY --from=assets-build /code/public /var/www/html/
