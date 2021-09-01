@@ -28,5 +28,9 @@ Artisan::command('notify:restart', function () {
     $this->warn("***|");
     $this->warn("***|   \e[0m http://127.0.0.1:8000");
     $this->warn("***|");
+    $this->warn("***|  Access the DB management utility here:");
+    $this->warn("***|");
+    $this->warn("***|   \e[0m http://127.0.0.1:9191");
+    $this->warn("***|");
     $this->newLine(2);
 });
