@@ -11,6 +11,7 @@ setup:
 	php artisan key:generate
 	php artisan migrate
 	php artisan db:seed
+	php artisan notify:restart
 
 db-migrate:
 	php artisan db:wipe

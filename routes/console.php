@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Artisan::command('notify:restart', function () {
+    $this->info(
+        "\n**** You should restart your nginx container. To do this, please 'exit' this session before restarting ****\n"
+    );
+});
