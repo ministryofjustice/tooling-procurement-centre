@@ -19,7 +19,9 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Artisan::command('notify:restart', function () {
-    $this->info(
-        "\n**** You should restart your nginx container. To do this, please 'exit' this session before restarting ****\n"
+    $this->newLine();
+    $this->warn(
+        "**** You should restart your nginx container. To do this, please 'exit' this shell before restarting ****"
     );
+    $this->newLine();
 });
