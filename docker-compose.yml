@@ -1,4 +1,4 @@
-version: "2.4"
+version: "3"
 
 volumes:
     node_modules: ~
@@ -48,6 +48,8 @@ services:
         depends_on:
             mariadb:
                 condition: service_healthy
+        links:
+            - mariadb
 
     mariadb:
         image: mariadb:10
@@ -61,3 +63,15 @@ services:
             MYSQL_USER: ${DB_USERNAME}
             MYSQL_PASSWORD: ${DB_PASSWORD}
             MYSQL_DATABASE: ${DB_DATABASE}
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            - PMA_HOST=mariadb
+        depends_on:
+            mariadb:
+                condition: service_healthy
+        ports:
+            - "9191:80"
+        links:
+            - mariadb

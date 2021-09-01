@@ -3,7 +3,7 @@
 dshell:
 	[ -f "./.env" ] || cp .env.example .env
 	echo "http://127.0.0.1:8080/" > public/hot
-	docker compose up -d nginx
+	docker compose up -d nginx phpmyadmin
 	docker compose run --service-ports --rm --entrypoint=sh php
 
 setup:
