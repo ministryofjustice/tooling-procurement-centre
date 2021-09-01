@@ -20,10 +20,13 @@ Artisan::command('inspire', function () {
 
 Artisan::command('notify:restart', function () {
     $this->newLine();
-    $this->warn("**** You should restart your docker application after the key update");
-    $this->warn("**** Exit this shell and run 'make restart'");
-    $this->newLine();
-    $this->info("**** Your application is available here:");
-    $this->warn("**** http://127.0.0.1:8000");
+    $this->warn("***|");
+    $this->warn("***|  You should restart your docker application after setup");
+    $this->warn("***|  Exit this shell and run\e[0m make restart");
+    $this->warn("***|");
+    $this->warn("***|  Your application is available here:");
+    $this->warn("***|");
+    $this->warn("***|   \e[0m http://127.0.0.1:8000");
+    $this->warn("***|");
     $this->newLine(2);
 });
