@@ -13,6 +13,11 @@ setup:
 	php artisan db:seed
 	php artisan notify:restart
 
+restart:
+	docker compose down
+	docker compose up -d nginx phpmyadmin
+	docker compose run --service-ports --rm --entrypoint=sh php
+
 db-migrate:
 	php artisan db:wipe
 	php artisan migrate
