@@ -9,6 +9,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Setup PHP8
+        uses: shivammathur/setup-php@2.13.0
+        with:
+          php-version: '8.0'
+          extensions: apcu
+          tools: composer:v2
+          ini-values: 'apc.enable_cli=1,apc.enable=1'
+
       - uses: php-actions/composer@v6
         with:
           php_version: 8.0
@@ -19,7 +27,8 @@ jobs:
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
-          php_extensions: apcu
+          php_extensions: apcu xdebug
           args: --coverage-text
         env:
           TEST_NAME: TPCentre
+          XDEBUG_MODE: coverage
