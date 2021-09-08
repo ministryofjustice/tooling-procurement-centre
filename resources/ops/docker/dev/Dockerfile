@@ -5,8 +5,12 @@ RUN docker-php-ext-install exif
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install pdo_mysql
-RUN pecl install apcu
-RUN docker-php-ext-enable apcu
+
+#INSTALL APCU
+ARG APCU_VERSION=5.1.20
+RUN pecl install apcu-${APCU_VERSION} && docker-php-ext-enable apcu
+RUN echo "apc.enable_cli=1" >> /usr/local/etc/php/php.ini
+RUN echo "apc.enable=1" >> /usr/local/etc/php/php.ini
 
 ###
 
