@@ -19,6 +19,7 @@ jobs:
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
+          php_extensions: apcu
           args: --coverage-text
         env:
           TEST_NAME: TPCentre
