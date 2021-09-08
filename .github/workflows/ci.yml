@@ -27,8 +27,6 @@ jobs:
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
-          php_extensions: apcu xdebug
-          args: --coverage-text
+          php_extensions: apcu
         env:
           TEST_NAME: TPCentre
-          XDEBUG_MODE: coverage
