@@ -18,14 +18,13 @@ class ToolingManagementTest extends TestCase
         $response = $this->post('/tool', [
             'name' => 'My cool tool',
             'description' => 'A wonderful description to enlighten the reader.',
-            'external-management-link' => 'https:/example.com/remote-management-admin',
-            'tags' => '{"json-tags":["cool","tooling"]}',
+            'link' => 'https:/example.com/remote-management-admin',
             'version' => "1.23.4567",
             'license_id' => "1",
             'contact_id' => "1"
         ]);
 
         $response->assertOk();
-        $this->assertCount('1', Tools::all());
+        $this->assertCount('1', Tool::all());
     }
 }
