@@ -9,22 +9,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Setup PHP8
-        uses: shivammathur/setup-php@2.13.0
-        with:
-          php-version: '8.0'
-          extensions: apcu
-          ini-values: 'apc.enable_cli=1,apc.enable=1'
-
       - uses: php-actions/composer@v6
         with:
-          php_extensions: apcu
+          php_version: 8.0
 
       - name: PHPUnit Tests
         uses: php-actions/phpunit@v3
         with:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml
-          php_extensions: apcu
         env:
           TEST_NAME: TPCentre
