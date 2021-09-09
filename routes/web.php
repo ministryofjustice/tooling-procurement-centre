@@ -14,4 +14,6 @@ use App\Http\Controllers\ToolController;
 |
 */
 
-Route::resource('/tool', ToolController::class);
+Route::patch('/tools/{tool}', 'App\Http\Controllers\ToolController@update');
+Route::delete('/tools/{tool}', 'App\Http\Controllers\ToolController@destroy');
+Route::resource('/tools', ToolController::class);
