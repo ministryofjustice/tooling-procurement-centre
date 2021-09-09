@@ -20,3 +20,4 @@ jobs:
           configuration: phpunit.xml
         env:
           TEST_NAME: TPCentre
+          APP_KEY: base64:2NCh00CfUJ89QkCz2Ez8jMMkRnlR81pFLCdN/Mp4O5Q=
