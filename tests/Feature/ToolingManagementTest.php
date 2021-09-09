@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Tag;
+use App\Models\TagTool;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\Tool;
@@ -23,7 +25,7 @@ class ToolingManagementTest extends TestCase
         ]);
 
         $this->assertCount('1', Tool::all());
-        $response->assertRedirect(Tool::first()->path());
+        $response->assertCreated();
     }
 
     /** @test */
@@ -93,5 +95,49 @@ class ToolingManagementTest extends TestCase
 
         $this->assertCount(0, Tool::all());
         $response->assertRedirect('/tools');
+    }
+
+    /** @test */
+    public function a_tag_can_be_added_to_a_tool()
+    {
+        $this->post('/tags', [
+            'name' => 'my tag'
+        ]);
+
+        $this->post('/tags', [
+            'name' => 'another tag'
+        ]);
+
+        $tag_id = Tag::first()->id;
+        $this->assertEquals(1, $tag_id);
+        $this->assertCount(2, Tag::all());
+
+        $response = $this->post('/tools', [
+            'name' => 'My cool tool',
+            'description' => 'A wonderful description to enlighten the reader.',
+            'link' => 'https:/example.com/remote-management-admin',
+            'version' => "1.23.4567",
+            'license_id' => "1",
+            'contact_id' => "1"
+        ]);
+
+        $response->assertCreated();
+
+        $response = $this->post('/tools/1/tag', [
+            'tag_id' => 1
+        ]);
+        $response->assertCreated();
+
+        $response = $this->post('/tools/1/tag', [
+            'tag_id' => 2
+        ]);
+        $response->assertCreated();
+
+        // get the tools tags
+        $tags = Tool::first()->tags();
+        $this->assertCount(2, TagTool::all());
+        $this->assertCount(2, $tags->get());
+
+        $this->assertEquals('another tag', $tags->find(2)->name);
     }
 }

@@ -35,8 +35,7 @@ class ToolController extends Controller
      */
     public function store()
     {
-        $tool = Tool::create($this->validateRequest());
-        return redirect($tool->path());
+        return Tool::create($this->validateRequest());
     }
 
     /**
