@@ -76,7 +76,6 @@ class ToolController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Tool $tool
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Tool $tool)
     {
@@ -90,13 +89,6 @@ class ToolController extends Controller
      */
     protected function validateRequest(): array
     {
-        return request()->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'link' => 'required',
-            'version' => "required",
-            'license_id' => "required",
-            'contact_id' => "required"
-        ]);
+        return request()->validate(Tool::$createRules);
     }
 }

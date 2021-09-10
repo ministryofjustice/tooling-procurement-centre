@@ -3,11 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Tool extends Model
 {
     protected $guarded = [];
+
+    public static array $createRules = [
+        'name' => 'required|unique:tools|max:80',
+        'description' => 'required',
+        'link' => '',
+        'version' => '',
+        'license_id' => 'required|numeric',
+        'contact_id' => 'required'
+    ];
 
     public function path()
     {
