@@ -24,23 +24,23 @@ class ToolingManagementTest extends TestCase
             'contact_id' => "1"
         ]);
 
-        $this->assertCount('1', Tool::all());
         $response->assertCreated();
+        $this->assertCount('1', Tool::all());
     }
 
     /** @test */
-    public function a_tool_name_must_not_be_blank()
+    public function tool_data_must_not_be_blank()
     {
         $response = $this->post('/tools', [
             'name' => '',
-            'description' => 'A wonderful description to enlighten the reader.',
+            'description' => '',
             'link' => 'https:/example.com/remote-management-admin',
             'version' => "1.23.4567",
             'license_id' => "1",
             'contact_id' => "1"
         ]);
 
-        $response->assertSessionHasErrors('name');
+        $response->assertSessionHasErrors(['name', 'description']);
     }
 
     /** @test  */
@@ -108,11 +108,15 @@ class ToolingManagementTest extends TestCase
             'name' => 'another tag'
         ]);
 
-        $tag_id = Tag::first()->id;
-        $this->assertEquals(1, $tag_id);
         $this->assertCount(2, Tag::all());
 
-        $response = $this->post('/tools', [
+        $tag_1 = Tag::where('name', 'my tag')->first();
+        $tag_2 = Tag::where('name', 'another tag')->first();
+
+        $this->assertEquals(1, $tag_1->id);
+        $this->assertEquals(2, $tag_2->id);
+
+        $the_tool = $this->post('/tools', [
             'name' => 'My cool tool',
             'description' => 'A wonderful description to enlighten the reader.',
             'link' => 'https:/example.com/remote-management-admin',
@@ -120,24 +124,22 @@ class ToolingManagementTest extends TestCase
             'license_id' => "1",
             'contact_id' => "1"
         ]);
+        $the_tool->assertCreated();
 
-        $response->assertCreated();
-
-        $response = $this->post('/tools/1/tag', [
-            'tag_id' => 1
+        $tag_tool_1 = $this->post('/tools/1/tag', [
+            'tag_id' => $tag_1->id
         ]);
-        $response->assertCreated();
+        $tag_tool_1->assertCreated();
 
-        $response = $this->post('/tools/1/tag', [
-            'tag_id' => 2
+        $tag_tool_2 = $this->post('/tools/1/tag', [
+            'tag_id' => $tag_2->id
         ]);
-        $response->assertCreated();
+        $tag_tool_2->assertCreated();
 
-        // get the tools tags
+        // assert tools tags
         $tags = Tool::first()->tags();
         $this->assertCount(2, TagTool::all());
         $this->assertCount(2, $tags->get());
-
         $this->assertEquals('another tag', $tags->find(2)->name);
     }
 }
