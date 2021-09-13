@@ -1,10 +1,13 @@
 .PHONY: dshell
 
+d-compose:
+	docker compose up -d nginx phpmyadmin
+	docker compose run --service-ports --rm --entrypoint=bash php
+
 dshell:
 	[ -f "./.env" ] || cp .env.example .env
 	echo "http://127.0.0.1:8080/" > public/hot
-	docker compose up -d nginx phpmyadmin
-	docker compose run --service-ports --rm --entrypoint=bash php
+	make d-compose
 
 setup:
 	composer install
@@ -15,8 +18,7 @@ setup:
 
 restart:
 	docker compose down
-	docker compose up -d nginx phpmyadmin
-	docker compose run --service-ports --rm --entrypoint=sh php
+	make d-compose
 
 db-migrate:
 	php artisan db:wipe
@@ -26,7 +28,7 @@ db-migrate:
 test:
 	php artisan test
 
-# Remove ignored git files – e.g. composer dependencies and built theme assets
+# Remove ignored git files
 clean:
 	@if [ -d ".git" ]; then git clean -xdf --exclude ".env" --exclude ".idea"; fi
 
