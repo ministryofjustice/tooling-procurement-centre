@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Licence;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class LicenceController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -20,7 +21,7 @@ class LicenceController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -30,19 +31,18 @@ class LicenceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function store(Request $request)
+    public function store()
     {
-        //
+        return Licence::create($this->validateRequest());
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Licence  $licence
-     * @return \Illuminate\Http\Response
+     * @param Licence $licence
+     * @return Response
      */
     public function show(Licence $licence)
     {
@@ -52,8 +52,8 @@ class LicenceController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Licence  $licence
-     * @return \Illuminate\Http\Response
+     * @param Licence $licence
+     * @return Response
      */
     public function edit(Licence $licence)
     {
@@ -63,23 +63,32 @@ class LicenceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Licence  $licence
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Licence $licence
+     * @return Response
      */
     public function update(Request $request, Licence $licence)
     {
-        //
+        $licence->update($this->validateRequest());
+        return redirect($licence->path());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Licence  $licence
-     * @return \Illuminate\Http\Response
+     * @param Licence $licence
+     * @return Response
      */
     public function destroy(Licence $licence)
     {
         //
+    }
+
+    /**
+     * @return array
+     */
+    protected function validateRequest(): array
+    {
+        return request()->validate(Licence::$createRules);
     }
 }
