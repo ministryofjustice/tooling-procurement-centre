@@ -1,8 +1,10 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+            <h1 class="text-xl mb-4 text-grey-800">Tooling Procurement Centre
+                <span class="block text-lg font-black uppercase">Reset</span></h1>
+            <a href="/" class="inline-block">
+                <x-application-logo-eco class="w-20 h-20 fill-current text-gray-500"/>
             </a>
         </x-slot>
 

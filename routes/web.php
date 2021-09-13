@@ -23,6 +23,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+
+require __DIR__.'/auth.php';
+
+
 Route::patch('/tools/{tool}', 'App\Http\Controllers\ToolController@update');
 Route::delete('/tools/{tool}', 'App\Http\Controllers\ToolController@destroy');
 Route::resource('/tools', ToolController::class);
@@ -31,5 +35,3 @@ Route::post('/tools/{tool}/tag', 'App\Http\Controllers\TagToolController@store')
 
 // Tags
 Route::resource('/tags', TagController::class);
-
-require __DIR__.'/auth.php';
