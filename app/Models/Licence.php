@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,11 @@ class Licence extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected $dates = [
+        'start',
+        'stop'
+    ];
 
     public static array $createRules = [
         'tool_id' => 'required|numeric',
@@ -25,5 +31,15 @@ class Licence extends Model
     public function path()
     {
         return '/licences/' . $this->id;
+    }
+
+    public function setStartAttribute($start)
+    {
+        $this->attributes['start'] = Carbon::parse($start);
+    }
+
+    public function setStopAttribute($stop)
+    {
+        $this->attributes['stop'] = Carbon::parse($stop);
     }
 }

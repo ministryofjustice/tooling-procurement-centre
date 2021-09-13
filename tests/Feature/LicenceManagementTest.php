@@ -3,37 +3,50 @@
 namespace Tests\Feature;
 
 use App\Models\Licence;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class LicenceManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function a_licence_can_be_created()
+    public function test_a_licence_can_be_created()
     {
-        $this->mockTool();
+        $this->mockToolCreate();
 
-        $response = $this->post('/licences', [
+        $this->post('/licences', [
             'tool_id' => 1,
             'description' => 'hello',
-            'user_limit' => '1000',
+            'user_limit' => 1000,
             'annual_cost' => 24140,
             'currency' => 'GB',
             'cost_per_user' => 10.99,
             'start' => '2021-09-12 00:00:00',
             'stop' => '2022-09-11 23:59:59'
         ]);
-        $response->assertCreated();
-        $this->assertCount(1, Licence::all());
+
+        $licences = Licence::all();
+        $this->assertCount(1, $licences);
+
+        // start; test date formats correctly
+        $this->assertInstanceOf(Carbon::class, $licences->first()->start);
+        $this->assertEquals(
+            'Sunday 12th of September 2021',
+            $licences->first()->start->format('l jS \of F Y')
+        );
+
+        // stop; test date formats correctly
+        $this->assertInstanceOf(Carbon::class, $licences->first()->stop);
+        $this->assertEquals(
+            'Sunday 11th of September 2022 11:59 PM',
+            $licences->first()->stop->format('l jS \of F Y h:i A')
+        );
     }
 
-    /** @test */
-    public function a_licence_can_be_created_with_only_tool_id()
+    public function test_a_licence_can_be_created_with_only_tool_id()
     {
-        $this->mockTool();
+        $this->mockToolCreate();
 
         // add a licence and associate with the tool_id
         $response = $this->post('/licences', [
@@ -47,64 +60,9 @@ class LicenceManagementTest extends TestCase
         $response->assertSessionHasErrors('tool_id');
     }
 
-    /** @test */
-    public function a_licence_description_cannot_be_boolean()
+    public function test_a_licence_can_be_updated()
     {
-        $this->mockTool();
-
-        // description: boolean
-        $response = $this->post('/licences', [
-            'tool_id' => 1,
-            'description' => false
-        ]);
-        $response->assertSessionHasErrors('description');
-    }
-
-    /** @test */
-    public function a_licence_description_cannot_be_an_integer()
-    {
-        $this->mockTool();
-
-        // description: integer
-        $response = $this->post('/licences', [
-            'tool_id' => 1,
-            'description' => 12345
-        ]);
-        $response->assertSessionHasErrors('description');
-    }
-
-    /** @test */
-    public function a_licence_currency_code_is_3_chars_max()
-    {
-        $this->mockTool();
-
-        // description: integer
-        $response = $this->post('/licences', [
-            'tool_id' => 1,
-            'currency' => 'GBPL'
-        ]);
-        $response->assertSessionHasErrors('currency');
-    }
-
-    /** @test */
-    public function a_licence_is_removed_if_tool_deleted()
-    {
-        $this->mockTool();
-
-        $this->post('/licences', [
-            'tool_id' => 1
-        ]);
-        $this->assertCount(1, Licence::all());
-
-        $this->delete('/tools/1');
-        $this->assertCount(0, Licence::all());
-    }
-
-    /** @test */
-    public function a_licence_can_be_updated()
-    {
-        $this->withoutExceptionHandling();
-        $this->mockTool();
+        $this->mockToolCreate();
 
         $this->post('/licences', [
             'tool_id' => 1,
@@ -135,7 +93,56 @@ class LicenceManagementTest extends TestCase
         $response->assertRedirect($licence->fresh()->path());
     }
 
-    protected function mockTool()
+    public function test_a_licence_description_cannot_be_boolean()
+    {
+        $this->mockToolCreate();
+
+        // description: boolean
+        $response = $this->post('/licences', [
+            'tool_id' => 1,
+            'description' => false
+        ]);
+        $response->assertSessionHasErrors('description');
+    }
+
+    public function test_a_licence_description_cannot_be_an_integer()
+    {
+        $this->mockToolCreate();
+
+        // description: integer
+        $response = $this->post('/licences', [
+            'tool_id' => 1,
+            'description' => 12345
+        ]);
+        $response->assertSessionHasErrors('description');
+    }
+
+    public function test_a_licence_currency_code_is_3_chars_max()
+    {
+        $this->mockToolCreate();
+
+        // description: integer
+        $response = $this->post('/licences', [
+            'tool_id' => 1,
+            'currency' => 'GBPL'
+        ]);
+        $response->assertSessionHasErrors('currency');
+    }
+
+    public function test_a_licence_is_removed_if_tool_deleted()
+    {
+        $this->mockToolCreate();
+
+        $this->post('/licences', [
+            'tool_id' => 1
+        ]);
+        $this->assertCount(1, Licence::all());
+
+        $this->delete('/tools/1');
+        $this->assertCount(0, Licence::all());
+    }
+
+    protected function mockToolCreate()
     {
         $this->post('/tools', [
             'name' => 'My cool tool',
