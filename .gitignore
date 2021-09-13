@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /storage/*.key
+/public/mix-manifest.json
 /vendor
 .env
 .env.backup
@@ -16,6 +17,6 @@ yarn-error.log
 .idea/
 
 # No lock files, allow updates for security
-# ... manage versions, rely on CI and testing
+# ... manage versions, rely on CI and TDD
 composer.lock
 package-lock.json
