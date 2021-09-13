@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LicenceController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
@@ -35,3 +36,7 @@ Route::post('/tools/{tool}/tag', 'App\Http\Controllers\TagToolController@store')
 
 // Tags
 Route::resource('/tags', TagController::class);
+
+// Licences
+Route::patch('/licences/{licence}', 'App\Http\Controllers\LicenceController@update');
+Route::resource('/licences', LicenceController::class);
