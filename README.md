@@ -1,5 +1,5 @@
 # Tooling Procurement Centre
-<img src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px-7026afebba9918a0830ebf68cf496cbb0b81f3514b884dc2c32904780baa3368.png" width="18">&nbsp;&nbsp;**Ministry of Justice**
+<img src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px-7026afebba9918a0830ebf68cf496cbb0b81f3514b884dc2c32904780baa3368.png" width="18">&nbsp;&nbsp;**Ministry of Justice, Digital & Technology**
 
 ---
 
@@ -21,8 +21,9 @@ The configuration uses multiple Docker containers and volumes to manage ephemera
 6. `make restart`
 7. Visit http://127.0.0.1:8000/
 
+Nb. steps 5 and 6 are necessary and fix a bug that occurs due to Laravel's APP_KEY being generated on the fly, and the systems' inability to read environment variables that change after init. When we restart the containers the newly generated APP_KEY loads correctly.  
 
-## Laravel inside
+## Laravel inside...
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
