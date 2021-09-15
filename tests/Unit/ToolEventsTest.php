@@ -41,12 +41,10 @@ class ToolEventsTest extends TestCase
         $tool = Tool::factory()->create();
         $user = User::factory()->create();
 
-        $detail = 'approved';
-
-        $tool->statusEvent($detail, $user);
+        $tool->statusEvent('approved', $user);
 
         $this->assertCount(1, Event::all());
-        $this->assertEquals($detail, Event::first()->detail);
+        $this->assertEquals('approved', Event::first()->detail);
         $this->assertEquals($tool->id, Event::first()->tool_id);
         $this->assertEquals($user->id, Event::first()->user_id);
     }
