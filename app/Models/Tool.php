@@ -30,7 +30,7 @@ class Tool extends Model
         return $this->belongsToMany(\App\Models\Tag::class);
     }
 
-    public function reviewEvent($detail, $user)
+    public function review($detail, $user)
     {
         $this->events()->create([
             'action' => 'tooling-review',
@@ -40,13 +40,15 @@ class Tool extends Model
         ]);
     }
 
-    public function statusEvent($detail, $user)
+    public function status($detail, $user = null)
     {
+        $user_id = $user->id ?? null;
+
         $this->events()->create([
             'action' => 'status',
             'detail' => $detail,
             'origin' => 'application',
-            'user_id' => $user->id
+            'user_id' => $user_id
         ]);
     }
 

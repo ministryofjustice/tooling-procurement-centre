@@ -17,10 +17,10 @@ class CreateEventsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('tool_id')->index();
             $table->foreign('tool_id')->references('id')->on('tools');
-            $table->unsignedBigInteger('user_id')->index();
+            $table->unsignedBigInteger('user_id')->index()->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('action');
-            $table->string('detail');
+            $table->longText('detail');
             $table->string('origin')->nullable();
             $table->timestamps();
         });

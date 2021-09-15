@@ -22,9 +22,9 @@ class ToolEventsTest extends TestCase
         $tool = Tool::factory()->create();
         $user = User::factory()->create();
 
-        $detail = $this->faker->sentence;
+        $detail = 'This is a review of a tool submitted to the TPC, by a user.';
 
-        $tool->reviewEvent($detail, $user);
+        $tool->review($detail, $user);
 
         $this->assertCount(1, Event::all());
         $this->assertEquals($detail, Event::first()->detail);
@@ -39,13 +39,11 @@ class ToolEventsTest extends TestCase
          * @var Tool $tool
          **/
         $tool = Tool::factory()->create();
-        $user = User::factory()->create();
 
-        $tool->statusEvent('approved', $user);
+        $tool->status('approved');
 
         $this->assertCount(1, Event::all());
         $this->assertEquals('approved', Event::first()->detail);
         $this->assertEquals($tool->id, Event::first()->tool_id);
-        $this->assertEquals($user->id, Event::first()->user_id);
     }
 }
