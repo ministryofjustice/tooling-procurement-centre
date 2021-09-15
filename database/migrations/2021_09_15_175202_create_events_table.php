@@ -21,7 +21,7 @@ class CreateEventsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('action');
             $table->string('detail');
-            $table->string('origin');
+            $table->string('origin')->nullable();
             $table->timestamps();
         });
     }

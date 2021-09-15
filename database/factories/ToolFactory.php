@@ -22,7 +22,7 @@ class ToolFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => $this->faker->words(3, true),
             'description' => $this->faker->sentence,
             'link' => $this->faker->url,
             'version' => $this->faker->text,

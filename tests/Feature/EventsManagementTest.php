@@ -6,7 +6,6 @@ use App\Models\Event;
 use App\Models\Tool;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class EventsManagementTest extends TestCase
@@ -16,8 +15,6 @@ class EventsManagementTest extends TestCase
     /** @test */
     public function an_event_can_be_created()
     {
-        $this->withoutExceptionHandling();
-
         $user = User::factory()->create();
         $tool = Tool::factory()->create();
 

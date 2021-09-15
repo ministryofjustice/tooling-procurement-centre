@@ -29,4 +29,29 @@ class Tool extends Model
     {
         return $this->belongsToMany(\App\Models\Tag::class);
     }
+
+    public function reviewEvent($detail, $user)
+    {
+        $this->events()->create([
+            'action' => 'tooling-review',
+            'detail' => $detail,
+            'origin' => 'application',
+            'user_id' => $user->id
+        ]);
+    }
+
+    public function statusEvent($detail, $user)
+    {
+        $this->events()->create([
+            'action' => 'status',
+            'detail' => $detail,
+            'origin' => 'application',
+            'user_id' => $user->id
+        ]);
+    }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }
