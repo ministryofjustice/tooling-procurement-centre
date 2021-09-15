@@ -28,11 +28,8 @@ Route::get('/dashboard', function () {
 require __DIR__.'/auth.php';
 
 
-Route::patch('/tools/{tool}', 'App\Http\Controllers\ToolController@update');
-Route::delete('/tools/{tool}', 'App\Http\Controllers\ToolController@destroy');
-Route::resource('/tools', ToolController::class);
-
-Route::post('/tools/{tool}/tag', 'App\Http\Controllers\TagToolController@store');
+// Events
+Route::resource('/events', EventController::class);
 
 // Tags
 Route::resource('/tags', TagController::class);
@@ -40,3 +37,11 @@ Route::resource('/tags', TagController::class);
 // Licences
 Route::patch('/licences/{licence}', 'App\Http\Controllers\LicenceController@update');
 Route::resource('/licences', LicenceController::class);
+
+// Tools
+Route::patch('/tools/{tool}', 'App\Http\Controllers\ToolController@update');
+Route::delete('/tools/{tool}', 'App\Http\Controllers\ToolController@destroy');
+Route::resource('/tools', ToolController::class);
+
+Route::post('/tools/{tool}/tag', 'App\Http\Controllers\TagToolController@store');
+Route::post('/tools/{tool}/event', 'App\Http\Controllers\EventController@store');

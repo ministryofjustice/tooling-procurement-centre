@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Tag;
 use App\Models\TagTool;
+use App\Models\Tool;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -58,46 +59,34 @@ class TagManagementTest extends TestCase
     /** @test */
     public function tags_are_removed_if_tool_is_deleted()
     {
-        $this->post('/tags', [ 'name' => 'my tag' ]);
-        $this->post('/tags', [ 'name' => 'another tag' ]);
-        $this->post('/tags', [ 'name' => 'yet another tag' ]);
-        $this->post('/tags', [ 'name' => 'another tag for tool 2' ]);
+        $this->post('/tags', ['name' => 'my tag']);
+        $this->post('/tags', ['name' => 'another tag']);
+        $this->post('/tags', ['name' => 'yet another tag']);
+        $this->post('/tags', ['name' => 'another tag for tool 2']);
 
         $this->assertCount(4, Tag::all());
 
-        $this->post('/tools', [
-            'name' => 'My cool tool',
-            'description' => 'A wonderful description to enlighten the reader.',
-            'link' => 'https:/example.com/remote-management-admin',
-            'version' => "1.23.4567",
-            'license_id' => "1",
-            'contact_id' => "1"
-        ]);
+        $tools = Tool::factory()->count(2)->create();
 
-        $this->post('/tools', [
-            'name' => 'My cool tool number 2',
-            'description' => 'A wonderful description ',
-            'link' => 'https:/example.com/admin',
-            'version' => "1",
-            'license_id' => "3",
-            'contact_id' => "2"
-        ]);
+        // resolve ids
+        $tool_1_id = $tools->find(1)->id;
+        $tool_2_id = $tools->find(2)->id;
 
         // attach tags to tool 1
-        $this->post('/tools/1/tag', [ 'tag_id' => 1 ]);
-        $this->post('/tools/1/tag', [ 'tag_id' => 2 ]);
+        $this->post('/tools/' . $tool_1_id . '/tag', ['tag_id' => 1]);
+        $this->post('/tools/' . $tool_1_id . '/tag', ['tag_id' => 2]);
         // attach tags to tool 2
-        $this->post('/tools/2/tag', [ 'tag_id' => 1 ]);
-        $this->post('/tools/2/tag', [ 'tag_id' => 2 ]);
-        $this->post('/tools/2/tag', [ 'tag_id' => 3 ]);
-        $this->post('/tools/2/tag', [ 'tag_id' => 4 ]);
+        $this->post('/tools/' . $tool_2_id . '/tag', ['tag_id' => 1]);
+        $this->post('/tools/' . $tool_2_id . '/tag', ['tag_id' => 2]);
+        $this->post('/tools/' . $tool_2_id . '/tag', ['tag_id' => 3]);
+        $this->post('/tools/' . $tool_2_id . '/tag', ['tag_id' => 4]);
 
         $this->assertCount(6, TagTool::all());
 
-        $this->delete('/tools/1');
+        $this->delete('/tools/' . $tool_1_id);
         $this->assertCount(4, TagTool::all());
 
-        $this->delete('/tools/2');
+        $this->delete('/tools/' . $tool_2_id);
         $this->assertCount(0, TagTool::all());
 
         // tags still exist
