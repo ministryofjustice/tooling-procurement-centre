@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ asset('judiciary-icon.png') }}" type="image/x-icon">
 
     <title>{{ config('app.name', 'Tool Procurement Centre | MoJ D&T') }}</title>
 
