@@ -1,8 +1,12 @@
 **Under Developement**
 
 ```diff
-@@ Nb. this application is not yet ready for production use. @@
-@@ Please watch 👁 and star ⭐️ to keep up to date with upcoming releases. @@
+❗️❗️❗️
+
++ Nb. this application is not yet ready for production use. 
++ Please watch 👁 and star ⭐️ to keep up to date with upcoming releases. 
+
+❗️❗️❗️
 ```
 
 ---
