@@ -1,7 +1,15 @@
-# Tooling Procurement Centre
-<img src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px-7026afebba9918a0830ebf68cf496cbb0b81f3514b884dc2c32904780baa3368.png" width="18">&nbsp;&nbsp;**Ministry of Justice, Digital & Technology**
+```diff
+- Under Developement
+
++ Nb. this application is not yet ready for production use. 
++ Please watch 👁 and star ⭐️ to keep up to date with upcoming releases. 
+
+```
 
 ---
+
+# Tooling Procurement Centre
+<img src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px-7026afebba9918a0830ebf68cf496cbb0b81f3514b884dc2c32904780baa3368.png" width="18">&nbsp;&nbsp;**Ministry of Justice, Digital & Technology**
 
 The core purpose of the TPC (Tooling Procurement Centre) is to aggregate data related to tooling within government digital teams and display exploratory reports and structured data for administrative review, financial quantification and high-confidence decision-making.
 
