@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\LicenceController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\TagController;
@@ -30,6 +31,8 @@ require __DIR__.'/auth.php';
 
 // Events
 Route::resource('/events', EventController::class);
+Route::post('/event/types', 'App\Http\Controllers\EventTypeController@store');
+Route::post('/event/types/{type}/tag', 'App\Http\Controllers\EventTypeTagController@store');
 
 // Tags
 Route::resource('/tags', TagController::class);
