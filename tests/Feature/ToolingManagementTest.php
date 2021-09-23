@@ -12,7 +12,7 @@ class ToolingManagementTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test  */
+    /** @test */
     public function a_tool_can_be_added_to_the_tpc()
     {
         $response = $this->post('/tools', [
@@ -43,19 +43,10 @@ class ToolingManagementTest extends TestCase
         $response->assertSessionHasErrors(['name', 'description']);
     }
 
-    /** @test  */
+    /** @test */
     public function a_tool_can_be_updated()
     {
-        $this->post('/tools', [
-            'name' => 'My cool tool',
-            'description' => 'A wonderful description to enlighten the reader.',
-            'link' => 'https:/example.com/remote-management-admin',
-            'version' => "1.23.4567",
-            'license_id' => "1",
-            'contact_id' => "1"
-        ]);
-
-        $tool = Tool::first();
+        $tool = Tool::factory()->create();
 
         $response = $this->patch($tool->path(), [
             'name' => 'Even cooler tool',
@@ -80,14 +71,7 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_tool_can_be_deleted()
     {
-        $this->post('/tools', [
-            'name' => 'My cool tool',
-            'description' => 'A wonderful description to enlighten the reader.',
-            'link' => 'https:/example.com/remote-management-admin',
-            'version' => "1.23.4567",
-            'license_id' => "1",
-            'contact_id' => "1"
-        ]);
+        Tool::factory()->create();
 
         $this->assertCount(1, Tool::all());
 
@@ -116,22 +100,14 @@ class ToolingManagementTest extends TestCase
         $this->assertEquals(1, $tag_1->id);
         $this->assertEquals(2, $tag_2->id);
 
-        $the_tool = $this->post('/tools', [
-            'name' => 'My cool tool',
-            'description' => 'A wonderful description to enlighten the reader.',
-            'link' => 'https:/example.com/remote-management-admin',
-            'version' => "1.23.4567",
-            'license_id' => "1",
-            'contact_id' => "1"
-        ]);
-        $the_tool->assertCreated();
+        $tool = Tool::factory()->create();
 
-        $tag_tool_1 = $this->post('/tools/1/tag', [
+        $tag_tool_1 = $this->post('/tools/' . $tool->id . '/tag', [
             'tag_id' => $tag_1->id
         ]);
         $tag_tool_1->assertCreated();
 
-        $tag_tool_2 = $this->post('/tools/1/tag', [
+        $tag_tool_2 = $this->post('/tools/' . $tool->id . '/tag', [
             'tag_id' => $tag_2->id
         ]);
         $tag_tool_2->assertCreated();

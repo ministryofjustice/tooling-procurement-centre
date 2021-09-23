@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Licence;
+use App\Models\Tool;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -13,10 +14,10 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_can_be_created()
     {
-        $this->mockToolCreate();
+        $tool = Tool::factory()->create();
 
         $this->post('/licences', [
-            'tool_id' => 1,
+            'tool_id' => $tool->id,
             'description' => 'hello',
             'user_limit' => 1000,
             'annual_cost' => 24140,
@@ -46,11 +47,11 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_can_be_created_with_only_tool_id()
     {
-        $this->mockToolCreate();
+        $tool = Tool::factory()->create();
 
         // add a licence and associate with the tool_id
         $response = $this->post('/licences', [
-            'tool_id' => 1
+            'tool_id' => $tool->id
         ]);
         $response->assertCreated();
         $this->assertCount(1, Licence::all());
@@ -62,10 +63,10 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_can_be_updated()
     {
-        $this->mockToolCreate();
+        $tool = Tool::factory()->create();
 
         $this->post('/licences', [
-            'tool_id' => 1,
+            'tool_id' => $tool->id,
             'user_limit' => 5,
             'description' => 'Hello'
         ]);
@@ -73,7 +74,7 @@ class LicenceManagementTest extends TestCase
         $this->assertEquals('Hello', $licence->description);
 
         $response = $this->patch('/licences/1', [
-            'tool_id' => 1,
+            'tool_id' => $tool->id,
             'description' => 'This description is now a great description',
             'user_limit' => 2000,
             'annual_cost' => 24140,
@@ -95,11 +96,11 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_description_cannot_be_boolean()
     {
-        $this->mockToolCreate();
+        $tool = Tool::factory()->create();
 
         // description: boolean
         $response = $this->post('/licences', [
-            'tool_id' => 1,
+            'tool_id' => $tool->id,
             'description' => false
         ]);
         $response->assertSessionHasErrors('description');
@@ -107,11 +108,11 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_description_cannot_be_an_integer()
     {
-        $this->mockToolCreate();
+        $tool = Tool::factory()->create();
 
         // description: integer
         $response = $this->post('/licences', [
-            'tool_id' => 1,
+            'tool_id' => $tool->id,
             'description' => 12345
         ]);
         $response->assertSessionHasErrors('description');
@@ -119,11 +120,11 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_currency_code_is_3_chars_max()
     {
-        $this->mockToolCreate();
+        $tool = Tool::factory()->create();
 
         // description: integer
         $response = $this->post('/licences', [
-            'tool_id' => 1,
+            'tool_id' => $tool->id,
             'currency' => 'GBPL'
         ]);
         $response->assertSessionHasErrors('currency');
@@ -131,26 +132,14 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_is_removed_if_tool_deleted()
     {
-        $this->mockToolCreate();
+        $tool = Tool::factory()->create();
 
         $this->post('/licences', [
-            'tool_id' => 1
+            'tool_id' => $tool->id
         ]);
         $this->assertCount(1, Licence::all());
 
         $this->delete('/tools/1');
         $this->assertCount(0, Licence::all());
-    }
-
-    protected function mockToolCreate()
-    {
-        $this->post('/tools', [
-            'name' => 'My cool tool',
-            'description' => 'A wonderful description to enlighten the reader.',
-            'link' => 'https:/example.com/remote-management-admin',
-            'version' => "1.23.4567",
-            'license_id' => "1",
-            'contact_id' => "1"
-        ]);
     }
 }

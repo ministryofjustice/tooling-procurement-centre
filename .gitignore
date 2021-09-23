@@ -3,6 +3,7 @@
 /public/storage
 /storage/*.key
 /public/mix-manifest.json
+/public/favicon.ico
 /vendor
 .env
 .env.backup
@@ -15,6 +16,8 @@ yarn-error.log
 /public/css
 /public/js
 .idea/
+.DS_*
+._DS*
 
 # No lock files, allow updates for security
 # ... manage versions, rely on CI and TDD
