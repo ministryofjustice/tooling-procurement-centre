@@ -21,12 +21,53 @@
 <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 <x-header-guest/>
 
-<div class="govuk-width-container">
 
+<div class="app-pane__content">
     <!-- Page Content -->
     <main class="govuk-main-wrapper " id="main-content" role="main">
-    </main>
+        <div class="app-masthead">
+            <div class="govuk-width-container">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds-from-desktop">
+                        <h1 class="govuk-heading-xl app-masthead__title">Deep-dive into tooling and discover software
+                            usage across the MOJ</h1>
+                        <p class="app-masthead__description">Login or register with your <code>@justice</code> email to view data
+                            charts and graphs, manage licencing, request new software for your team, even deliver
+                            feedback on current tooling use.</p>
 
+                        <a href="{{ route('dashboard') }}" role="button" draggable="false"
+                           class="govuk-button app-button--inverted govuk-!-margin-top-6 govuk-!-margin-bottom-0 govuk-button--start"
+                           data-module="govuk-button">
+                            Get started
+                            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5"
+                                 height="19" viewBox="0 0 33 40" aria-hidden="true" focusable="false">
+                                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z"></path>
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div class="govuk-grid-column-one-third-from-desktop">
+                        <img class="app-masthead__image" src="{{ asset('assets/chart-3.png') }}" alt=""
+                             role="presentation">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="govuk-width-container">
+            <div class="govuk-main-wrapper govuk-main-wrapper--l">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds-from-desktop">
+                        <h2 id="whats-new" class="govuk-heading-l">What’s new</h2>
+                        <p class="govuk-body">COMING SOON! Discover data related to tooling within digital teams and
+                            unveil exploratory reports and structured data for administrative review, financial
+                            quantification and high-confidence decision making.</p>
+                        <p class="govuk-body"><a href="{{ route('register') }}" class="govuk-link">Sign up to get update
+                                emails from the Tooling Procurement Centre</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
 <x-footer/>
 

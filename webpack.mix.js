@@ -16,4 +16,5 @@ mix.js('resources/js/app.js', 'public/assets/js')
     .copy('node_modules/govuk-frontend/govuk/all.js', 'public/assets/js/govuk.js')
     .copy('node_modules/govuk-frontend/govuk/assets/images', 'public/assets/images')
     .copy('node_modules/govuk-frontend/govuk/assets/fonts', 'public/assets/fonts')
+    .copy('resources/chart*', 'public/assets')
     .copy('resources/judiciary-icon.png', 'public/assets');
