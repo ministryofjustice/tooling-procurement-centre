@@ -15,4 +15,9 @@ class EventType extends Model
         'name' => 'required|unique:tools|max:80',
         'icon' => 'sometimes|required|string|nullable|starts_with:<path '
     ];
+
+    public function tags()
+    {
+        return $this->hasMany(EventTypeTag::class);
+    }
 }

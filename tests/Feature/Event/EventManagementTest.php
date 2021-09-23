@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Event;
 
 use App\Models\Event;
 use App\Models\Tool;
@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class EventsManagementTest extends TestCase
+class EventManagementTest extends TestCase
 {
     use RefreshDatabase;
 

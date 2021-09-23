@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Event;
 
 use App\Models\EventType;
 use App\Models\EventTypeTag;
@@ -12,10 +12,8 @@ class EventTypeTagTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function an_event_type_name_can_be_created()
+    public function an_event_type_tag_can_be_created()
     {
-        $this->withoutExceptionHandling();
-
         $type = EventType::factory()->create();
 
         $response = $this->post('/event/types/' . $type->id .'/tag', [
@@ -29,22 +27,22 @@ class EventTypeTagTest extends TestCase
 
 
     /** @test */
-    public function an_event_type_name_can_be_created_with_null_icon()
+    public function an_event_type_tag_can_be_created_with_null_icon()
     {
         $type = EventType::factory()->create();
         $response = $this->post('/event/types/' . $type->id . '/tag', [
-            'name' => 'Status'
+            'name' => 'Approve'
         ]);
         $this->assertCount(1, EventType::all());
         $response->assertCreated();
     }
 
     /** @test */
-    public function an_event_type_name_icon_must_contain_a_path_tag_if_present()
+    public function an_event_type_tag_icon_must_contain_a_path_tag_if_present()
     {
         $type = EventType::factory()->create();
         $response = $this->post('/event/types/' . $type->id . '/tag', [
-            'name' => 'Status',
+            'name' => 'Approve',
             'icon' => '<svg/>'
         ]);
 
@@ -52,14 +50,13 @@ class EventTypeTagTest extends TestCase
     }
 
     /** @test */
-    public function an_event_type_name_must_have_a_valid_event_type_id()
+    public function an_event_type_tag_must_have_a_valid_event_type_id()
     {
         $this->withoutExceptionHandling();
         $this->expectException('Illuminate\Database\Eloquent\ModelNotFoundException');
 
         $this->post('/event/types/3/tag', [
-            'name' => 'Status'
+            'name' => 'Approve'
         ]);
-
     }
 }
