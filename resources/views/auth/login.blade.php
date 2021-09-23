@@ -1,11 +1,7 @@
 <x-guest-layout>
     <x-auth-card>
-        <x-slot name="logo">
-            <h1 class="text-xl mb-4 text-grey-800">{{ config('app.name', 'Tooling Procurement Centre') }}
-                <span class="block text-lg font-black uppercase">Login</span></h1>
-            <a href="/" class="inline-block">
-                <x-application-logo-eco class="w-20 h-20 fill-current text-gray-500"/>
-            </a>
+        <x-slot name="title">
+            Log in
         </x-slot>
 
         <!-- Session Status -->
@@ -18,36 +14,33 @@
         @csrf
 
         <!-- Email Address -->
-            <div>
+            <div class="govuk-form-group">
                 <x-label for="email" :value="__('Email')"/>
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
-                         autofocus/>
+                <x-input id="email" type="email" name="email" :value="old('email')" required autofocus/>
             </div>
 
             <!-- Password -->
-            <div class="mt-4">
+
+            <div class="govuk-form-group">
                 <x-label for="password" :value="__('Password')"/>
 
-                <x-input id="password" class="block mt-1 w-full"
-                         type="password"
-                         name="password"
-                         required autocomplete="current-password"/>
+                <x-input id="password" type="password" name="password" required autocomplete="current-password"/>
             </div>
 
             <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox"
-                           class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                           name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
+            <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+                <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="remember_me" name="remember" type="checkbox">
+                    <label class="govuk-label govuk-checkboxes__label" for="remember_me">
+                        {{ __('Remember me') }}
+                    </label>
+                </div>
             </div>
 
             <div class="flex items-center justify-end mt-4">
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900"
+                    <a class="govuk-link"
                        href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
                     </a>

@@ -11,10 +11,9 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        require('postcss-import'),
-        require('tailwindcss'),
-        require('autoprefixer')
-    ])
-    .copy('resources/judiciary-icon.png', 'public/');
+mix.js('resources/js/app.js', 'public/assets/js')
+    .sass('resources/sass/app.scss', 'public/assets/css')
+    .copy('node_modules/govuk-frontend/govuk/all.js', 'public/assets/js/govuk.js')
+    .copy('node_modules/govuk-frontend/govuk/assets/images', 'public/assets/images')
+    .copy('node_modules/govuk-frontend/govuk/assets/fonts', 'public/assets/fonts')
+    .copy('resources/judiciary-icon.png', 'public/assets');
