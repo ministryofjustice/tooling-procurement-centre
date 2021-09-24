@@ -1,11 +1,7 @@
 <x-guest-layout>
     <x-auth-card>
-        <x-slot name="logo">
-            <h1 class="text-xl mb-4 text-grey-800">{{ config('app.name', 'Tool Procurement Centre | MoJ D&T') }}
-                <span class="block text-lg font-black uppercase">Reset</span></h1>
-            <a href="/" class="inline-block">
-                <x-application-logo-eco class="w-20 h-20 fill-current text-gray-500"/>
-            </a>
+        <x-slot name="title">
+            Reset
         </x-slot>
 
         <!-- Validation Errors -->

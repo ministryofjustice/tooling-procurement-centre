@@ -34,6 +34,7 @@ clean:
 
 node-assets:
 	npm install
+	npm run dev
 	npm run watch
 
 bash-nginx:

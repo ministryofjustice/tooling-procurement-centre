@@ -4,6 +4,7 @@
 /storage/*.key
 /public/mix-manifest.json
 /public/favicon.ico
+/public/assets
 /vendor
 .env
 .env.backup
