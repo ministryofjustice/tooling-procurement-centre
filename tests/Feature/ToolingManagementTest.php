@@ -4,23 +4,26 @@ namespace Tests\Feature;
 
 use App\Models\Tag;
 use App\Models\TagTool;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use App\Models\Tool;
+use Tests\TestCase;
+use Tests\WithAuthUser;
 
 class ToolingManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithAuthUser;
 
     /** @test */
     public function a_tool_can_be_added_to_the_tpc()
     {
+        $this->authUser();
+
         $response = $this->post('/tools', [
             'name' => 'My cool tool',
             'description' => 'A wonderful description to enlighten the reader.',
             'link' => 'https:/example.com/remote-management-admin',
             'version' => "1.23.4567",
-            'license_id' => "1",
             'contact_id' => "1"
         ]);
 
@@ -29,14 +32,25 @@ class ToolingManagementTest extends TestCase
     }
 
     /** @test */
+    public function a_new_tool_form_can_be_rendered()
+    {
+        $this->authUser();
+
+        $response = $this->get('/tools/create');
+        $response->assertStatus(200);
+
+    }
+
+    /** @test */
     public function tool_data_must_not_be_blank()
     {
+        $this->authUser();
+
         $response = $this->post('/tools', [
             'name' => '',
             'description' => '',
             'link' => 'https:/example.com/remote-management-admin',
             'version' => "1.23.4567",
-            'license_id' => "1",
             'contact_id' => "1"
         ]);
 
@@ -46,6 +60,8 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_tool_can_be_updated()
     {
+        $this->authUser();
+
         $tool = Tool::factory()->create();
 
         $response = $this->patch($tool->path(), [
@@ -53,7 +69,6 @@ class ToolingManagementTest extends TestCase
             'description' => 'So boom!',
             'link' => 'https:/tool.com/login',
             'version' => "7.65.4321",
-            'license_id' => "2",
             'contact_id' => "3"
         ]);
 
@@ -63,7 +78,6 @@ class ToolingManagementTest extends TestCase
         $this->assertEquals('So boom!', $tool->description);
         $this->assertEquals('https:/tool.com/login', $tool->link);
         $this->assertEquals('7.65.4321', $tool->version);
-        $this->assertEquals('2', $tool->license_id);
         $this->assertEquals('3', $tool->contact_id);
         $response->assertRedirect($tool->fresh()->path());
     }
@@ -72,13 +86,26 @@ class ToolingManagementTest extends TestCase
     public function a_tool_can_be_deleted()
     {
         Tool::factory()->create();
-
         $this->assertCount(1, Tool::all());
 
+        $this->authUser();
         $response = $this->delete(Tool::first()->path());
 
         $this->assertCount(0, Tool::all());
         $response->assertRedirect('/tools');
+    }
+
+    /** @test */
+    public function a_tool_cannot_be_deleted_by_unknown_user()
+    {
+        $this->withoutExceptionHandling();
+
+        Tool::factory()->create();
+        $this->assertCount(1, Tool::all());
+
+        $this->expectException(AuthenticationException::class);
+        $response = $this->delete(Tool::first()->path());
+        $response->assertForbidden();
     }
 
     /** @test */

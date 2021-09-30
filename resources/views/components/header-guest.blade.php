@@ -36,7 +36,7 @@
                             </li>
                             @if (Route::has('register'))
                                 <li class="govuk-header__navigation-item">
-                                    <a href="{{ route('register') }}" class="govuk-header__link">Register</a>
+                                    <a href="{{ route('register') }}" class="govuk-header__link">Create an account</a>
                                 </li>
                             @endif
                         @endauth

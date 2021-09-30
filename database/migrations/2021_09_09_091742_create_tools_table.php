@@ -18,9 +18,8 @@ class CreateToolsTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('link');
-            $table->string('version');
-            $table->integer('license_id');
-            $table->integer('contact_id');
+            $table->string('version')->nullable();
+            $table->integer('contact_id')->nullable();
             $table->timestamps();
         });
     }

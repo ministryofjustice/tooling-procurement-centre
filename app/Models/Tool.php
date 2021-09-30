@@ -16,7 +16,6 @@ class Tool extends Model
         'description' => 'required',
         'link' => '',
         'version' => '',
-        'license_id' => 'required|numeric',
         'contact_id' => 'required'
     ];
 

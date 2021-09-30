@@ -1,4 +1,9 @@
-@props(['disabled' => false])
+@props(['disabled' => false, 'required' => false, 'autofocus' => false, 'autocomplete' => false])
 
-<input {{ $disabled ? 'disabled' : '' }} {!! $attributes->merge(['class' => 'govuk-input govuk-!-width-one-half']) !!}>
+<input
+    {{ $disabled ? 'disabled' : '' }}
+    {{ $required ? 'required' : '' }}
+    {{ $autofocus ? 'autofocus' : '' }}
+    {{ $autocomplete ? 'autocomplete=' . $autocomplete: '' }}
+    {!! $attributes->merge(['class' => 'govuk-input govuk-!-width-one-half']) !!}>
 

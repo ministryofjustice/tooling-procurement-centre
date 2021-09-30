@@ -26,7 +26,6 @@ class ToolFactory extends Factory
             'description' => $this->faker->sentence,
             'link' => $this->faker->url,
             'version' => $this->faker->text,
-            'license_id' => "1",
             'contact_id' => "1"
         ];
     }

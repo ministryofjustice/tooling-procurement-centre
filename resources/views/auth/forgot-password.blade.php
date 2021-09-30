@@ -17,12 +17,14 @@
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
 
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" type="email" name="email" :value="old('email')" required autofocus />
-            </div>
+            {{-- Email --}}
+            <x-form-group
+                id="email"
+                label="Email"
+                type="text"
+                :required="true"
+                :autofocus="true"
+            />
 
             <div>
                 <br>

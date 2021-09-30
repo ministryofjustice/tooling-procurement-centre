@@ -29,11 +29,11 @@
             <div class="govuk-width-container">
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds-from-desktop">
-                        <h1 class="govuk-heading-xl app-masthead__title">Deep-dive into tooling and discover software
-                            usage across the MOJ</h1>
-                        <p class="app-masthead__description">Login or register with your <code>@justice</code> email to view data
-                            charts and graphs, manage licencing, request new software for your team, even deliver
-                            feedback on current tooling use.</p>
+                        <h1 class="govuk-heading-xl app-masthead__title">Take a deep-dive into tooling and discover
+                            software usage across the MOJ</h1>
+                        <p class="app-masthead__description">Login or register with your <code>justice.gov.uk</code> email
+                            to view data charts and graphs, manage licencing, procure new software for your team, even
+                            deliver feedback on current tooling use.</p>
 
                         <a href="{{ route('dashboard') }}" role="button" draggable="false"
                            class="govuk-button app-button--inverted govuk-!-margin-top-6 govuk-!-margin-bottom-0 govuk-button--start"

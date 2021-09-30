@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Licence;
 use App\Models\Tool;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ToolController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,17 +23,17 @@ class ToolController extends Controller
      */
     public function index()
     {
-        //
+        $tools = Tool::all();
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return View
      */
     public function create()
     {
-        //
+        return view('forms.tooling');
     }
 
     /**
@@ -35,7 +43,10 @@ class ToolController extends Controller
      */
     public function store()
     {
-        return Tool::create($this->validateRequest());
+        // create a contact
+        $user = Auth::user();
+        $data = array_merge($this->validateRequest(), ['contact_id' => $user->id]);
+        return Tool::create($data);
     }
 
     /**
@@ -46,7 +57,7 @@ class ToolController extends Controller
      */
     public function show(Tool $tool)
     {
-        return $tool->get();
+        // return $tool->get();
     }
 
     /**
