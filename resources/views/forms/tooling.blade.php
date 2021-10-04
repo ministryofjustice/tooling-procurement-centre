@@ -1,4 +1,7 @@
 <x-app-layout>
+    <x-slot name="backlink">
+        <a href="{{ route('dashboard') }}" class="govuk-back-link">Back</a>
+    </x-slot>
     <x-form-card>
         <x-slot name="title">
             Create a tool
@@ -35,11 +38,12 @@
                 id="link"
                 label="Link"
                 type="text"
+                summary="Something about the link"
             />
 
             <div>
                 <x-button>
-                    {{ __('Assign contact') }}
+                    {{ __('Save and continue') }}
                 </x-button>
             </div>
         </form>

@@ -24,6 +24,7 @@
 <x-header/>
 
 <div class="govuk-width-container">
+    {{ $backlink ?? '' }}
     <!-- Page Content -->
     <main class="govuk-main-wrapper " id="main-content" role="main">
         {{ $slot }}

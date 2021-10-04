@@ -7,6 +7,8 @@ use App\Models\Tool;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class ToolController extends Controller
@@ -19,11 +21,12 @@ class ToolController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return View
      */
     public function index()
     {
         $tools = Tool::all();
+        return view('tools', ['tools' => $tools]);
     }
 
     /**
@@ -39,25 +42,38 @@ class ToolController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return Response
+     * @return \Illuminate\Routing\Redirector
      */
     public function store()
     {
-        // create a contact
+        // create a contact: get current user
         $user = Auth::user();
-        $data = array_merge($this->validateRequest(), ['contact_id' => $user->id]);
-        return Tool::create($data);
+        // associate user with the tool
+        $data = array_merge($this->validateRequest(), [
+            'slug' => Str::slug(request()->name),
+            'contact_id' => $user->id
+        ]);
+
+        $tool = Tool::create($data);
+        $tool->action('Tool created');
+
+        Licence::create([
+            'tool_id' => $tool->id
+        ]);
+
+        return redirect('/tools');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Tool $tool
-     * @return Response
+     * @param $slug
+     * @return View
      */
-    public function show(Tool $tool)
+    public function show($slug): View
     {
-        // return $tool->get();
+        $tool = Tool::where(['slug' => $slug])->first();
+        return view('tool', ['tool' => $tool]);
     }
 
     /**
@@ -74,11 +90,11 @@ class ToolController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Tool  $tool
-     * @return Response
+     * @param Tool $tool
      */
     public function update(Tool $tool)
     {
+        $tool->action('Tool update');
         $tool->update($this->validateRequest());
         return redirect($tool->path());
     }
@@ -93,6 +109,13 @@ class ToolController extends Controller
         $tool->delete();
 
         return redirect('/tools');
+    }
+
+    public function find($search)
+    {
+        $search = str_replace('-', ' ', $search);
+        $tools = Tool::where('name', 'LIKE', '%' . $search . '%')->get();
+        return ['results' => $tools];
     }
 
     /**

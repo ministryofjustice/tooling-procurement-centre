@@ -15,6 +15,24 @@ class ToolingManagementTest extends TestCase
     use RefreshDatabase, WithAuthUser;
 
     /** @test */
+    public function a_new_tool_form_can_be_rendered()
+    {
+        $this->authUser();
+
+        $response = $this->get('/tools/create');
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function existing_tools_can_be_rendered()
+    {
+        $this->authUser();
+
+        $response = $this->get('/tools');
+        $response->assertStatus(200);
+    }
+
+    /** @test */
     public function a_tool_can_be_added_to_the_tpc()
     {
         $this->authUser();
@@ -23,22 +41,11 @@ class ToolingManagementTest extends TestCase
             'name' => 'My cool tool',
             'description' => 'A wonderful description to enlighten the reader.',
             'link' => 'https:/example.com/remote-management-admin',
-            'version' => "1.23.4567",
             'contact_id' => "1"
         ]);
 
-        $response->assertCreated();
+        $response->assertRedirect('/tools');
         $this->assertCount('1', Tool::all());
-    }
-
-    /** @test */
-    public function a_new_tool_form_can_be_rendered()
-    {
-        $this->authUser();
-
-        $response = $this->get('/tools/create');
-        $response->assertStatus(200);
-
     }
 
     /** @test */
@@ -50,7 +57,6 @@ class ToolingManagementTest extends TestCase
             'name' => '',
             'description' => '',
             'link' => 'https:/example.com/remote-management-admin',
-            'version' => "1.23.4567",
             'contact_id' => "1"
         ]);
 
@@ -62,13 +68,12 @@ class ToolingManagementTest extends TestCase
     {
         $this->authUser();
 
-        $tool = Tool::factory()->create();
+        Tool::factory()->create();
 
-        $response = $this->patch($tool->path(), [
+        $response = $this->patch('tools/1', [
             'name' => 'Even cooler tool',
             'description' => 'So boom!',
             'link' => 'https:/tool.com/login',
-            'version' => "7.65.4321",
             'contact_id' => "3"
         ]);
 
@@ -77,8 +82,8 @@ class ToolingManagementTest extends TestCase
         $this->assertEquals('Even cooler tool', $tool->name);
         $this->assertEquals('So boom!', $tool->description);
         $this->assertEquals('https:/tool.com/login', $tool->link);
-        $this->assertEquals('7.65.4321', $tool->version);
         $this->assertEquals('3', $tool->contact_id);
+        //dd($tool->path());
         $response->assertRedirect($tool->fresh()->path());
     }
 
@@ -89,7 +94,7 @@ class ToolingManagementTest extends TestCase
         $this->assertCount(1, Tool::all());
 
         $this->authUser();
-        $response = $this->delete(Tool::first()->path());
+        $response = $this->delete('tools/1');
 
         $this->assertCount(0, Tool::all());
         $response->assertRedirect('/tools');
@@ -104,7 +109,7 @@ class ToolingManagementTest extends TestCase
         $this->assertCount(1, Tool::all());
 
         $this->expectException(AuthenticationException::class);
-        $response = $this->delete(Tool::first()->path());
+        $response = $this->delete('tools/1');
         $response->assertForbidden();
     }
 
@@ -144,5 +149,43 @@ class ToolingManagementTest extends TestCase
         $this->assertCount(2, TagTool::all());
         $this->assertCount(2, $tags->get());
         $this->assertEquals('another tag', $tags->find(2)->name);
+    }
+
+    /** @test */
+    public function a_tool_can_be_displayed()
+    {
+        $this->authUser();
+        $tool = Tool::factory()->create();
+
+        $response = $this->get($tool->path());
+        $response->assertStatus(200);
+    }
+
+    /** @test */
+    public function a_tool_can_be_found_using_tool_search()
+    {
+        $this->authUser();
+
+        $tool = Tool::factory()->create();
+        $search = $tool->slug;
+        $response = $this->post('/tools/search/' . substr($search, 0, 4) . '/');
+        $results = $response->getData()->results;
+
+        $this->assertCount(1, $results);
+        $this->assertEquals($tool->name, $results[0]->name);
+    }
+
+    /** @test */
+    public function a_tool_cannot_be_searched_by_unknown_user()
+    {
+        $this->withoutExceptionHandling();
+
+        $tool = Tool::factory()->create();
+
+        $this->expectException(AuthenticationException::class);
+
+        $search = $tool->slug;
+        $response = $this->post('/tools/search/' . substr($search, 0, 4) . '/');
+        $response->assertForbidden();
     }
 }
