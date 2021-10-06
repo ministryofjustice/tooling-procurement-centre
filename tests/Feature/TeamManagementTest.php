@@ -34,16 +34,17 @@ class TeamManagementTest extends TestCase
 
         $team = Team::factory()->create();
 
-        $organisation = Organisation::factory()->create();
+        $patch_name = 'Our Brilliant Team';
+        $patch_comms_url = 'https:/slack.com/webhook';
 
         $this->patch('teams/' . $team->id, [
-            'name' => 'Our Brilliant Team',
-            'comms_url' => 'https:/slack.com/webhook',
-            'organisation_id' => $organisation->id
+            'name' => $patch_name,
+            'comms_url' => $patch_comms_url,
+            'organisation_id' => Organisation::factory()->create()->id
         ]);
 
         $team = Team::first();
-        $this->assertEquals('Our Brilliant Team', $team->name);
-        $this->assertEquals('https:/slack.com/webhook', $team->comms_url);
+        $this->assertEquals($patch_name, $team->name);
+        $this->assertEquals($patch_comms_url, $team->comms_url);
     }
 }
