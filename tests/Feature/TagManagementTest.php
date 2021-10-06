@@ -8,10 +8,11 @@ use App\Models\Tool;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
+use Tests\WithAuthUser;
 
 class TagManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithAuthUser;
 
     /** @test */
     public function a_tag_can_be_created()
@@ -66,6 +67,7 @@ class TagManagementTest extends TestCase
 
         $this->assertCount(4, Tag::all());
 
+        $this->authUser();
         $tools = Tool::factory()->count(2)->create();
 
         // resolve ids

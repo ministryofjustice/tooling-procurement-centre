@@ -7,10 +7,11 @@ use App\Models\Tool;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\WithAuthUser;
 
 class ToolEventsTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithAuthUser;
 
     /** @test */
     public function tools_can_record_a_review_event()
@@ -34,6 +35,7 @@ class ToolEventsTest extends TestCase
     /** @test */
     public function tools_can_record_a_status_update_event()
     {
+        $this->authUser();
         /**
          * @var Tool $tool
          **/

@@ -7,10 +7,11 @@ use App\Models\Tool;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\WithAuthUser;
 
 class LicenceManagementTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithAuthUser;
 
     public function test_a_licence_can_be_created()
     {
@@ -132,6 +133,7 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_is_removed_if_tool_deleted()
     {
+        $this->authUser();
         $tool = Tool::factory()->create();
 
         $this->post('/licences', [

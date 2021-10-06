@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="title">
-            Register
+            Create an account
         </x-slot>
 
         <!-- Validation Errors -->
@@ -10,46 +10,51 @@
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
-            <!-- Name -->
-            <div>
-                <x-label for="name" :value="__('Name')" />
 
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
-            </div>
+            {{-- Name --}}
+            <x-form-group
+                id="name"
+                label="Name"
+                type="text"
+                :required="true"
+                :autofocus="true"
+            />
 
-            <!-- Email Address -->
-            <div class="mt-4">
-                <x-label for="email" :value="__('Email')" />
 
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
-            </div>
+            {{-- Email --}}
+            <x-form-group
+                id="email"
+                label="Email"
+                type="text"
+                :required="true"
+            />
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+            {{-- Password --}}
+            <x-form-group
+                id="password"
+                label="Password"
+                type="password"
+                :required="true"
+                :autocomplete="'new-password'"
+            />
 
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="new-password" />
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required />
-            </div>
+            {{-- Password Confirmation--}}
+            <x-form-group
+                id="password_confirmation"
+                label="Confirm Password"
+                type="password"
+                :required="true"
+                :autocomplete="'new-password'"
+            />
 
             <div>
                 <a class="govuk-link" href="{{ route('login') }}">
                     {{ __('Already registered?') }}
                 </a>
-
+                <br>
+                <br>
                 <x-button class="ml-4">
-                    {{ __('Register') }}
+                    {{ __('Submit') }}
                 </x-button>
             </div>
         </form>

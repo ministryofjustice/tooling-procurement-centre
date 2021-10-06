@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Tool;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class ToolFactory extends Factory
 {
@@ -19,14 +20,14 @@ class ToolFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
+        $name = $this->faker->words(3, true);
         return [
-            'name' => $this->faker->words(3, true),
+            'name' => $name,
+            'slug' => Str::slug($name),
             'description' => $this->faker->sentence,
             'link' => $this->faker->url,
-            'version' => $this->faker->text,
-            'license_id' => "1",
             'contact_id' => "1"
         ];
     }

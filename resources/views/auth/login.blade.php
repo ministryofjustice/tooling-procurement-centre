@@ -11,24 +11,27 @@
         <x-auth-validation-errors class="mb-4" :errors="$errors"/>
 
         <form method="POST" action="{{ route('login') }}">
-        @csrf
+            @csrf
 
-        <!-- Email Address -->
-            <div class="govuk-form-group">
-                <x-label for="email" :value="__('Email')"/>
+            {{-- Email --}}
+            <x-form-group
+                id="email"
+                label="Email"
+                type="text"
+                :required="true"
+                :autofocus="true"
+            />
 
-                <x-input id="email" type="email" name="email" :value="old('email')" required autofocus/>
-            </div>
+            {{-- Password --}}
+            <x-form-group
+                id="password"
+                label="Password"
+                type="password"
+                :required="true"
+                :autocomplete="'current-password'"
+            />
 
-            <!-- Password -->
-
-            <div class="govuk-form-group">
-                <x-label for="password" :value="__('Password')"/>
-
-                <x-input id="password" type="password" name="password" required autocomplete="current-password"/>
-            </div>
-
-            <!-- Remember Me -->
+            {{-- Remember Me --}}
             <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                 <div class="govuk-checkboxes__item">
                     <input class="govuk-checkboxes__input" id="remember_me" name="remember" type="checkbox">
@@ -37,7 +40,7 @@
                     </label>
                 </div>
             </div>
-
+            <br>
             <div class="flex items-center justify-end mt-4">
                 @if (Route::has('password.request'))
                     <a class="govuk-link"
@@ -46,6 +49,7 @@
                     </a>
                 @endif
 
+                <br><br>
                 <x-button class="ml-3">
                     {{ __('Log in') }}
                 </x-button>

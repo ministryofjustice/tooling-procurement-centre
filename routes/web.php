@@ -26,9 +26,6 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 
-require __DIR__.'/auth.php';
-
-
 // Events
 Route::resource('/events', EventController::class);
 Route::post('/event/types', 'App\Http\Controllers\EventTypeController@store');
@@ -42,9 +39,16 @@ Route::patch('/licences/{licence}', 'App\Http\Controllers\LicenceController@upda
 Route::resource('/licences', LicenceController::class);
 
 // Tools
+Route::post('/tools', [ToolController::class, 'store'])->middleware('auth');
+Route::post('/tools/search/{search}', 'App\Http\Controllers\ToolController@find');
 Route::patch('/tools/{tool}', 'App\Http\Controllers\ToolController@update');
 Route::delete('/tools/{tool}', 'App\Http\Controllers\ToolController@destroy');
-Route::resource('/tools', ToolController::class);
+//-> get
+Route::get('/tools', 'App\Http\Controllers\ToolController@index');
+Route::get('/tools/create', 'App\Http\Controllers\ToolController@create');
+Route::get('/tools/{slug}', 'App\Http\Controllers\ToolController@show');
 
 Route::post('/tools/{tool}/tag', 'App\Http\Controllers\TagToolController@store');
 Route::post('/tools/{tool}/event', 'App\Http\Controllers\EventController@store');
+
+require __DIR__.'/auth.php';
