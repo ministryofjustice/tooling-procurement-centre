@@ -9,7 +9,7 @@ trait WithAuthUser
     /**
      * Create a pseudo, authenticated user
      */
-    public function authUser()
+    public function authorisedUser()
     {
         // create a user object
         $user = new User([

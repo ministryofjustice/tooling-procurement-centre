@@ -25,6 +25,12 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+// Organisations
+Route::post('/organisations', 'App\Http\Controllers\OrganisationController@store');
+
+// Teams
+Route::post('/teams', 'App\Http\Controllers\TeamController@store');
+Route::patch('/teams/{team}', 'App\Http\Controllers\TeamController@update');
 
 // Events
 Route::resource('/events', EventController::class);

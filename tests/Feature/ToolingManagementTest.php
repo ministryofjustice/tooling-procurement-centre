@@ -17,7 +17,7 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_new_tool_form_can_be_rendered()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
         $response = $this->get('/tools/create');
         $response->assertStatus(200);
@@ -26,7 +26,7 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function existing_tools_can_be_rendered()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
         $response = $this->get('/tools');
         $response->assertStatus(200);
@@ -35,7 +35,7 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_tool_can_be_added_to_the_tpc()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
         $response = $this->post('/tools', [
             'name' => 'My cool tool',
@@ -51,7 +51,7 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function tool_data_must_not_be_blank()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
         $response = $this->post('/tools', [
             'name' => '',
@@ -66,7 +66,7 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_tool_can_be_updated()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
         Tool::factory()->create();
 
@@ -83,7 +83,6 @@ class ToolingManagementTest extends TestCase
         $this->assertEquals('So boom!', $tool->description);
         $this->assertEquals('https:/tool.com/login', $tool->link);
         $this->assertEquals('3', $tool->contact_id);
-        //dd($tool->path());
         $response->assertRedirect($tool->fresh()->path());
     }
 
@@ -93,7 +92,7 @@ class ToolingManagementTest extends TestCase
         Tool::factory()->create();
         $this->assertCount(1, Tool::all());
 
-        $this->authUser();
+        $this->authorisedUser();
         $response = $this->delete('tools/1');
 
         $this->assertCount(0, Tool::all());
@@ -154,7 +153,7 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_tool_can_be_displayed()
     {
-        $this->authUser();
+        $this->authorisedUser();
         $tool = Tool::factory()->create();
 
         $response = $this->get($tool->path());
@@ -164,7 +163,7 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_tool_can_be_found_using_tool_search()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
         $tool = Tool::factory()->create();
         $search = $tool->slug;

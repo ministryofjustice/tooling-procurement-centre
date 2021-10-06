@@ -67,7 +67,7 @@ class TagManagementTest extends TestCase
 
         $this->assertCount(4, Tag::all());
 
-        $this->authUser();
+        $this->authorisedUser();
         $tools = Tool::factory()->count(2)->create();
 
         // resolve ids

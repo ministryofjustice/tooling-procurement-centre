@@ -133,7 +133,7 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_is_removed_if_tool_deleted()
     {
-        $this->authUser();
+        $this->authorisedUser();
         $tool = Tool::factory()->create();
 
         $this->post('/licences', [
