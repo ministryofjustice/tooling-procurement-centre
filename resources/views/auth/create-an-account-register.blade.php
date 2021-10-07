@@ -4,6 +4,13 @@
             Create an account
         </x-slot>
 
+        <!-- Validation Errors -->
+        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
+        <x-summary>
+            An account will be created using these details.
+        </x-summary>
+
         <dl class="govuk-summary-list govuk-!-width-two-thirds">
             <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
@@ -33,8 +40,9 @@
             </div>
         </dl>
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        <x-summary>
+            If you are happy, fill in the following fields to complete your account set up.
+        </x-summary>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf

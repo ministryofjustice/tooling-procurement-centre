@@ -8,8 +8,8 @@
     </p>
     <hr>
     <p class="govuk-body">
-        <x-nav-link href="{{ route('organisations-create') }}">New organisation</x-nav-link>
+        <x-nav-link href="{{ route('organisations') }}">Organisations</x-nav-link>
         <br>
-        <x-nav-link href="{{ route('teams-create') }}">New team</x-nav-link>
+        <x-nav-link href="{{ route('teams') }}">Teams</x-nav-link>
     </p>
 </x-app-layout>
