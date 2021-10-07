@@ -16,7 +16,7 @@
             <x-form-group
                 id="name"
                 label="Team"
-                summary="What is your team name?"
+                summary="What is the team name?"
                 type="text"
                 :required="true"
                 :autofocus="true"
