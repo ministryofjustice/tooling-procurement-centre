@@ -1,7 +1,4 @@
 <x-guest-layout>
-    <x-slot name="backlink">
-        <a href="{{ route('dashboard') }}" class="govuk-back-link">Back</a>
-    </x-slot>
     <x-form-card>
         <x-slot name="title">
             Request a team addition

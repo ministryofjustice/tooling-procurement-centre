@@ -1,5 +1,7 @@
-
 <x-app-layout>
+    <x-slot name="backlink">
+        <a href="{{ route('dashboard') }}" class="govuk-back-link">Back</a>
+    </x-slot>
     <h1 class="govuk-heading-xl">{{ __('Teams') }}</h1>
     <x-nav-link class="govuk-button" href="{{ route('teams-create') }}">Add new</x-nav-link>
     <table class="govuk-table">
@@ -15,7 +17,7 @@
     @foreach($teams as $team)
             <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
-                    <x-nav-link href="{{ $team->path() }}"> {{ $team->name }} </x-nav-link>
+                    {{ $team->name }}
                 </th>
                 <td class="govuk-table__cell">{{ $team->comms_url }}</td>
                 <td class="govuk-table__cell">{{ $team->organisation->name }}</td>

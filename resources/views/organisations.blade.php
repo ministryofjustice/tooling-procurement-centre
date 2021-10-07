@@ -1,4 +1,7 @@
 <x-app-layout>
+    <x-slot name="backlink">
+        <a href="{{ route('dashboard') }}" class="govuk-back-link">Back</a>
+    </x-slot>
     <h1 class="govuk-heading-xl">{{ __('Organisations') }}</h1>
     <x-nav-link class="govuk-button" href="{{ route('organisations-create') }}">Add new</x-nav-link>
     <table class="govuk-table">
@@ -14,7 +17,7 @@
         @foreach($organisations as $organisation)
             <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
-                    <x-nav-link href="{{ $organisation->path() }}"> {{ $organisation->name }} </x-nav-link>
+                    {{ $organisation->name }}
                     @if(count($organisation->teams) > 0)
                         <br><br>
                         <details class="govuk-details" data-module="govuk-details">

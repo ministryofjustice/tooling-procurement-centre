@@ -1,10 +1,10 @@
-<x-guest-layout>
+<x-app-layout>
     <x-slot name="backlink">
-        <a href="{{ route('dashboard') }}" class="govuk-back-link">Back</a>
+        <a href="{{ route('organisations') }}" class="govuk-back-link">Back</a>
     </x-slot>
     <x-form-card>
         <x-slot name="title">
-            New Organisation
+            Create an organisation
         </x-slot>
         {{-- Validation Errors --}}
         <x-auth-validation-errors class="govuk-body" :errors="$errors"/>
@@ -47,4 +47,4 @@
 
         </form>
     </x-form-card>
-</x-guest-layout>
+</x-app-layout>
