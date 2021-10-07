@@ -19,7 +19,7 @@ class ToolingManagementTest extends TestCase
     {
         $this->authorisedUser();
 
-        $response = $this->get('/tools/create');
+        $response = $this->get('/dashboard/tools/create');
         $response->assertStatus(200);
     }
 
@@ -28,7 +28,7 @@ class ToolingManagementTest extends TestCase
     {
         $this->authorisedUser();
 
-        $response = $this->get('/tools');
+        $response = $this->get('/dashboard/tools');
         $response->assertStatus(200);
     }
 
@@ -37,14 +37,14 @@ class ToolingManagementTest extends TestCase
     {
         $this->authorisedUser();
 
-        $response = $this->post('/tools', [
+        $response = $this->post('/dashboard/tools', [
             'name' => 'My cool tool',
             'description' => 'A wonderful description to enlighten the reader.',
             'link' => 'https:/example.com/remote-management-admin',
             'contact_id' => "1"
         ]);
 
-        $response->assertRedirect('/tools');
+        $response->assertRedirect('/dashboard/tools');
         $this->assertCount('1', Tool::all());
     }
 
@@ -53,7 +53,7 @@ class ToolingManagementTest extends TestCase
     {
         $this->authorisedUser();
 
-        $response = $this->post('/tools', [
+        $response = $this->post('/dashboard/tools', [
             'name' => '',
             'description' => '',
             'link' => 'https:/example.com/remote-management-admin',
@@ -70,7 +70,7 @@ class ToolingManagementTest extends TestCase
 
         Tool::factory()->create();
 
-        $response = $this->patch('tools/1', [
+        $response = $this->patch('/dashboard/tools/1', [
             'name' => 'Even cooler tool',
             'description' => 'So boom!',
             'link' => 'https:/tool.com/login',
@@ -93,10 +93,10 @@ class ToolingManagementTest extends TestCase
         $this->assertCount(1, Tool::all());
 
         $this->authorisedUser();
-        $response = $this->delete('tools/1');
+        $response = $this->delete('/dashboard/tools/1');
 
         $this->assertCount(0, Tool::all());
-        $response->assertRedirect('/tools');
+        $response->assertRedirect('/dashboard/tools');
     }
 
     /** @test */
@@ -108,18 +108,18 @@ class ToolingManagementTest extends TestCase
         $this->assertCount(1, Tool::all());
 
         $this->expectException(AuthenticationException::class);
-        $response = $this->delete('tools/1');
+        $response = $this->delete('/dashboard/tools/1');
         $response->assertForbidden();
     }
 
     /** @test */
     public function a_tag_can_be_added_to_a_tool()
     {
-        $this->post('/tags', [
+        $this->post('/dashboard/tags', [
             'name' => 'my tag'
         ]);
 
-        $this->post('/tags', [
+        $this->post('/dashboard/tags', [
             'name' => 'another tag'
         ]);
 
@@ -133,12 +133,12 @@ class ToolingManagementTest extends TestCase
 
         $tool = Tool::factory()->create();
 
-        $tag_tool_1 = $this->post('/tools/' . $tool->id . '/tag', [
+        $tag_tool_1 = $this->post('/dashboard/tools/' . $tool->id . '/tag', [
             'tag_id' => $tag_1->id
         ]);
         $tag_tool_1->assertCreated();
 
-        $tag_tool_2 = $this->post('/tools/' . $tool->id . '/tag', [
+        $tag_tool_2 = $this->post('/dashboard/tools/' . $tool->id . '/tag', [
             'tag_id' => $tag_2->id
         ]);
         $tag_tool_2->assertCreated();
@@ -167,7 +167,7 @@ class ToolingManagementTest extends TestCase
 
         $tool = Tool::factory()->create();
         $search = $tool->slug;
-        $response = $this->post('/tools/search/' . substr($search, 0, 4) . '/');
+        $response = $this->post('/dashboard/tools/search/' . substr($search, 0, 4) . '/');
         $results = $response->getData()->results;
 
         $this->assertCount(1, $results);
@@ -184,7 +184,7 @@ class ToolingManagementTest extends TestCase
         $this->expectException(AuthenticationException::class);
 
         $search = $tool->slug;
-        $response = $this->post('/tools/search/' . substr($search, 0, 4) . '/');
+        $response = $this->post('/dashboard/tools/search/' . substr($search, 0, 4) . '/');
         $response->assertForbidden();
     }
 }

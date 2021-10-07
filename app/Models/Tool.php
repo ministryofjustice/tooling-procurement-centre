@@ -22,7 +22,7 @@ class Tool extends Model
 
     public function path()
     {
-        return '/tools/' . $this->slug;
+        return '/dashboard/tools/' . $this->slug;
     }
 
     public function tags()

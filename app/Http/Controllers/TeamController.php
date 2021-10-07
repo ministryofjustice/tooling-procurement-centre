@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Organisation;
 use App\Models\Team;
 use Illuminate\Http\Request;
 
@@ -12,6 +13,18 @@ class TeamController extends Controller
         $this->middleware('auth');
     }
 
+    public function index()
+    {
+        return view('teams', ['teams' => Team::all()]);
+    }
+
+    public function create()
+    {
+        return view('forms.team', [
+            'organisations' => Organisation::all()
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -19,7 +32,8 @@ class TeamController extends Controller
      */
     public function store()
     {
-        return Team::create($this->validateRequest());
+        Team::create($this->validateRequest());
+        return redirect('/dashboard/teams');
     }
 
     /**

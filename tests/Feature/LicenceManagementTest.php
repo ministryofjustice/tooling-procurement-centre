@@ -17,7 +17,7 @@ class LicenceManagementTest extends TestCase
     {
         $tool = Tool::factory()->create();
 
-        $this->post('/licences', [
+        $this->post('/dashboard/licences', [
             'tool_id' => $tool->id,
             'description' => 'hello',
             'user_limit' => 1000,
@@ -51,14 +51,14 @@ class LicenceManagementTest extends TestCase
         $tool = Tool::factory()->create();
 
         // add a licence and associate with the tool_id
-        $response = $this->post('/licences', [
+        $response = $this->post('/dashboard/licences', [
             'tool_id' => $tool->id
         ]);
         $response->assertCreated();
         $this->assertCount(1, Licence::all());
 
         // force an error on the tool_id column; attempt to create a record with no data
-        $response = $this->post('/licences', []);
+        $response = $this->post('/dashboard/licences', []);
         $response->assertSessionHasErrors('tool_id');
     }
 
@@ -66,7 +66,7 @@ class LicenceManagementTest extends TestCase
     {
         $tool = Tool::factory()->create();
 
-        $this->post('/licences', [
+        $this->post('/dashboard/licences', [
             'tool_id' => $tool->id,
             'user_limit' => 5,
             'description' => 'Hello'
@@ -74,7 +74,7 @@ class LicenceManagementTest extends TestCase
         $licence = Licence::first();
         $this->assertEquals('Hello', $licence->description);
 
-        $response = $this->patch('/licences/1', [
+        $response = $this->patch('/dashboard/licences/1', [
             'tool_id' => $tool->id,
             'description' => 'This description is now a great description',
             'user_limit' => 2000,
@@ -100,7 +100,7 @@ class LicenceManagementTest extends TestCase
         $tool = Tool::factory()->create();
 
         // description: boolean
-        $response = $this->post('/licences', [
+        $response = $this->post('/dashboard/licences', [
             'tool_id' => $tool->id,
             'description' => false
         ]);
@@ -112,7 +112,7 @@ class LicenceManagementTest extends TestCase
         $tool = Tool::factory()->create();
 
         // description: integer
-        $response = $this->post('/licences', [
+        $response = $this->post('/dashboard/licences', [
             'tool_id' => $tool->id,
             'description' => 12345
         ]);
@@ -124,7 +124,7 @@ class LicenceManagementTest extends TestCase
         $tool = Tool::factory()->create();
 
         // description: integer
-        $response = $this->post('/licences', [
+        $response = $this->post('/dashboard/licences', [
             'tool_id' => $tool->id,
             'currency' => 'GBPL'
         ]);
@@ -136,12 +136,12 @@ class LicenceManagementTest extends TestCase
         $this->authorisedUser();
         $tool = Tool::factory()->create();
 
-        $this->post('/licences', [
+        $this->post('/dashboard/licences', [
             'tool_id' => $tool->id
         ]);
         $this->assertCount(1, Licence::all());
 
-        $this->delete('/tools/1');
+        $this->delete('/dashboard/tools/1');
         $this->assertCount(0, Licence::all());
     }
 }

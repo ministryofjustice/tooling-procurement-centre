@@ -12,6 +12,16 @@ class OrganisationController extends Controller
         $this->middleware('auth');
     }
 
+    public function create(Request $request)
+    {
+        return view('forms.organisation');
+    }
+
+    public function index()
+    {
+        return view('organisations', ['organisations' => Organisation::all()]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -19,7 +29,8 @@ class OrganisationController extends Controller
      */
     public function store()
     {
-        return Organisation::create($this->validateRequest());
+        Organisation::create($this->validateRequest());
+        return redirect('/dashboard/organisations');
     }
 
     /**

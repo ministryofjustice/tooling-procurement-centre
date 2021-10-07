@@ -19,12 +19,12 @@ class TeamManagementTest extends TestCase
 
         $organisation = Organisation::factory()->create();
 
-        $response = $this->post('/teams', [
+        $response = $this->post('/dashboard/teams', [
             'name' => 'Our Great Team',
             'comms_url' => '',
             'organisation_id' => $organisation->id
         ]);
-        $response->assertCreated();
+        $response->assertRedirect('/dashboard/teams');
         $this->assertCount('1', Team::all());
     }
 
@@ -37,7 +37,7 @@ class TeamManagementTest extends TestCase
         $patch_name = 'Our Brilliant Team';
         $patch_comms_url = 'https:/slack.com/webhook';
 
-        $this->patch('teams/' . $team->id, [
+        $this->patch('/dashboard/teams/' . $team->id, [
             'name' => $patch_name,
             'comms_url' => $patch_comms_url,
             'organisation_id' => Organisation::factory()->create()->id
@@ -46,5 +46,23 @@ class TeamManagementTest extends TestCase
         $team = Team::first();
         $this->assertEquals($patch_name, $team->name);
         $this->assertEquals($patch_comms_url, $team->comms_url);
+    }
+
+    public function test_a_team_form_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $response = $this->get('/dashboard/teams/create');
+        $response->assertStatus(200);
+    }
+
+    public function test_teams_can_be_listed()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->authorisedUser();
+
+        $response = $this->get('/dashboard/teams');
+        $response->assertStatus(200);
     }
 }

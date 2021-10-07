@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Organisation;
+use App\Models\Team;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -15,13 +17,53 @@ use Illuminate\Validation\Rules;
 class RegisteredUserController extends Controller
 {
     /**
+     * Display the org/team select view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function selectOrgTeam()
+    {
+        return view('auth.create-an-account', [
+            'organisations' => Organisation::with('teams')->get()
+        ]);
+    }
+
+    /**
+     * Post Request to store step1 info in session
+     *
+     * @param  Request $request
+     */
+    public function storeOrgteam(Request $request)
+    {
+        $data = $request->validate([
+            'organisation' => 'required|numeric',
+            'team' => 'required|numeric'
+        ]);
+
+        $request->session()->put('org-team', $data);
+
+        return redirect('/create-an-account/register');
+    }
+
+    /**
      * Display the registration view.
      *
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('auth.register');
+        $org_team = $request->session()->get('org-team');
+
+        if (!$org_team) {
+            return redirect('/create-an-account');
+        }
+
+        $data = [
+            'organisation' => Organisation::find($org_team['organisation'])->name,
+            'team' => Team::find($org_team['team'])->name
+        ];
+
+        return view('auth.create-an-account-register', ['data' => $data]);
     }
 
     /**
@@ -49,5 +91,33 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    public function createTeamAddition()
+    {
+        return view('forms.team-addition', ['organisations' => Organisation::all()]);
+    }
+
+    public function requestTeamAddition(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'team' => 'required|string',
+            'organisation' => 'required|numeric'
+        ]);
+
+        /**
+         * TODO: integrate the Notification channel for Slack
+         * Composer already requires the channel, setup is needed;
+         * https://laravel.com/docs/8.x/notifications#slack-prerequisites
+         */
+
+        return redirect('your-team-addition-request-has-been-sent');
+    }
+
+    public function thankYouForYourRequest()
+    {
+        return view('thanks.team-request-sent');
     }
 }
