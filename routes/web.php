@@ -26,15 +26,20 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 // Organisations
-Route::get('/dashboard/organisations', 'App\Http\Controllers\OrganisationController@index')->name('organisations');;
+Route::get('/dashboard/organisations', 'App\Http\Controllers\OrganisationController@index')->name('organisations');
 Route::get('/dashboard/organisations/create', 'App\Http\Controllers\OrganisationController@create')->name('organisations-create');
+Route::get('/dashboard/organisations/edit/{slug}', 'App\Http\Controllers\OrganisationController@edit')->name('organisations-edit');
+Route::get('/dashboard/organisations/{slug}', 'App\Http\Controllers\OrganisationController@show');
 Route::post('/dashboard/organisations', 'App\Http\Controllers\OrganisationController@store');
+Route::patch('/dashboard/organisations/{org}', 'App\Http\Controllers\OrganisationController@update')->name('organisations-patch');
 
 // Teams
 Route::get('/dashboard/teams', 'App\Http\Controllers\TeamController@index')->name('teams');
 Route::get('/dashboard/teams/create', 'App\Http\Controllers\TeamController@create')->name('teams-create');
+Route::get('/dashboard/teams/edit/{slug}', 'App\Http\Controllers\TeamController@edit')->name('teams-edit');
+Route::get('/dashboard/teams/{slug}', 'App\Http\Controllers\TeamController@show');
 Route::post('/dashboard/teams', 'App\Http\Controllers\TeamController@store');
-Route::patch('/dashboard/teams/{team}', 'App\Http\Controllers\TeamController@update');
+Route::patch('/dashboard/teams/{team}', 'App\Http\Controllers\TeamController@update')->name('teams-patch');;
 
 // Events
 Route::resource('/dashboard/events', EventController::class);
@@ -53,7 +58,7 @@ Route::post('/dashboard/tools', [ToolController::class, 'store'])->middleware('a
 Route::post('/dashboard/tools/search/{search}', 'App\Http\Controllers\ToolController@find');
 Route::patch('/dashboard/tools/{tool}', 'App\Http\Controllers\ToolController@update');
 Route::delete('/dashboard/tools/{tool}', 'App\Http\Controllers\ToolController@destroy');
-//-> get
+//-> tool get routes
 Route::get('/dashboard/tools', 'App\Http\Controllers\ToolController@index')->name('tools');
 Route::get('/dashboard/tools/create', 'App\Http\Controllers\ToolController@create')->name('tools-create');
 Route::get('/dashboard/tools/{slug}', 'App\Http\Controllers\ToolController@show');

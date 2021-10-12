@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Organisation;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class TeamFactory extends Factory
 {
@@ -22,8 +23,10 @@ class TeamFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->words(3, true);
         return [
-            'name' => $this->faker->words(3, true),
+            'name' => $name,
+            'slug' => Str::slug($name),
             'comms_url' => $this->faker->url(),
             'organisation_id' => Organisation::factory()->create()->id
         ];

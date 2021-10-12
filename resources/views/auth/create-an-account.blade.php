@@ -30,7 +30,7 @@
                             <div class="govuk-radios__item">
                                 <input class="govuk-radios__input" id="organisation-{{ $loop->index }}" name="organisation" type="radio"
                                        value="{{ $organisation->id }}"
-                                       data-aria-controls="conditional-organisation-{{ $loop->index }}">
+                                       data-aria-controls="conditional-organisation-{{ $loop->index }}" required>
                                 <label class="govuk-label govuk-radios__label" for="organisation-{{ $loop->index }}">
                                     {{ $organisation->name }}
                                 </label>
@@ -42,7 +42,7 @@
                             @foreach($organisation->teams as $team)
                                     <div class="govuk-radios">
                                         <div class="govuk-radios__item">
-                                            <input class="govuk-radios__input" id="team_id-{{ $loop->index }}" name="team" type="radio" value="{{ $team->id }}">
+                                            <input class="govuk-radios__input" id="team_id-{{ $loop->index }}" name="team" type="radio" value="{{ $team->id }}" required />
                                             <label class="govuk-label govuk-radios__label" for="team_id-{{ $loop->index }}">
                                                 {{ $team->name }}
                                             </label>

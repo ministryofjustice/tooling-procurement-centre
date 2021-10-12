@@ -35,7 +35,7 @@ class TeamManagementTest extends TestCase
         $team = Team::factory()->create();
 
         $patch_name = 'Our Brilliant Team';
-        $patch_comms_url = 'https:/slack.com/webhook';
+        $patch_comms_url = '#central-digital';
 
         $this->patch('/dashboard/teams/' . $team->id, [
             'name' => $patch_name,
@@ -58,11 +58,27 @@ class TeamManagementTest extends TestCase
 
     public function test_teams_can_be_listed()
     {
-        $this->withoutExceptionHandling();
-
         $this->authorisedUser();
 
         $response = $this->get('/dashboard/teams');
+        $response->assertStatus(200);
+    }
+
+    public function test_team_edit_form_can_be_rendered()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->authorisedUser();
+        $team = Team::factory()->create();
+        $response = $this->get('/dashboard/teams/edit/' . $team->slug);
+        $response->assertStatus(200);
+    }
+
+    public function test_single_team_can_be_rendered()
+    {
+        $this->authorisedUser();
+        $team = Team::factory()->create();
+        $response = $this->get('/dashboard/teams/' . $team->slug);
         $response->assertStatus(200);
     }
 }

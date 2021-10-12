@@ -1,47 +1,66 @@
+@push('head')
+    <script src="{{ asset('assets/js/icons.js')}}"></script>
+@endpush
 <x-app-layout>
     <x-slot name="backlink">
         <a href="{{ route('dashboard') }}" class="govuk-back-link">Back</a>
     </x-slot>
-    <h1 class="govuk-heading-xl">{{ __('Organisations') }}</h1>
-    <x-nav-link class="govuk-button" href="{{ route('organisations-create') }}">Add new</x-nav-link>
+
+    <x-crud-index-header
+        title="{{ __('Organisations') }}"
+        route="{{ route('organisations-create') }}"
+    ></x-crud-index-header>
+
     <table class="govuk-table">
-        <caption class="govuk-table__caption govuk-table__caption--m">Available organisations</caption>
-        <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Name</th>
-            <th scope="col" class="govuk-table__header">Address</th>
-            <th scope="col" class="govuk-table__header">Description</th>
-        </tr>
-        </thead>
-        <tbody class="govuk-table__body">
         @foreach($organisations as $organisation)
             <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">
-                    {{ $organisation->name }}
-                    @if(count($organisation->teams) > 0)
-                        <br><br>
-                        <details class="govuk-details" data-module="govuk-details">
-                            <summary class="govuk-details__summary">
-                                <span class="govuk-details__summary-text">
-                                  Teams
-                                </span>
-                            </summary>
-                            <div class="govuk-details__text">
-
-                                @foreach($organisation->teams as $team)
-                                    <ul class="govuk-list">
-                                        <li class="govuk-!-font-size-16">{{ $team->name }}</li>
-                                    </ul>
-                                @endforeach
-                            </div>
-                        </details>
-                        @endif
-                </th>
-                <td class="govuk-table__cell">{{ $organisation->address }}</td>
-                <td class="govuk-table__cell">{{ $organisation->description }}</td>
+                <td>
+                    <x-crud-index-tool-bar
+                        title="{{ __($organisation->name) }}"
+                        edit="organisations/edit/{{ $organisation->slug }}"
+                    ></x-crud-index-tool-bar>
+                </td>
             </tr>
+            <tr class="govuk-table__row">
+                <td>
+                    <table class="govuk-table">
+                        <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header">Address</th>
+                            <th scope="col" class="govuk-table__header">Description</th>
+                        </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                        <td class="govuk-table__cell">{{ $organisation->address }}</td>
+                        <td class="govuk-table__cell">{{ $organisation->description }}</td>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            @if(count($organisation->teams) > 0)
+                <tr>
+                    <td class="govuk-table__body" colspan="2">
+                        <strong>Teams</strong>
+                        <div class="govuk-inset-text govuk-body-s">
+                            @foreach($organisation->teams as $team)
+                                @if($loop->index < 7)
+                                    {{ $team->name }},
+                                @else()
+                                    ... <x-nav-link href="{{route('teams')}}">view all teams</x-nav-link>
+                                @endif
+
+                            @endforeach
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+                    </td>
+                </tr>
+            @endif
         @endforeach
-        </tbody>
     </table>
+
 
 </x-app-layout>

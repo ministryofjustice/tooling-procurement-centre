@@ -11,6 +11,8 @@
 
 @import "node_modules/govuk-frontend/govuk/all";
 
+@import "crud"; // contains CRUD related styling
+
 body {
     margin: 0;
 }

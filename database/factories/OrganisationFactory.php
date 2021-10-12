@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Organisation;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class OrganisationFactory extends Factory
 {
@@ -21,8 +22,10 @@ class OrganisationFactory extends Factory
      */
     public function definition(): array
     {
+        $name = $this->faker->words(3, true);
         return [
-            'name' => $this->faker->words(3, true),
+            'name' => $name,
+            'slug' => Str::slug($name),
             'address' => $this->faker->address,
             'description' => $this->faker->sentence
         ];

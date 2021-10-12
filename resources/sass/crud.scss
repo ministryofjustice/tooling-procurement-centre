@@ -1,0 +1,17 @@
+.crud-index-header {
+    .govuk-grid-column-one-third {
+        text-align: right;
+    }
+}
+
+.crud-index-table {
+    .govuk-table__header {
+        > small {
+            font-weight: 400;
+        }
+    }
+}
+
+.alight-right {
+    text-align: right;
+}

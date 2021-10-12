@@ -47,4 +47,41 @@ class OrganisationManagementTest extends TestCase
         $response = $this->get('/dashboard/organisations');
         $response->assertStatus(200);
     }
+
+    public function test_organisation_can_be_updated()
+    {
+        $this->authorisedUser();
+
+        $organisation = Organisation::factory()->create();
+        $response = $this->patch('/dashboard/organisations/' . $organisation->id, [
+            'name' => 'My New Org Name',
+            'address' => 'Great Road, London',
+            'description' => $organisation->description
+        ]);
+
+        $organisation_patched = Organisation::first();
+        $this->assertEquals('My New Org Name', $organisation_patched->name);
+        $this->assertEquals('Great Road, London', $organisation_patched->address);
+        $response->assertRedirect($organisation_patched->fresh()->path());
+    }
+
+    public function test_organisation_edit_form_can_be_rendered()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->authorisedUser();
+        $organisation = Organisation::factory()->create();
+        $response = $this->get('/dashboard/organisations/edit/' . $organisation->slug);
+        $response->assertStatus(200);
+    }
+
+    public function test_single_organisation_can_be_rendered()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->authorisedUser();
+        $org = Organisation::factory()->create();
+        $response = $this->get('/dashboard/organisations/' . $org->slug);
+        $response->assertStatus(200);
+    }
 }

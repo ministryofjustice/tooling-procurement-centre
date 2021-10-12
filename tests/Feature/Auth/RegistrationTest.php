@@ -54,14 +54,15 @@ class RegistrationTest extends TestCase
 
     public function test_new_users_can_register()
     {
+        $this->withoutExceptionHandling();
+
         $response = $this->withSession(['org-team' => [
-            'organisation' => 1,
-            'team' => 1,
+            'team' => 1
         ]])->post('/create-an-account/register', [
             'name' => 'Test User',
             'email' => 'test@justice.gov.uk',
             'password' => 'password',
-            'password_confirmation' => 'password',
+            'password_confirmation' => 'password'
         ]);
 
         $this->assertAuthenticated();

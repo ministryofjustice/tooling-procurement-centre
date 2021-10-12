@@ -22,6 +22,14 @@
                 :autofocus="true"
             />
 
+            {{-- comms_url --}}
+            <x-form-group
+                id="comms_url"
+                label="Comms URL"
+                summary="Used to deliver important messages about tooling or licences.<br>Currently supported: Slack channel handle in the form of; #the-channel"
+                type="text"
+            />
+
             <x-label>
                 Organisation
             </x-label>
@@ -29,9 +37,9 @@
             <div class="govuk-radios" data-module="govuk-radios">
                 @foreach($organisations as $organisation)
                     <div class="govuk-radios__item">
-                        <input class="govuk-radios__input" id="organisation_id" name="organisation_id" type="radio"
-                               value="{{$organisation->id}}">
-                        <label class="govuk-label govuk-radios__label" for="organisation_id">
+                        <input class="govuk-radios__input" id="organisation-{{ $loop->index }}" name="organisation_id" type="radio"
+                               value="{{$organisation->id}}" required>
+                        <label class="govuk-label govuk-radios__label" for="organisation-{{ $loop->index }}">
                             {{ $organisation->name }}
                         </label>
                     </div>

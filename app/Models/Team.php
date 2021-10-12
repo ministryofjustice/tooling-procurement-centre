@@ -21,7 +21,7 @@ class Team extends Model
 
     public function path()
     {
-        return '/dashboard/teams/' . $this->id;
+        return '/dashboard/teams/' . $this->slug;
     }
 
     public function organisation()

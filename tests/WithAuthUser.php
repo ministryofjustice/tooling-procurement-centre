@@ -13,7 +13,8 @@ trait WithAuthUser
     {
         // create a user object
         $user = new User([
-            'id' => 1
+            'id' => 1,
+            'team_id' => 1
         ]);
 
         // authenticate it

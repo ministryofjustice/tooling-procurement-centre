@@ -19,12 +19,12 @@ class Organisation extends Model
 
     public function path()
     {
-        return '/dashboard/organisations/' . $this->id;
+        return '/dashboard/organisations/' . $this->slug;
     }
 
     public function teams(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Team::class);
+        return $this->hasMany(Team::class)->orderBy('name');
     }
 
     public function name()

@@ -84,6 +84,7 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'team_id' => $request->session()->get('org-team')['team']
         ]);
 
         event(new Registered($user));

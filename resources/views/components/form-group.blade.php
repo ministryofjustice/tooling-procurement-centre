@@ -3,6 +3,7 @@
 'label' => null,
 'summary' => null,
 'type' => null,
+'value' => '',
 'required' => false,
 'autofocus' => false,
 'autocomplete' => false
@@ -15,7 +16,7 @@
         </x-label>
         @isset ($summary)
             <x-summary id="{{ $id }}-hint">
-                {{ $summary }}
+                {!! $summary !!}
             </x-summary>
         @endif
         @switch($type)
@@ -24,9 +25,16 @@
                 id="{{ $id }}"
                 type="text"
                 name="{{ $id }}"
-                :value="old('{{ $id }}')"
+                :value="$value"
                 :required="$required"
                 :autofocus="$autofocus"></x-input>
+            @break
+            @case('hidden')
+            <x-input
+                id="{{ $id }}"
+                type="hidden"
+                name="{{ $id }}"
+                :value="$value"></x-input>
             @break
             @case('password')
             <x-input id="{{ $id }}"
@@ -40,7 +48,7 @@
             <x-textarea
                 id="{{ $id }}"
                 name="{{ $id }}"
-                :value="old('{{ $id }}')"
+                :value="$value"
                 :required="$required"></x-textarea>
             @break
         @endswitch

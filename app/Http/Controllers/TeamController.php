@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Organisation;
 use App\Models\Team;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TeamController extends Controller
 {
@@ -15,13 +16,13 @@ class TeamController extends Controller
 
     public function index()
     {
-        return view('teams', ['teams' => Team::all()]);
+        return view('teams', ['teams' => Team::all()->sortByDesc('organisation_id')->sortBy("name")]);
     }
 
     public function create()
     {
         return view('forms.team', [
-            'organisations' => Organisation::all()
+            'organisations' => Organisation::all()->sortBy("name")
         ]);
     }
 
@@ -36,6 +37,18 @@ class TeamController extends Controller
         return redirect('/dashboard/teams');
     }
 
+    public function show($slug)
+    {
+        return view('team', [
+            'team' => Team::where('slug', 'LIKE', $slug)->first()
+        ]);
+    }
+
+    public function edit($slug)
+    {
+        return view('forms.team-edit', [ 'team' => Team::where('slug', 'LIKE', $slug)->first()]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -43,14 +56,23 @@ class TeamController extends Controller
      */
     public function update(Team $team)
     {
-        return $team->update($this->validateRequest());
+        $team->update($this->validateRequest($team->organisation_id));
+        return redirect($team->path());
     }
 
     /**
+     * @param null $org_id
      * @return array
      */
-    protected function validateRequest(): array
+    protected function validateRequest($org_id = null): array
     {
-        return request()->validate(Team::$createRules);
+        if ($org_id) {
+            request('organisation_id', $org_id);
+        }
+
+        $request = request()->validate(Team::$createRules);
+        // add slug...
+        $request['slug'] = Str::slug($request['name']);
+        return $request;
     }
 }
