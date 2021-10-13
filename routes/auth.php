@@ -10,11 +10,30 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/register', [RegisteredUserController::class, 'create'])
+Route::get('/create-an-account', [RegisteredUserController::class, 'selectOrgTeam'])
+                ->middleware('guest')
+                ->name('create-an-account');
+
+Route::get('/request-team-addition', [RegisteredUserController::class, 'createTeamAddition'])
+                ->middleware('guest')
+                ->name('request-team-addition');
+
+Route::post('/request-team-addition', [RegisteredUserController::class, 'requestTeamAddition'])
+                ->middleware('guest')
+                ->name('teams-addition');
+
+Route::get('/your-team-addition-request-has-been-sent', [RegisteredUserController::class, 'thankYouForYourRequest'])
+                ->middleware('guest')
+                ->name('your-team-addition-request-has-been-sent');
+
+Route::get('/create-an-account/register', [RegisteredUserController::class, 'create'])
                 ->middleware('guest')
                 ->name('register');
 
-Route::post('/register', [RegisteredUserController::class, 'store'])
+Route::post('/create-an-account/org-team', [RegisteredUserController::class, 'storeOrgTeam'])
+                ->middleware('guest');
+
+Route::post('/create-an-account/register', [RegisteredUserController::class, 'store'])
                 ->middleware('guest');
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])

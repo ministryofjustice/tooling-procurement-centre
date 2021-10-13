@@ -35,7 +35,7 @@ class ToolEventsTest extends TestCase
     /** @test */
     public function tools_can_record_a_status_update_event()
     {
-        $this->authUser();
+        $this->authorisedUser();
         /**
          * @var Tool $tool
          **/

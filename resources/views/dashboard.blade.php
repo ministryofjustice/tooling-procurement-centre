@@ -2,8 +2,10 @@
     <h1 class="govuk-heading-xl">{{ __('Dashboard') }}</h1>
 
     <p class="govuk-body">
-        <x-nav-link href="/tools">View tooling</x-nav-link>
-        <br>
-        <x-nav-link href="/tools/create">Create a tool</x-nav-link>
+    <ul class="govuk-list">
+        <li><x-nav-link href="{{ route('tools') }}">Tooling</x-nav-link></li>
+        <li><x-nav-link href="{{ route('organisations') }}">Organisations</x-nav-link></li>
+        <li><x-nav-link href="{{ route('teams') }}">Teams</x-nav-link></li>
+    </ul>
     </p>
 </x-app-layout>

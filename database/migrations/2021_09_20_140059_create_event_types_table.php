@@ -15,7 +15,7 @@ class CreateEventTypesTable extends Migration
     {
         Schema::create('event_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->text('icon')->comment('Accepts the path tag of an SVG')->nullable();
             $table->timestamps();
         });

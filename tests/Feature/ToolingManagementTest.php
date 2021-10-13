@@ -17,43 +17,43 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_new_tool_form_can_be_rendered()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
-        $response = $this->get('/tools/create');
+        $response = $this->get('/dashboard/tools/create');
         $response->assertStatus(200);
     }
 
     /** @test */
     public function existing_tools_can_be_rendered()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
-        $response = $this->get('/tools');
+        $response = $this->get('/dashboard/tools');
         $response->assertStatus(200);
     }
 
     /** @test */
     public function a_tool_can_be_added_to_the_tpc()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
-        $response = $this->post('/tools', [
+        $response = $this->post('/dashboard/tools', [
             'name' => 'My cool tool',
             'description' => 'A wonderful description to enlighten the reader.',
             'link' => 'https:/example.com/remote-management-admin',
             'contact_id' => "1"
         ]);
 
-        $response->assertRedirect('/tools');
+        $response->assertRedirect('/dashboard/tools');
         $this->assertCount('1', Tool::all());
     }
 
     /** @test */
     public function tool_data_must_not_be_blank()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
-        $response = $this->post('/tools', [
+        $response = $this->post('/dashboard/tools', [
             'name' => '',
             'description' => '',
             'link' => 'https:/example.com/remote-management-admin',
@@ -66,11 +66,11 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_tool_can_be_updated()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
         Tool::factory()->create();
 
-        $response = $this->patch('tools/1', [
+        $response = $this->patch('/dashboard/tools/1', [
             'name' => 'Even cooler tool',
             'description' => 'So boom!',
             'link' => 'https:/tool.com/login',
@@ -83,7 +83,6 @@ class ToolingManagementTest extends TestCase
         $this->assertEquals('So boom!', $tool->description);
         $this->assertEquals('https:/tool.com/login', $tool->link);
         $this->assertEquals('3', $tool->contact_id);
-        //dd($tool->path());
         $response->assertRedirect($tool->fresh()->path());
     }
 
@@ -93,11 +92,11 @@ class ToolingManagementTest extends TestCase
         Tool::factory()->create();
         $this->assertCount(1, Tool::all());
 
-        $this->authUser();
-        $response = $this->delete('tools/1');
+        $this->authorisedUser();
+        $response = $this->delete('/dashboard/tools/1');
 
         $this->assertCount(0, Tool::all());
-        $response->assertRedirect('/tools');
+        $response->assertRedirect('/dashboard/tools');
     }
 
     /** @test */
@@ -109,18 +108,18 @@ class ToolingManagementTest extends TestCase
         $this->assertCount(1, Tool::all());
 
         $this->expectException(AuthenticationException::class);
-        $response = $this->delete('tools/1');
+        $response = $this->delete('/dashboard/tools/1');
         $response->assertForbidden();
     }
 
     /** @test */
     public function a_tag_can_be_added_to_a_tool()
     {
-        $this->post('/tags', [
+        $this->post('/dashboard/tags', [
             'name' => 'my tag'
         ]);
 
-        $this->post('/tags', [
+        $this->post('/dashboard/tags', [
             'name' => 'another tag'
         ]);
 
@@ -134,12 +133,12 @@ class ToolingManagementTest extends TestCase
 
         $tool = Tool::factory()->create();
 
-        $tag_tool_1 = $this->post('/tools/' . $tool->id . '/tag', [
+        $tag_tool_1 = $this->post('/dashboard/tools/' . $tool->id . '/tag', [
             'tag_id' => $tag_1->id
         ]);
         $tag_tool_1->assertCreated();
 
-        $tag_tool_2 = $this->post('/tools/' . $tool->id . '/tag', [
+        $tag_tool_2 = $this->post('/dashboard/tools/' . $tool->id . '/tag', [
             'tag_id' => $tag_2->id
         ]);
         $tag_tool_2->assertCreated();
@@ -154,7 +153,7 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_tool_can_be_displayed()
     {
-        $this->authUser();
+        $this->authorisedUser();
         $tool = Tool::factory()->create();
 
         $response = $this->get($tool->path());
@@ -164,11 +163,11 @@ class ToolingManagementTest extends TestCase
     /** @test */
     public function a_tool_can_be_found_using_tool_search()
     {
-        $this->authUser();
+        $this->authorisedUser();
 
         $tool = Tool::factory()->create();
         $search = $tool->slug;
-        $response = $this->post('/tools/search/' . substr($search, 0, 4) . '/');
+        $response = $this->post('/dashboard/tools/search/' . substr($search, 0, 4) . '/');
         $results = $response->getData()->results;
 
         $this->assertCount(1, $results);
@@ -185,7 +184,7 @@ class ToolingManagementTest extends TestCase
         $this->expectException(AuthenticationException::class);
 
         $search = $tool->slug;
-        $response = $this->post('/tools/search/' . substr($search, 0, 4) . '/');
+        $response = $this->post('/dashboard/tools/search/' . substr($search, 0, 4) . '/');
         $response->assertForbidden();
     }
 }

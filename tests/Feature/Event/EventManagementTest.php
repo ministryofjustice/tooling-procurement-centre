@@ -18,7 +18,7 @@ class EventManagementTest extends TestCase
         $user = User::factory()->create();
         $tool = Tool::factory()->create();
 
-        $response = $this->post('/tools/' . $tool->id . '/event', [
+        $response = $this->post('/dashboard/tools/' . $tool->id . '/event', [
             'action' => 'tooling-review',
             'detail' => 'This detail would contain an official review of a tool after consideration.',
             'origin' => 'email-submission',

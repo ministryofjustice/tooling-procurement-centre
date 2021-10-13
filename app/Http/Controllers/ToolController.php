@@ -25,8 +25,7 @@ class ToolController extends Controller
      */
     public function index()
     {
-        $tools = Tool::all();
-        return view('tools', ['tools' => $tools]);
+        return view('tools', ['tools' => Tool::all()]);
     }
 
     /**
@@ -61,7 +60,7 @@ class ToolController extends Controller
             'tool_id' => $tool->id
         ]);
 
-        return redirect('/tools');
+        return redirect('/dashboard/tools');
     }
 
     /**
@@ -108,7 +107,7 @@ class ToolController extends Controller
     {
         $tool->delete();
 
-        return redirect('/tools');
+        return redirect('/dashboard/tools');
     }
 
     public function find($search)

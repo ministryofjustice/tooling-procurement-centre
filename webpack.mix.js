@@ -11,7 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/assets/js')
+mix.js(['resources/js/icons.js', 'resources/js/app.js'], 'public/assets/js')
     .sass('resources/sass/app.scss', 'public/assets/css')
     .copy('node_modules/govuk-frontend/govuk/all.js', 'public/assets/js/govuk.js')
     .copy('node_modules/govuk-frontend/govuk/assets/images', 'public/assets/images')

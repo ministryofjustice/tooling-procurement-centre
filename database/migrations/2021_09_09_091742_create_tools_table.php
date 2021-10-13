@@ -15,8 +15,8 @@ class CreateToolsTable extends Migration
     {
         Schema::create('tools', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
+            $table->string('name')->unique();
+            $table->string('slug')->unique();
             $table->string('description');
             $table->string('link');
             $table->integer('contact_id')->nullable();

@@ -25,30 +25,45 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+// Organisations
+Route::get('/dashboard/organisations', 'App\Http\Controllers\OrganisationController@index')->name('organisations');
+Route::get('/dashboard/organisations/create', 'App\Http\Controllers\OrganisationController@create')->name('organisations-create');
+Route::get('/dashboard/organisations/edit/{slug}', 'App\Http\Controllers\OrganisationController@edit')->name('organisations-edit');
+Route::get('/dashboard/organisations/{slug}', 'App\Http\Controllers\OrganisationController@show');
+Route::post('/dashboard/organisations', 'App\Http\Controllers\OrganisationController@store');
+Route::patch('/dashboard/organisations/{org}', 'App\Http\Controllers\OrganisationController@update')->name('organisations-patch');
+
+// Teams
+Route::get('/dashboard/teams', 'App\Http\Controllers\TeamController@index')->name('teams');
+Route::get('/dashboard/teams/create', 'App\Http\Controllers\TeamController@create')->name('teams-create');
+Route::get('/dashboard/teams/edit/{slug}', 'App\Http\Controllers\TeamController@edit')->name('teams-edit');
+Route::get('/dashboard/teams/{slug}', 'App\Http\Controllers\TeamController@show');
+Route::post('/dashboard/teams', 'App\Http\Controllers\TeamController@store');
+Route::patch('/dashboard/teams/{team}', 'App\Http\Controllers\TeamController@update')->name('teams-patch');;
 
 // Events
-Route::resource('/events', EventController::class);
-Route::post('/event/types', 'App\Http\Controllers\EventTypeController@store');
-Route::post('/event/types/{type}/tag', 'App\Http\Controllers\EventTypeTagController@store');
+Route::resource('/dashboard/events', EventController::class);
+Route::post('/dashboard/event/types', 'App\Http\Controllers\EventTypeController@store');
+Route::post('/dashboard/event/types/{type}/tag', 'App\Http\Controllers\EventTypeTagController@store');
 
 // Tags
-Route::resource('/tags', TagController::class);
+Route::resource('/dashboard/tags', TagController::class);
 
 // Licences
-Route::patch('/licences/{licence}', 'App\Http\Controllers\LicenceController@update');
-Route::resource('/licences', LicenceController::class);
+Route::patch('/dashboard/licences/{licence}', 'App\Http\Controllers\LicenceController@update');
+Route::resource('/dashboard/licences', LicenceController::class);
 
 // Tools
-Route::post('/tools', [ToolController::class, 'store'])->middleware('auth');
-Route::post('/tools/search/{search}', 'App\Http\Controllers\ToolController@find');
-Route::patch('/tools/{tool}', 'App\Http\Controllers\ToolController@update');
-Route::delete('/tools/{tool}', 'App\Http\Controllers\ToolController@destroy');
-//-> get
-Route::get('/tools', 'App\Http\Controllers\ToolController@index');
-Route::get('/tools/create', 'App\Http\Controllers\ToolController@create');
-Route::get('/tools/{slug}', 'App\Http\Controllers\ToolController@show');
+Route::post('/dashboard/tools', [ToolController::class, 'store'])->middleware('auth');
+Route::post('/dashboard/tools/search/{search}', 'App\Http\Controllers\ToolController@find');
+Route::patch('/dashboard/tools/{tool}', 'App\Http\Controllers\ToolController@update');
+Route::delete('/dashboard/tools/{tool}', 'App\Http\Controllers\ToolController@destroy');
+//-> tool get routes
+Route::get('/dashboard/tools', 'App\Http\Controllers\ToolController@index')->name('tools');
+Route::get('/dashboard/tools/create', 'App\Http\Controllers\ToolController@create')->name('tools-create');
+Route::get('/dashboard/tools/{slug}', 'App\Http\Controllers\ToolController@show');
 
-Route::post('/tools/{tool}/tag', 'App\Http\Controllers\TagToolController@store');
-Route::post('/tools/{tool}/event', 'App\Http\Controllers\EventController@store');
+Route::post('/dashboard/tools/{tool}/tag', 'App\Http\Controllers\TagToolController@store');
+Route::post('/dashboard/tools/{tool}/event', 'App\Http\Controllers\EventController@store');
 
 require __DIR__.'/auth.php';
