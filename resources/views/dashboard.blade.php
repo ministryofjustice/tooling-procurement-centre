@@ -6,6 +6,7 @@
         <li><x-nav-link href="{{ route('tools') }}">Tooling</x-nav-link></li>
         <li><x-nav-link href="{{ route('organisations') }}">Organisations</x-nav-link></li>
         <li><x-nav-link href="{{ route('teams') }}">Teams</x-nav-link></li>
+        <li><x-nav-link href="{{ route('contacts') }}">Contacts</x-nav-link></li>
     </ul>
     </p>
 </x-app-layout>

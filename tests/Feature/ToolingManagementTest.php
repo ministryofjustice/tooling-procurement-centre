@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\BusinessCase;
 use App\Models\Tag;
 use App\Models\TagTool;
 use Illuminate\Auth\AuthenticationException;
@@ -19,7 +20,7 @@ class ToolingManagementTest extends TestCase
     {
         $this->authorisedUser();
 
-        $response = $this->get('/dashboard/tools/create');
+        $response = $this->withSession(['tooling-data' => []])->get('/dashboard/tools/create');
         $response->assertStatus(200);
     }
 
@@ -40,12 +41,11 @@ class ToolingManagementTest extends TestCase
         $response = $this->post('/dashboard/tools', [
             'name' => 'My cool tool',
             'description' => 'A wonderful description to enlighten the reader.',
-            'link' => 'https:/example.com/remote-management-admin',
-            'contact_id' => "1"
+            'link' => 'https:/example.com/remote-management-admin'
         ]);
 
-        $response->assertRedirect('/dashboard/tools');
-        $this->assertCount('1', Tool::all());
+        $response->assertSessionHas('tooling');
+        $response->assertRedirect('/dashboard/tools/create/contact');
     }
 
     /** @test */
@@ -73,8 +73,7 @@ class ToolingManagementTest extends TestCase
         $response = $this->patch('/dashboard/tools/1', [
             'name' => 'Even cooler tool',
             'description' => 'So boom!',
-            'link' => 'https:/tool.com/login',
-            'contact_id' => "3"
+            'link' => 'https:/tool.com/login'
         ]);
 
         $tool = Tool::first();
@@ -82,7 +81,6 @@ class ToolingManagementTest extends TestCase
         $this->assertEquals('Even cooler tool', $tool->name);
         $this->assertEquals('So boom!', $tool->description);
         $this->assertEquals('https:/tool.com/login', $tool->link);
-        $this->assertEquals('3', $tool->contact_id);
         $response->assertRedirect($tool->fresh()->path());
     }
 
@@ -186,5 +184,76 @@ class ToolingManagementTest extends TestCase
         $search = $tool->slug;
         $response = $this->post('/dashboard/tools/search/' . substr($search, 0, 4) . '/');
         $response->assertForbidden();
+    }
+
+    public function test_a_tool_contact_add_screen_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $response = $this->get('/dashboard/tools/create/contact');
+        $response->assertStatus(200);
+    }
+
+    public function test_a_tooling_contact_can_be_added()
+    {
+        $this->authorisedUser();
+
+        $response = $this->post('dashboard/tools/contact', [
+            'contact' => 'yes',
+            'name' => 'Tooling Contact',
+            'email' => 'tooling.contact@justice.gov.uk'
+        ]);
+
+        $response->assertSessionHas('contact');
+        $response->assertRedirect(route('tools-create-business-case'));
+    }
+
+    public function test_a_tooling_contact_can_be_skipped()
+    {
+        $this->authorisedUser();
+
+        $response = $this->post('dashboard/tools/contact', [
+            'contact' => 'no'
+        ]);
+
+        $response->assertSessionMissing('contact');
+        $response->assertRedirect(route('tools-create-business-case'));
+    }
+
+    public function test_a_tool_business_case_add_screen_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $response = $this->get(route('tools-create-business-case'));
+        $response->assertStatus(200);
+    }
+
+    public function test_a_tooling_business_case_can_be_added()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $response = $this->post('dashboard/tools/business-case', [
+            'business-case' => 'yes',
+            'name' => 'My compelling case title',
+            'text' => 'A massive amount of text'
+        ]);
+
+        $response->assertSessionHas('business-case');
+        $response->assertRedirect(route('tools-view-summary'));
+    }
+
+
+    public function test_a_tooling_business_case_can_be_skipped()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $response = $this->post('dashboard/tools/business-case', [
+            'business-case' => 'no'
+        ]);
+
+        $response->assertSessionMissing('business-case');
+        $response->assertRedirect(route('tools-view-summary'));
     }
 }

@@ -4,14 +4,14 @@
     </x-slot>
     <x-form-card>
         <x-slot name="title">
-            Create a tool
+            Procure a tool
         </x-slot>
         {{-- Validation Errors --}}
         <x-auth-validation-errors class="govuk-body" :errors="$errors"/>
 
         <p class="govuk-body">Please be as specific as you can.</p>
 
-        <form method="POST" action="/tools">
+        <form method="POST" action="{{ route('tools-add') }}">
             @csrf
 
             {{-- Name --}}
@@ -20,6 +20,7 @@
                 label="Name"
                 summary="What is the name of the tool"
                 type="text"
+                value="{{ session()->get('tooling-data')['name'] ?? '' }}"
                 :required="true"
                 :autofocus="true"
             />
@@ -30,6 +31,7 @@
                 label="Description"
                 summary="Please describe what this tool is used for."
                 type="textarea"
+                value="{{ session()->get('tooling-data')['description'] ?? '' }}"
                 :required="true"
             />
 
@@ -38,6 +40,7 @@
                 id="link"
                 label="Admin URL"
                 type="text"
+                value="{{ session()->get('tooling-data')['link'] ?? '' }}"
                 summary="It would be useful if this link directed the user to the suppliers administration dashboard, or
                     a location on the web where the licence for this tool can be managed."
             />
