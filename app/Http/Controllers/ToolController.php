@@ -94,7 +94,8 @@ class ToolController extends Controller
 
     public function storeContact(Request $request)
     {
-        if ($request->get('contact') === 'no') {
+        if ($request->get('contact') === 'yes') {
+            $request->session()->forget('contact');
             return redirect(route('tools-create-business-case'));
         }
 
@@ -109,6 +110,7 @@ class ToolController extends Controller
     public function storeBusinessCase(Request $request)
     {
         if ($request->get('business-case') === 'no') {
+            $request->session()->forget('business-case');
             return redirect(route('tools-view-summary'));
         }
 
@@ -120,6 +122,15 @@ class ToolController extends Controller
         return redirect(route('tools-view-summary'));
     }
 
+    public function viewSummary()
+    {
+        return view('forms.tooling-summary', [
+            'tooling' => request()->session()->get('tooling'),
+            'contact' => request()->session()->get('contact'),
+            'business_case' => request()->session()->get('business-case')
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -128,8 +139,8 @@ class ToolController extends Controller
     public function store()
     {
         // create a contact or get the current user
-        if ($contact_data = request()->session()->get('contact')) {
-            $user = Contact::create($contact_data);
+        if ($contact = request()->session()->get('contact')) {
+            $user = Contact::create($contact);
         } else {
             $user = Auth::user();
         }
@@ -141,11 +152,16 @@ class ToolController extends Controller
             'tool_id' => $tool->id
         ]);
 
-        BusinessCase::create(
-            array_merge(request()->session()->get('business-case'), [
-                'tool_id' => $tool->id
-            ])
-        );
+        $tool->action('Licence created');
+
+        if ($business_case = request()->session()->get('business-case')) {
+            BusinessCase::create(
+                array_merge($business_case, [
+                    'tool_id' => $tool->id
+                ])
+            );
+            $tool->action('Business case created');
+        }
 
         // clear the session data
         request()->session()->forget('tooling');

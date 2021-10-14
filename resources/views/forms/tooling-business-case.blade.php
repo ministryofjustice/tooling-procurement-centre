@@ -9,7 +9,7 @@
 
         {{-- Validation Errors --}}
         <x-auth-validation-errors class="govuk-body" :errors="$errors"/>
-        <form method="POST" action="{{ route('tools-add-contact') }}">
+        <form method="POST" action="{{ route('tools-add-business-case') }}">
             @csrf
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
@@ -51,7 +51,7 @@
                             />
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="contact-no" name="contact" type="radio" value="no">
+                            <input class="govuk-radios__input" id="contact-no" name="business-case" type="radio" value="no">
                             <label class="govuk-label govuk-radios__label" for="contact-no">
                                 No
                             </label>

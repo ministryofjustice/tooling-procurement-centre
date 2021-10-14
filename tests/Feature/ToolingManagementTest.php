@@ -199,7 +199,7 @@ class ToolingManagementTest extends TestCase
         $this->authorisedUser();
 
         $response = $this->post('dashboard/tools/contact', [
-            'contact' => 'yes',
+            'contact' => 'no',
             'name' => 'Tooling Contact',
             'email' => 'tooling.contact@justice.gov.uk'
         ]);
@@ -213,7 +213,7 @@ class ToolingManagementTest extends TestCase
         $this->authorisedUser();
 
         $response = $this->post('dashboard/tools/contact', [
-            'contact' => 'no'
+            'contact' => 'yes'
         ]);
 
         $response->assertSessionMissing('contact');
@@ -230,7 +230,6 @@ class ToolingManagementTest extends TestCase
 
     public function test_a_tooling_business_case_can_be_added()
     {
-        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $response = $this->post('dashboard/tools/business-case', [
@@ -246,7 +245,6 @@ class ToolingManagementTest extends TestCase
 
     public function test_a_tooling_business_case_can_be_skipped()
     {
-        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $response = $this->post('dashboard/tools/business-case', [
@@ -255,5 +253,14 @@ class ToolingManagementTest extends TestCase
 
         $response->assertSessionMissing('business-case');
         $response->assertRedirect(route('tools-view-summary'));
+    }
+
+    public function test_a_tool_summary_screen_can_be_rendered()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $response = $this->get(route('tools-view-summary'));
+        $response->assertStatus(200);
     }
 }
