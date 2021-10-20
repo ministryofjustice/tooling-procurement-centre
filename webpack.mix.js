@@ -12,10 +12,9 @@ const mix = require('laravel-mix');
  */
 
 mix.browserSync({
-    proxy: 'http://127.0.0.1:8080/'
+    proxy: 'http://127.0.0.1:8000/'
 })
-    .js('resources/js/icons.js', 'public/assets/js')
-    .js('resources/js/app.js', 'public/assets/js')
+    .js(['resources/js/icons.js', 'resources/js/app.js'], 'public/assets/js/app.js')
     .js('node_modules/jquery/dist/jquery', 'public/assets/js')
     .sass('resources/sass/app.scss', 'public/assets/css')
     .copy('node_modules/govuk-frontend/govuk/all.js', 'public/assets/js/govuk.js')

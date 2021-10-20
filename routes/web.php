@@ -98,12 +98,13 @@ Route::post($tool_base_path, $tool_controller .'storeSessionData')->name('tools-
 Route::post($tool_base_path . '/contact', $tool_controller .'storeContact')->name('tools-add-contact');
 Route::post($tool_base_path . '/business-case', $tool_controller .'storeBusinessCase')->name('tools-add-business-case');
 Route::post($tool_base_path . '/store', $tool_controller .'store')->name('tools-store');
+Route::post($tool_base_path . '/search/{search}', $tool_controller .'find')->name('tools-find');
+Route::post($tool_base_path . '/{tool}/approve', $tool_controller .'approve')->name('tools-approve');
 Route::get($tool_base_path . '/create', $tool_controller .'create')->name('tools-create');
 Route::get($tool_base_path . '/create/contact', $tool_controller .'createContact')->name('tools-create-contact');
 Route::get($tool_base_path . '/create/business-case', $tool_controller .'createBusinessCase')->name('tools-create-business-case');
 Route::get($tool_base_path . '/create/summary', $tool_controller .'viewSummary')->name('tools-view-summary');
 Route::get($tool_base_path . '/{slug}', $tool_controller .'show')->name('tool');
-Route::post($tool_base_path . '/search/{search}', $tool_controller .'find')->name('tools-find');
 Route::patch($tool_base_path . '/{tool}', $tool_controller .'update')->name('tools-patch');
 Route::delete($tool_base_path . '/{tool}', $tool_controller .'destroy')->name('tools-delete');
 

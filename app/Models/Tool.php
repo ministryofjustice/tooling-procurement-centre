@@ -16,7 +16,8 @@ class Tool extends Model
     public static array $createRules = [
         'name' => 'required|unique:tools|max:80',
         'description' => 'required',
-        'link' => 'required'
+        'link' => 'required',
+        'approved' => 'sometimes|boolean'
     ];
 
     public function path()
@@ -58,7 +59,7 @@ class Tool extends Model
         $this->events()->create([
             'action' => 'action',
             'detail' => $detail,
-            'origin' => 'application',
+            'origin' => ($user ? 'user' : 'application'),
             'user_id' => $user_id
         ]);
     }

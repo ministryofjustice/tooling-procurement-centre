@@ -264,4 +264,28 @@ class ToolingManagementTest extends TestCase
         $response = $this->get(route('tools-view-summary'));
         $response->assertStatus(200);
     }
+
+    public function test_a_tool_can_be_approved()
+    {
+        $this->authorisedUser();
+        $tool = Tool::factory()->create();
+        $this->post('dashboard/tools/' . $tool->id . '/approve', [
+            'approved' => true
+        ]);
+
+        $tool = Tool::first();
+        $this->assertEquals(1, $tool->approved);
+    }
+
+    public function test_a_tool_can_be_unapproved()
+    {
+        $this->authorisedUser();
+        $tool = Tool::factory()->create();
+        $this->post('dashboard/tools/' . $tool->id . '/approve', [
+            'approved' => false
+        ]);
+
+        $tool = Tool::first();
+        $this->assertEquals(0, $tool->approved);
+    }
 }

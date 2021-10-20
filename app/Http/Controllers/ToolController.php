@@ -146,7 +146,7 @@ class ToolController extends Controller
         }
 
         $tool = Tool::create(array_merge(request()->session()->get('tooling'), ['contact_id' => $user->id]));
-        $tool->action('Tool created');
+        $tool->action('Tool created', true);
 
         Licence::create([
             'tool_id' => $tool->id
@@ -201,7 +201,7 @@ class ToolController extends Controller
      */
     public function update(Tool $tool)
     {
-        $tool->action('Tool update');
+        $tool->action('Tool updated');
         $tool->update($this->validateRequest());
         return redirect($tool->path());
     }
@@ -223,6 +223,15 @@ class ToolController extends Controller
         $search = str_replace('-', ' ', $search);
         $tools = Tool::where('name', 'LIKE', '%' . $search . '%')->get();
         return ['results' => $tools];
+    }
+
+    public function approve(Tool $tool, Request $request)
+    {
+        $tool->approved = $request->approved;
+        $tool->save();
+
+        $tool->action('Tooling was ' . ($request->approved ? 'approved' : 'unapproved') . ' for purchase', true);
+        return redirect($tool->path());
     }
 
     /**
