@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Contact;
 use App\Models\Event;
 use App\Models\Tool;
 use App\Models\User;
@@ -48,5 +49,19 @@ class ToolEventsTest extends TestCase
         $this->assertCount(3, Event::all());
         $this->assertEquals('in review', Event::first()->detail);
         $this->assertEquals($tool->id, Event::first()->tool_id);
+    }
+
+    public function test_a_tool_object_has_events()
+    {
+        Event::factory()->create();
+        $tool = Tool::first();
+        $this->assertEquals('Tool created', $tool->events[0]->detail);
+    }
+
+    public function test_a_tool_object_has_a_contact()
+    {
+        $tool = Tool::factory()->create();
+        $contact = Contact::first();
+        $this->assertEquals($contact->name, $tool->contact->name);
     }
 }

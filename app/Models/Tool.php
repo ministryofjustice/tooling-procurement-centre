@@ -66,6 +66,11 @@ class Tool extends Model
 
     public function events()
     {
-        return $this->hasMany(Event::class);
+        return $this->hasMany(Event::class, 'tool_id', 'id')->orderBy('created_at', 'desc');
+    }
+
+    public function contact()
+    {
+        return $this->hasOne(Contact::class, 'id', 'contact_id');
     }
 }

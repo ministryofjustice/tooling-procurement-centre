@@ -27,7 +27,7 @@ class ToolFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'approved' => 1,
+            'approved' => 0,
             'description' => $this->faker->sentence,
             'link' => $this->faker->url,
             'contact_id' => Contact::factory()->create()->id
