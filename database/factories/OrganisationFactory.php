@@ -24,10 +24,8 @@ class OrganisationFactory extends Factory
     {
         $name = $this->faker->words(3, true);
         return [
-            'name' => $name,
-            'slug' => Str::slug($name),
-            'address' => $this->faker->address,
-            'description' => $this->faker->sentence
+            'name' => ucwords($name),
+            'slug' => Str::slug($name)
         ];
     }
 }

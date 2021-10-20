@@ -4,9 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\BusinessCase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class BusinessCaseController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,22 +27,23 @@ class BusinessCaseController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function create()
     {
-        //
+        return view('forms.business-case');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
-        //
+        BusinessCase::create($this->validateRequest());
+        return redirect(route('business-cases'));
     }
 
     /**
@@ -81,5 +89,16 @@ class BusinessCaseController extends Controller
     public function destroy(BusinessCase $businessCase)
     {
         //
+    }
+
+    /**
+     * @return array
+     */
+    protected function validateRequest(): array
+    {
+        $request = request()->validate(BusinessCase::$createRules);
+        // add slug...
+        $request['slug'] = Str::slug($request['name']);
+        return $request;
     }
 }

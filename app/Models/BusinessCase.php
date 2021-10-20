@@ -12,8 +12,14 @@ class BusinessCase extends Model
     protected $guarded = [];
 
     public static array $createRules = [
-        'name' => 'required',
-        'text' => 'required',
+        'name' => 'required|unique:business_cases|max:80',
+        'link' => 'required-without:text',
+        'text' => 'required-without:link',
         'tool_id' => ''
     ];
+
+    public function path()
+    {
+        return '/dashboard/business-cases/' . $this->slug;
+    }
 }

@@ -25,9 +25,8 @@ class TeamFactory extends Factory
     {
         $name = $this->faker->words(3, true);
         return [
-            'name' => $name,
+            'name' => ucwords($name),
             'slug' => Str::slug($name),
-            'comms_url' => $this->faker->url(),
             'organisation_id' => Organisation::factory()->create()->id
         ];
     }

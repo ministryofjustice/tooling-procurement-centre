@@ -29,7 +29,7 @@
             <x-form-group
                 id="description"
                 label="Description"
-                summary="Please describe what this tool is used for."
+                summary="Please describe what this tool enables us to do."
                 type="textarea"
                 value="{{ session()->get('tooling-data')['description'] ?? '' }}"
                 :required="true"

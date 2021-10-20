@@ -45,8 +45,10 @@
                             @foreach($organisation->teams as $team)
                                 @if($loop->index < 7)
                                     {{ $team->name }},
-                                @else()
+                                @elseif($loop->index === 7)
                                     ... <x-nav-link href="{{route('teams')}}">view all teams</x-nav-link>
+                                @else()
+                                    @continue
                                 @endif
 
                             @endforeach

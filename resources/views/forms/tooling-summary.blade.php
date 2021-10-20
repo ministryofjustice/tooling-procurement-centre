@@ -11,7 +11,7 @@
 
         <p class="govuk-body">Please check your answers.</p>
 
-        <form method="POST" action="{{ route('tools-add') }}">
+        <form method="POST" action="{{ route('tools-store') }}">
             @csrf
 
             <dl class="govuk-summary-list">

@@ -17,7 +17,8 @@ class CreateBusinessCasesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->longText('text');
+            $table->string('link')->nullable();
+            $table->longText('text')->nullable();
             $table->unsignedBigInteger('tool_id')->nullable();
             $table->foreign('tool_id')->references('id')->on('tools')->onDelete('cascade');
             $table->timestamps();

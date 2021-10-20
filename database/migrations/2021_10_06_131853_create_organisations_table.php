@@ -17,7 +17,7 @@ class CreateOrganisationsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('slug')->unique();
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
         });

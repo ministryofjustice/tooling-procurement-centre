@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class ContactSeeder extends Seeder
+class OrganisationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,6 @@ class ContactSeeder extends Seeder
      */
     public function run()
     {
-        //
+
     }
 }

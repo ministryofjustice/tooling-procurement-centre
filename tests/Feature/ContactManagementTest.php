@@ -5,14 +5,21 @@ namespace Tests\Feature;
 use App\Models\Contact;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Tests\WithAuthUser;
-use function Couchbase\fastlzCompress;
 
 class ContactManagementTest extends TestCase
 {
     use RefreshDatabase, WithAuthUser;
+
+    public function test_contacts_can_be_listed()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $response = $this->get('/dashboard/contacts');
+        $response->assertStatus(200);
+    }
 
     public function test_a_contact_can_be_added()
     {
