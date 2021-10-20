@@ -201,7 +201,8 @@ class ToolingManagementTest extends TestCase
         $response = $this->post('dashboard/tools/contact', [
             'contact' => 'no',
             'name' => 'Tooling Contact',
-            'email' => 'tooling.contact@justice.gov.uk'
+            'email' => 'tooling.contact@justice.gov.uk',
+            'slack' => 'BL4HBL4H'
         ]);
 
         $response->assertSessionHas('contact');

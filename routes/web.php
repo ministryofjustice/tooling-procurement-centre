@@ -21,7 +21,14 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $data = [
+        'tooling' => ['count' => count(\App\Models\Tool::all())],
+        'organisations' => ['count' => count(\App\Models\Organisation::all())],
+        'teams' => ['count' => count(\App\Models\Team::all())],
+        'business-cases' => ['count' => count(\App\Models\BusinessCase::all())],
+        'contacts' => ['count' => count(\App\Models\Contact::all())],
+    ];
+    return view('dashboard', ['data' => $data]);
 })->middleware(['auth'])->name('dashboard');
 
 // auth routes
@@ -55,7 +62,7 @@ $contact_base_path = 'dashboard/contacts';
 Route::get($contact_base_path, $contact_controller . 'index')->name('contacts');
 Route::post($contact_base_path, $contact_controller . 'store')->name('contacts-add');
 Route::get($contact_base_path . '/create', $contact_controller . 'create')->name('contacts-create');
-Route::get($contact_base_path . '/edit/{slug}', $contact_controller . 'edit')->name('contacts-edit');
+Route::get($contact_base_path . '/{slug}/edit', $contact_controller . 'edit')->name('contacts-edit');
 Route::get($contact_base_path . '/{slug}', $contact_controller . 'show')->name('contact');
 Route::patch($contact_base_path . '/{contact}', $contact_controller . 'update')->name('contacts-patch');
 Route::delete($contact_base_path . '/{contact}', $contact_controller . 'destroy')->name('contacts-delete');

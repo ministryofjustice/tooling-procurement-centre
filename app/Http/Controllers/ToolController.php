@@ -27,7 +27,7 @@ class ToolController extends Controller
      */
     public function index()
     {
-        return view('tools', ['tools' => Tool::all()]);
+        return view('tools', ['tools' => Tool::orderBy('name')->get()]);
     }
 
     /**
@@ -145,7 +145,7 @@ class ToolController extends Controller
             $user = Auth::user();
         }
 
-        $tool = Tool::create(request()->session()->get('tooling'));
+        $tool = Tool::create(array_merge(request()->session()->get('tooling'), ['contact_id' => $user->id]));
         $tool->action('Tool created');
 
         Licence::create([

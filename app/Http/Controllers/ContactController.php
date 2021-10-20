@@ -48,29 +48,27 @@ class ContactController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Contact  $contact
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function show(Contact $contact)
+    public function show($slug)
     {
-        //
+        return view('contact', ['contact' => Contact::where('slug', 'LIKE', $slug)->first()]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Contact  $contact
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function edit(Contact $contact)
+    public function edit($slug)
     {
-        //
+        return view('forms.contact-edit', ['contact' => Contact::where('slug', 'LIKE', $slug)->first()]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Models\Contact  $contact
+     * @param \App\Models\Contact $contact
      */
     public function update(Contact $contact)
     {
@@ -81,7 +79,7 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Contact  $contact
+     * @param \App\Models\Contact $contact
      */
     public function destroy(Contact $contact)
     {

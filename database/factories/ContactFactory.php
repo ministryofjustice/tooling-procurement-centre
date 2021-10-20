@@ -23,10 +23,12 @@ class ContactFactory extends Factory
     public function definition()
     {
         $name =  $this->faker->name();
+        $slug = Str::slug($name);
         return [
             'name' => $name,
             'email' => $this->faker->unique()->safeEmail(),
-            'slug' => Str::slug($name)
+            'slack' => $slug,
+            'slug' => $slug
         ];
     }
 }

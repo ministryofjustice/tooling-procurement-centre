@@ -12,6 +12,20 @@ class ContactManagementTest extends TestCase
 {
     use RefreshDatabase, WithAuthUser;
 
+    public function test_a_contact_can_be_added()
+    {
+        $this->authorisedUser();
+
+        $response = $this->post('dashboard/contacts', [
+            'name' => 'New tooling contact',
+            'email' => 'tooling.contact@justice.gov.uk',
+            'slack' => 'MYSL4C3ID'
+        ]);
+
+        $response->assertCreated();
+        $this->assertCount(1, Contact::all());
+    }
+
     public function test_contacts_can_be_listed()
     {
         $this->withoutExceptionHandling();
@@ -19,19 +33,6 @@ class ContactManagementTest extends TestCase
 
         $response = $this->get('/dashboard/contacts');
         $response->assertStatus(200);
-    }
-
-    public function test_a_contact_can_be_added()
-    {
-        $this->authorisedUser();
-
-        $response = $this->post('dashboard/contacts', [
-            'name' => 'New tooling contact',
-            'email' => 'tooling.contact@justice.gov.uk'
-        ]);
-
-        $response->assertCreated();
-        $this->assertCount(1, Contact::all());
     }
 
     /** @test */
@@ -57,14 +58,17 @@ class ContactManagementTest extends TestCase
 
         $patch_name = 'James McNally';
         $patch_email = 'tooling.contact@justice.gov.uk';
+        $patch_slack = 'AN0T83RID';
         $response = $this->patch('dashboard/contacts/' . $contact->id, [
             'name' => $patch_name,
-            'email' => $patch_email
+            'email' => $patch_email,
+            'slack' => $patch_slack
         ]);
 
         $contact = Contact::first();
         $this->assertEquals($patch_name, $contact->name);
         $this->assertEquals($patch_email, $contact->email);
+        $this->assertEquals($patch_slack, $contact->slack);
 
         $response->assertRedirect($contact->path());
     }
@@ -82,10 +86,31 @@ class ContactManagementTest extends TestCase
 
     public function test_a_contact_create_form_can_be_rendered()
     {
-        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $response = $this->get('/dashboard/contacts/create');
+        $response->assertStatus(200);
+    }
+
+    public function test_a_contact_can_be_viewed()
+    {
+        $this->authorisedUser();
+
+        $contact = Contact::factory()->create();
+        $this->assertCount(1, Contact::all());
+        $this->assertEquals($contact->slug, Contact::first()->slug);
+
+        $response = $this->get('/dashboard/contacts/' . $contact->slug);
+        $response->assertStatus(200);
+    }
+
+    public function test_a_contact_edit_form_can_be_rendered()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $contact = Contact::factory()->create();
+        $response = $this->get('dashboard/contacts/' . $contact->slug . '/edit');
         $response->assertStatus(200);
     }
 }

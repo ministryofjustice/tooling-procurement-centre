@@ -53,6 +53,14 @@
                                 summary="Please enter the contacts email address here."
                                 type="text"
                             />
+
+                            {{-- Slack --}}
+                            <x-form-group
+                                id="slack"
+                                label="Slack ID"
+                                summary="Enter a Slack member ID for this contact."
+                                type="text"
+                            />
                         </div>
                     </div>
                 </fieldset>

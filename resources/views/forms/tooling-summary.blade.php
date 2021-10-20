@@ -47,7 +47,8 @@
                     </dt>
                     <dd class="govuk-summary-list__value">
                         {{ $contact['name'] ?? 'A contact was not added.' }}<br>
-                        {{ $contact['email'] ?? '' }}
+                        {{ $contact['email'] ?? '' }}<br>
+                        {{ $contact['slack'] ?? '' }}
                     </dd>
                     <dd class="govuk-summary-list__actions">
                         <a class="govuk-link" href="{{route('tools-create-contact')}}">

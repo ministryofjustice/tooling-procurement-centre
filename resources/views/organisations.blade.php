@@ -44,13 +44,12 @@
                         <div class="govuk-inset-text govuk-body-s">
                             @foreach($organisation->teams as $team)
                                 @if($loop->index < 7)
-                                    {{ $team->name }},
+                                    {{ $team->name }}@if($loop->count > 1 && (!$loop->last && $loop->index < 6)),@endif
                                 @elseif($loop->index === 7)
                                     ... <x-nav-link href="{{route('teams')}}">view all teams</x-nav-link>
-                                @else()
+                                @else
                                     @continue
                                 @endif
-
                             @endforeach
                         </div>
                     </td>
@@ -63,6 +62,4 @@
             @endif
         @endforeach
     </table>
-
-
 </x-app-layout>

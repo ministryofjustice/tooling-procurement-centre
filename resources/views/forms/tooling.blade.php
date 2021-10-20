@@ -52,4 +52,38 @@
             </div>
         </form>
     </x-form-card>
+    @verbatim
+        <script>
+            (function ($) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+
+                $('#name').keyup(function () {
+                    let theVar = $(this).val();
+                    if (theVar.length > 2) {
+                        $.ajax({
+                                type: 'POST',
+                                url: '/dashboard/tools/search/' + theVar,
+                                success: function (data) {
+                                    if (data.results.length > 0) {
+                                        let ii = 0;
+                                        let iiLen = data.results.length;
+                                        console.log('Tooling has been found');
+                                        for (ii; ii < iiLen; ii++) {
+                                            console.log(data.results[ii].name);
+                                        }
+                                    } else {
+                                        console.log('No matching tooling has been found.');
+                                    }
+                                }
+                            }
+                        );
+                    }
+                });
+            })(jQuery);
+        </script>
+    @endverbatim
 </x-app-layout>

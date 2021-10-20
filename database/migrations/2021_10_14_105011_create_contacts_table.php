@@ -17,6 +17,7 @@ class CreateContactsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->string('slack')->nullable()->comment('The Slack user, user ID (IM)');
             $table->string('email')->unique();
             $table->timestamps();
         });

@@ -4,46 +4,47 @@
     </x-slot>
     <x-form-card>
         <x-slot name="title">
-            Create a contact
+            Edit: {!! $contact->name !!}
         </x-slot>
         {{-- Validation Errors --}}
         <x-auth-validation-errors class="govuk-body" :errors="$errors"/>
 
-        <form method="POST" action="{{ route('contacts') }}">
+        <form method="POST" action="{{ route('contacts-patch', $contact->id) }}">
             @csrf
-
-            {{-- Select a team --}}
+            {!! method_field('patch') !!}
+            {{-- Name --}}
             <x-form-group
                 id="name"
-                label="Team"
-                summary="What is the contacts name?"
+                label="Name"
                 type="text"
+                value="{!! $contact->name !!}"
                 :required="true"
                 :autofocus="true"
             />
 
-            {{-- email --}}
+            {{-- Email --}}
             <x-form-group
                 id="email"
                 label="Email"
-                summary="Please enter the contacts email address."
                 type="text"
+                value="{!! $contact->email !!}"
                 :required="true"
             />
 
-            {{-- email --}}
+            {{-- Slack --}}
             <x-form-group
                 id="slack"
                 label="Slack ID"
-                summary="Enter a Slack member ID for this contact."
                 type="text"
+                value="{!! $contact->slack !!}"
             />
 
             <div>
                 <x-button>
-                    {{ __('Save') }}
+                    {{ __('Save and continue') }}
                 </x-button>
             </div>
+
         </form>
     </x-form-card>
 </x-app-layout>
