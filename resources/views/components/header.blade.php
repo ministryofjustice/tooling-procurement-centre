@@ -46,4 +46,6 @@
     </div>
 </header>
 
-<x-phase-banner/>
+<x-phase-banner phase="beta">
+    This is a new service – your <x-nav-link href="#">feedback</x-nav-link> will help us to improve it.
+</x-phase-banner>

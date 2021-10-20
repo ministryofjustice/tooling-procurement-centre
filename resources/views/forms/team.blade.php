@@ -9,7 +9,7 @@
         {{-- Validation Errors --}}
         <x-auth-validation-errors class="govuk-body" :errors="$errors"/>
 
-        <form method="POST" action="{{ route('teams') }}">
+        <form method="POST" action="{{ route('teams-add') }}">
             @csrf
 
             {{-- Select a team --}}

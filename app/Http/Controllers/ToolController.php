@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BusinessCase;
+use App\Models\Contact;
 use App\Models\Licence;
 use App\Models\Tool;
 use Illuminate\Http\Request;
@@ -25,7 +27,7 @@ class ToolController extends Controller
      */
     public function index()
     {
-        return view('tools', ['tools' => Tool::all()]);
+        return view('tools', ['tools' => Tool::orderBy('name')->get()]);
     }
 
     /**
@@ -33,9 +35,100 @@ class ToolController extends Controller
      *
      * @return View
      */
-    public function create()
+    public function create(): View
     {
-        return view('forms.tooling');
+        return view('forms.tooling', [
+            'tooling' => request()->session()->get('tooling-data') ?? []
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return View
+     */
+    public function createContact(): View
+    {
+        return view('forms.tooling-contact', [
+            'tooling' => request()->session()->get('tooling-data') ?? []
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return View
+     */
+    public function createBusinessCase(): View
+    {
+        return view('forms.tooling-business-case', [
+            'tooling' => request()->session()->get('tooling') ?? []
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return View
+     */
+    public function createSummary(): View
+    {
+        return view('forms.tooling-summary', [
+            'tooling' => request()->session()->get('tooling') ?? [],
+            'contact' => request()->session()->get('contact') ?? [],
+            'business-case' => request()->session()->get('business-case') ?? [],
+        ]);
+    }
+
+    public function storeSessionData(Request $request)
+    {
+        // associate user with the tool
+        $data = array_merge($this->validateRequest(), [
+            'slug' => Str::slug(request()->name)
+        ]);
+
+        $request->session()->put('tooling', $data);
+
+        return redirect('/dashboard/tools/create/contact');
+    }
+
+    public function storeContact(Request $request)
+    {
+        if ($request->get('contact') === 'yes') {
+            $request->session()->forget('contact');
+            return redirect(route('tools-create-business-case'));
+        }
+
+        $contact = $request->validate(Contact::$createRules);
+        $contact['slug'] = Str::slug($contact['name']);
+
+        $request->session()->put('contact', $contact);
+
+        return redirect(route('tools-create-business-case'));
+    }
+
+    public function storeBusinessCase(Request $request)
+    {
+        if ($request->get('business-case') === 'no') {
+            $request->session()->forget('business-case');
+            return redirect(route('tools-view-summary'));
+        }
+
+        $business_case = $request->validate(BusinessCase::$createRules);
+        $business_case['slug'] = Str::slug($business_case['name']);
+
+        $request->session()->put('business-case', $business_case);
+
+        return redirect(route('tools-view-summary'));
+    }
+
+    public function viewSummary()
+    {
+        return view('forms.tooling-summary', [
+            'tooling' => request()->session()->get('tooling'),
+            'contact' => request()->session()->get('contact'),
+            'business_case' => request()->session()->get('business-case')
+        ]);
     }
 
     /**
@@ -45,20 +138,35 @@ class ToolController extends Controller
      */
     public function store()
     {
-        // create a contact: get current user
-        $user = Auth::user();
-        // associate user with the tool
-        $data = array_merge($this->validateRequest(), [
-            'slug' => Str::slug(request()->name),
-            'contact_id' => $user->id
-        ]);
+        // create a contact or get the current user
+        if ($contact = request()->session()->get('contact')) {
+            $user = Contact::create($contact);
+        } else {
+            $user = Auth::user();
+        }
 
-        $tool = Tool::create($data);
+        $tool = Tool::create(array_merge(request()->session()->get('tooling'), ['contact_id' => $user->id]));
         $tool->action('Tool created');
 
         Licence::create([
             'tool_id' => $tool->id
         ]);
+
+        $tool->action('Licence created');
+
+        if ($business_case = request()->session()->get('business-case')) {
+            BusinessCase::create(
+                array_merge($business_case, [
+                    'tool_id' => $tool->id
+                ])
+            );
+            $tool->action('Business case created');
+        }
+
+        // clear the session data
+        request()->session()->forget('tooling');
+        request()->session()->forget('contact');
+        request()->session()->forget('business-case');
 
         return redirect('/dashboard/tools');
     }

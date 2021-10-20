@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
 
     <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @stack('head')
     <script src="{{ asset('assets/js/app.js') }}" defer></script>
 </head>

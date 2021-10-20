@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Contact;
 use App\Models\Tool;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -26,9 +27,10 @@ class ToolFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name),
+            'approved' => 1,
             'description' => $this->faker->sentence,
             'link' => $this->faker->url,
-            'contact_id' => "1"
+            'contact_id' => Contact::factory()->create()->id
         ];
     }
 }

@@ -16,8 +16,7 @@ class Tool extends Model
     public static array $createRules = [
         'name' => 'required|unique:tools|max:80',
         'description' => 'required',
-        'link' => 'required',
-        'contact_id' => 'nullable'
+        'link' => 'required'
     ];
 
     public function path()
