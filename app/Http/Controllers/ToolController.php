@@ -157,7 +157,10 @@ class ToolController extends Controller
         // create the tool
         $tool = Tool::create(array_merge(request()->session()->get('tooling'), ['contact_id' => $user->id]));
         // fire the event
-        $tool->action('Tooling procurement for ' . $tool->name . ' began.', true);
+        $tool->action(
+            'Tooling procurement for ' . $tool->name . ' began by <small><a href="mailto:' . $user->email . '">' . $user->name . '</a></small>.',
+            true
+        );
 
         // create an empty licence
         $licence = Licence::create(['tool_id' => $tool->id]);
