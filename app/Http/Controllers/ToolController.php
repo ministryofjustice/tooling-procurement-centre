@@ -162,7 +162,7 @@ class ToolController extends Controller
         // create an empty licence
         $licence = Licence::create(['tool_id' => $tool->id]);
         // fire the event
-        $tool->action('Licence generated <strong class="govuk-tag govuk-tag--yellow">empty</strong>.
+        $tool->action('<strong class="govuk-tag govuk-tag--yellow">empty</strong> licence generated.
             <a href="' . route('licences-edit', $licence->id) . '">Add information here.</a>');
 
         // create a business case, if requested
