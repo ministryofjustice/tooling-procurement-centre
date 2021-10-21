@@ -16,7 +16,9 @@ class Tool extends Model
     public static array $createRules = [
         'name' => 'required|unique:tools|max:80',
         'description' => 'required',
-        'link' => 'required'
+        'link' => 'required',
+        'approved' => 'sometimes|boolean',
+        'approved_reason' => ''
     ];
 
     public function path()
@@ -58,13 +60,18 @@ class Tool extends Model
         $this->events()->create([
             'action' => 'action',
             'detail' => $detail,
-            'origin' => 'application',
+            'origin' => ($user ? 'user' : 'application'),
             'user_id' => $user_id
         ]);
     }
 
     public function events()
     {
-        return $this->hasMany(Event::class);
+        return $this->hasMany(Event::class, 'tool_id', 'id')->orderBy('created_at', 'desc');
+    }
+
+    public function contact()
+    {
+        return $this->hasOne(Contact::class, 'id', 'contact_id');
     }
 }

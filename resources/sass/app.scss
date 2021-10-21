@@ -10,8 +10,10 @@
 */
 
 @import "node_modules/govuk-frontend/govuk/all";
+@import "govuk-amends"; // slight adjustments on gds framework
 
-@import "crud"; // contains CRUD related styling
+@import "crud"; // contains CRUD related styling for application
+@import "tool-timeline";
 
 body {
     margin: 0;
@@ -175,6 +177,20 @@ body {
 
 .italic {
     font-style: italic;
+}
+
+.tooling-approve {
+    float:right;
+}
+.tooling-new {
+    color:#00703c !important;
+}
+.tooling-unapproved {
+    color:#d4351c !important;
+}
+
+.no-border {
+    border: none;
 }
 
 @media (min-width: 40.0625em) {

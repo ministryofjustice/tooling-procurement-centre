@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Licence;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Redirect;
 
 class LicenceController extends Controller
 {
@@ -65,7 +67,7 @@ class LicenceController extends Controller
      *
      * @param Request $request
      * @param Licence $licence
-     * @return Response
+     * @return RedirectResponse
      */
     public function update(Request $request, Licence $licence)
     {

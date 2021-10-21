@@ -17,7 +17,7 @@ class CreateToolsTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('slug')->unique();
-            $table->integer('approved')->comment('Approval to purchase')->default(0);
+            $table->boolean('approved')->comment('Approval to purchase')->default(false);
             $table->string('description');
             $table->string('link');
             $table->integer('contact_id')->nullable();

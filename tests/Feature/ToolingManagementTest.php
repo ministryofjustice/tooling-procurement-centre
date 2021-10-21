@@ -3,11 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\BusinessCase;
+use App\Models\Contact;
 use App\Models\Tag;
 use App\Models\TagTool;
+use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Tool;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 use Tests\WithAuthUser;
 
@@ -263,5 +266,51 @@ class ToolingManagementTest extends TestCase
 
         $response = $this->get(route('tools-view-summary'));
         $response->assertStatus(200);
+    }
+
+    public function test_a_tool_can_be_approved()
+    {
+        $this->authorisedUser();
+        $tool = Tool::factory()->create();
+        $this->post('dashboard/tools/' . $tool->id . '/approve', [
+            'approved' => true
+        ]);
+
+        $tool = Tool::first();
+        $this->assertEquals(1, $tool->approved);
+    }
+
+    public function test_a_tool_can_be_unapproved()
+    {
+        $this->authorisedUser();
+        $tool = Tool::factory()->create();
+        $this->post('dashboard/tools/' . $tool->id . '/approve', [
+            'approved' => false
+        ]);
+
+        $tool = Tool::first();
+        $this->assertEquals(0, $tool->approved);
+    }
+
+    public function test_a_tool_can_be_added_with_auth_user_as_contact()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = User::factory()->create();
+        $this->be($user);
+
+        $response = $this->withSession(['tooling'=> [
+            'name' => 'My fab tool',
+            'slug' => Str::slug('My fab tool'),
+            'description' => 'An equally cool description',
+            'link' => 'https:/example.com/remote-management-admin'
+        ]])->post(route('tools-store'));
+
+        $tool = Tool::first();
+        $contact = Contact::first();
+
+        $response->assertRedirect($tool->path());
+        $this->assertEquals($user->email, $contact->email);
+        $this->assertEquals($tool->contact_id, $contact->id);
     }
 }
