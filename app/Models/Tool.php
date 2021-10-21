@@ -17,7 +17,8 @@ class Tool extends Model
         'name' => 'required|unique:tools|max:80',
         'description' => 'required',
         'link' => 'required',
-        'approved' => 'sometimes|boolean'
+        'approved' => 'sometimes|boolean',
+        'approved_reason' => ''
     ];
 
     public function path()

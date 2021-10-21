@@ -10,8 +10,10 @@
 */
 
 @import "node_modules/govuk-frontend/govuk/all";
+@import "govuk-amends"; // slight adjustments on gds framework
 
-@import "crud"; // contains CRUD related styling
+@import "crud"; // contains CRUD related styling for application
+@import "tool-timeline";
 
 body {
     margin: 0;
@@ -180,23 +182,13 @@ body {
 .tooling-approve {
     float:right;
 }
+.tooling-new {
+    color:#00703c !important;
+}
 .tooling-unapproved {
     color:#d4351c !important;
 }
-.tooling-timeline-date, .tooling-timeline-date-year {
-    display: inline-block;
-    background-color: #2d70b7;
-    color: #ffffff;
-    padding:3px 12px;
-    text-align: center;
-}
-.tooling-timeline-date-year {
-    display: block;
-    background-color: #b1b4b6;
-    text-align: left;
-    text-indent: 12px;
-    margin-right:-30px;
-}
+
 .no-border {
     border: none;
 }

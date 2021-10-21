@@ -75,8 +75,8 @@ Route::post($bcase_base_path, $bcase_controller . 'store')->name('business-cases
 Route::get($bcase_base_path . '/create', $bcase_controller . 'create')->name('business-cases-create');
 Route::get($bcase_base_path . '/edit/{slug}', $bcase_controller . 'edit')->name('business-cases-edit');
 Route::get($bcase_base_path . '/{slug}', $bcase_controller . 'show')->name('business-case');
-Route::patch($bcase_base_path . '/{contact}', $bcase_controller . 'update')->name('business-cases-patch');
-Route::delete($bcase_base_path . '/{contact}', $bcase_controller . 'destroy')->name('business-cases-delete');
+Route::patch($bcase_base_path . '/{case}', $bcase_controller . 'update')->name('business-cases-patch');
+Route::delete($bcase_base_path . '/{case}', $bcase_controller . 'destroy')->name('business-cases-delete');
 
 // Events
 Route::resource('dashboard/events', EventController::class);
@@ -87,8 +87,15 @@ Route::post('dashboard/event/types/{type}/tag', 'App\Http\Controllers\EventTypeT
 Route::resource('dashboard/tags', TagController::class);
 
 // Licences
-Route::patch('dashboard/licences/{licence}', 'App\Http\Controllers\LicenceController@update');
-Route::resource('dashboard/licences', LicenceController::class);
+$licence_controller = 'App\Http\Controllers\LicenceController@';
+$licence_base_path = 'dashboard/licences';
+Route::get($licence_base_path, $licence_controller . 'index')->name('contacts');
+Route::post($licence_base_path, $licence_controller . 'store')->name('licences-add');
+Route::get($licence_base_path . '/edit/{slug}', $licence_controller . 'edit')->name('licences-edit');
+Route::get($licence_base_path . '/create', $licence_controller . 'create')->name('licences-create');
+Route::get($licence_base_path . '/{slug}', $licence_controller . 'show')->name('licence');
+Route::patch($licence_base_path . '/{licence}', $licence_controller . 'update')->name('licences-patch');
+Route::delete($licence_base_path . '/{contact}', $licence_controller . 'destroy')->name('licences-delete');
 
 // Tools
 $tool_controller = 'App\Http\Controllers\ToolController@';

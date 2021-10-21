@@ -9,7 +9,6 @@ use App\Models\Tool;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -138,22 +137,35 @@ class ToolController extends Controller
      */
     public function store()
     {
-        // create a contact or get the current user
+        // create a contact or get the current auth user and evaluate as a tooling contact
         if ($contact = request()->session()->get('contact')) {
             $user = Contact::create($contact);
         } else {
-            $user = Auth::user();
+            // no contact specified, use the logged-in user
+            $contact = Auth::user();
+            $user = Contact::where('email', 'LIKE', $contact->email)->first();
+            // check: already marked as a contact?
+            if (empty($user)) {
+                $user = Contact::create([
+                    'name' => $contact->name,
+                    'slug' => Str::slug($contact->name),
+                    'email' => $contact->email
+                ]);
+            }
         }
 
+        // create the tool
         $tool = Tool::create(array_merge(request()->session()->get('tooling'), ['contact_id' => $user->id]));
-        $tool->action('Tool created', true);
+        // fire the event
+        $tool->action('Tooling procurement for ' . $tool->name . ' began.', true);
 
-        Licence::create([
-            'tool_id' => $tool->id
-        ]);
+        // create an empty licence
+        $licence = Licence::create(['tool_id' => $tool->id]);
+        // fire the event
+        $tool->action('Licence generated <strong class="govuk-tag govuk-tag--yellow">empty</strong>.
+            <a href="' . route('licences-edit', $licence->id) . '">Add information here.</a>');
 
-        $tool->action('Licence created');
-
+        // create a business case, if requested
         if ($business_case = request()->session()->get('business-case')) {
             BusinessCase::create(
                 array_merge($business_case, [
@@ -168,7 +180,7 @@ class ToolController extends Controller
         request()->session()->forget('contact');
         request()->session()->forget('business-case');
 
-        return redirect('/dashboard/tools');
+        return redirect('/dashboard/tools/' . $tool->slug);
     }
 
     /**
@@ -230,7 +242,27 @@ class ToolController extends Controller
         $tool->approved = $request->approved;
         $tool->save();
 
-        $tool->action('Tooling was ' . ($request->approved ? 'approved' : 'unapproved') . ' for purchase', true);
+        $user = Auth::user();
+        $comms = '<small><a href="mailto:' . $user->email . '">' . $user->name . '</a></small>';
+        if (isset($user->slack)) {
+            $comms = '<a href="https://mojdt.slack.com/team/' . $user->slack . '" target="_blank">' . $user->name . '</a>';
+        }
+
+        $approved = 'un';
+        $colour = 'red';
+
+        if ($request->approved) {
+            $approved = '';
+            $colour = 'turquoise';
+        }
+
+        $reason = '<div class="govuk-inset-text">' . $request->approved_reason . '</div>';
+
+        $message = '<strong class="govuk-tag govuk-tag--' . $colour . '">' . $approved . 'approved for purchase</strong>';
+        $message = 'Tooling was ' . $message . ' by '
+            . $comms . ' with the following message:' . $reason;
+
+        $tool->action($message, true);
         return redirect($tool->path());
     }
 

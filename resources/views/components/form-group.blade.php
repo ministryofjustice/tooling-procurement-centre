@@ -6,7 +6,8 @@
 'value' => '',
 'required' => false,
 'autofocus' => false,
-'autocomplete' => false
+'autocomplete' => false,
+'class' => ''
 ])
 
 @isset ($id, $type)
@@ -48,6 +49,7 @@
             <x-textarea
                 id="{{ $id }}"
                 name="{{ $id }}"
+                class="{{ $class }}"
                 :value="$value"
                 :required="$required"></x-textarea>
             @break

@@ -1,7 +1,7 @@
-@props(['disabled' => false, 'required' => false, 'value' => ''])
+@props(['disabled' => false, 'required' => false, 'value' => '', 'class' => ''])
 
 <textarea
     {{ $disabled ? 'disabled' : '' }}
     {{ $required ? 'required' : '' }}
-    {!! $attributes->merge(['class' => 'govuk-textarea govuk-!-width-one-half']) !!}>{!! $value !!}</textarea>
+    {!! $attributes->merge(['class' => 'govuk-textarea ' . ($class ? $class : 'govuk-!-width-one-half')]) !!}>{!! $value !!}</textarea>
 

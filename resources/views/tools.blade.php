@@ -16,17 +16,28 @@
         </thead>
         <tbody class="govuk-table__body">
         @foreach($tools as $tool)
+            @php
+                // 3 states: NEW = 2; APPROVED = 1; REJECTED = 0
+                $now = \Carbon\Carbon::now();
+                $approved = (!$tool->approved && $tool->created_at->diff($now)->days < 3
+                    ? 2
+                    : $tool->approved
+                );
+                $approved_state = ($approved === 2
+                    ? 'new'
+                    : (!$approved ? 'rejected' : 'approved'))
+            @endphp
             <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                    <strong class="govuk-tag govuk-tag--{{!$tool->approved ? 'red' : 'turquoise'}}">
-                        {{!$tool->approved ? 'REJECTED' : 'APPROVED'}}
+                    <strong class="govuk-tag govuk-tag--{{$approved === 2 ? 'green' : (!$approved ? 'red' : 'turquoise')}}">
+                        {{ $approved_state }}
                     </strong>
                 </td>
                 <th scope="row" class="govuk-table__header">
                     <x-nav-link
                         href="{{ $tool->path() }}"
-                        class="govuk-link--no-visited-state{{!$tool->approved ? ' tooling-unapproved' : ''}}"
-                        title="{{ $tool->name }} has been evaluated and {{ $tool->approved ? 'is fit for use.' : 'rejected.' }}"
+                        class="govuk-link--no-visited-state{{$approved === 2 ? ' tooling-new' : (!$approved ? ' tooling-unapproved' : '')}}"
+                        title="{{ $tool->name }} has been evaluated and is {{ $approved_state }}"
                     >
                         {{ $tool->name }}
                     </x-nav-link>
