@@ -24,8 +24,8 @@
                     {{ $team->name }} <br>
                     <small>
                     (
-                        <x-nav-link href="/dashboard/teams/{{$team->slug}}" :no_visit="true">view</x-nav-link> &nbsp;|&nbsp;
-                        <x-nav-link href="/dashboard/teams/edit/{{$team->slug}}" :no_visit="true">edit</x-nav-link>
+                        <x-nav-link href="{{ route('team', $team->slug) }}" :no_visit="true">view</x-nav-link> &nbsp;|&nbsp;
+                        <x-nav-link href="{{ route('teams-edit', $team->slug) }}" :no_visit="true">edit</x-nav-link>
                     )
                     </small>
                 </th>

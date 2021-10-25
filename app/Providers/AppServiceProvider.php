@@ -23,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        view()->share('breadcrumbs', explode('/', substr_replace(request()->path(), '', 0, 10)));
     }
 }

@@ -26,7 +26,7 @@ class ToolController extends Controller
      */
     public function index()
     {
-        return view('tools', ['tools' => Tool::orderBy('name')->get()]);
+        return view('tools', ['tools' => Tool::orderBy('approved', 'desc')->orderBy('name')->get()]);
     }
 
     /**
