@@ -14,7 +14,7 @@
             $input_value = '0';
             $button = '';
             $button_text = 'Remove approval';
-            $text_main = 'Tooling has been evaluated and is approved.';
+            $text_main = 'Tooling has been evaluated and approved.';
             $text_sub = 'View <a href="#licences" class="govuk-link govuk-link--no-visited-state">licences</a> below for further information';
             break;
         case 'rejected':

@@ -27,17 +27,22 @@
             <table class="govuk-table tooling-timeline">
                 <tbody class="govuk-table__body">
                 @foreach($tool->events as $event)
-                    @if($loop->index === 0 || ($event->created_at->format('Y') !== $tool->events[$loop->index-1]->created_at->format('Y')))
+                    @php
+                        $the_year = $event->created_at->format('Y');
+                    @endphp
+                    @if($loop->index === 0 || ($the_year !== $tool->events[$loop->index-1]->created_at->format('Y')))
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell tooling-timeline__item" colspan="2">
                                 <div class="tooling-timeline__date-year">
-                                    <strong class="govuk-!-font-size-27">{{$event->created_at->format('Y')}}</strong>
+                                    <strong class="govuk-!-font-size-27">{{$the_year}}</strong>
                                 </div>
                             </td>
                         </tr>
                     @endif
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell tooling-timeline__item">
+                        <td
+                            class="govuk-table__cell tooling-timeline__item"
+                            title="{{$event->created_at->format('r')}}">
                             <div class="tooling-timeline__date">
                                 <strong>{{$event->created_at->format('d M')}}</strong><br>
                                 <small>{{$event->created_at->format('H:i')}}</small>
