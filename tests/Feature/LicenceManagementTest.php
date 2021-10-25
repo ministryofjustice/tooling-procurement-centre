@@ -13,6 +13,14 @@ class LicenceManagementTest extends TestCase
 {
     use RefreshDatabase, WithAuthUser;
 
+    public function test_Licences_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $response = $this->get(route('licences'));
+        $response->assertStatus(200);
+    }
+
     public function test_a_licence_can_be_created()
     {
         $tool = Tool::factory()->create();

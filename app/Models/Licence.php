@@ -42,4 +42,9 @@ class Licence extends Model
     {
         $this->attributes['stop'] = Carbon::parse($stop);
     }
+
+    public function tool()
+    {
+        return $this->hasOne(Tool::class, 'id', 'tool_id');
+    }
 }

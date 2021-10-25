@@ -7,17 +7,18 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class LicenceController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return View
      */
     public function index()
     {
-        //
+        return view('licences', ['licences' => Licence::orderBy('annual_cost')->get()]);
     }
 
     /**

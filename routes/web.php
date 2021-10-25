@@ -24,6 +24,7 @@ Route::get('/dashboard', function () {
     $data = [
         'tooling' => ['count' => count(\App\Models\Tool::all())],
         'organisations' => ['count' => count(\App\Models\Organisation::all())],
+        'licences' => ['count' => count(\App\Models\Licence::all())],
         'teams' => ['count' => count(\App\Models\Team::all())],
         'business-cases' => ['count' => count(\App\Models\BusinessCase::all())],
         'contacts' => ['count' => count(\App\Models\Contact::all())],
@@ -89,7 +90,7 @@ Route::resource('dashboard/tags', TagController::class);
 // Licences
 $licence_controller = 'App\Http\Controllers\LicenceController@';
 $licence_base_path = 'dashboard/licences';
-Route::get($licence_base_path, $licence_controller . 'index')->name('contacts');
+Route::get($licence_base_path, $licence_controller . 'index')->name('licences');
 Route::post($licence_base_path, $licence_controller . 'store')->name('licences-add');
 Route::get($licence_base_path . '/{slug}/edit', $licence_controller . 'edit')->name('licences-edit');
 Route::get($licence_base_path . '/create', $licence_controller . 'create')->name('licences-create');
