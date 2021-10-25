@@ -16,8 +16,9 @@
     @endphp
 
     <x-tool-approved-banner
+        name="{{ $tool->name }}"
         approved="{{ $approved }}"
-        tool_id="{{$tool->id}}" />
+        tool_id="{{$tool->id}}"/>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -63,11 +64,14 @@
                     @php
                         $image = md5( strtolower( trim( $tool->contact->email ) ) );
                     @endphp
-                    <img src="https://www.gravatar.com/avatar/{{$image}}" style="float:left;margin-right:10px" />
+                    <img src="https://www.gravatar.com/avatar/{{$image}}" style="float:left;margin-right:10px"/>
                     <strong>{{$tool->contact->name}}</strong><br>
                     <x-nav-link href="mailto:{{$tool->contact->email}}">Email</x-nav-link>
                     @if(!empty($tool->contact->slack))
-                        <br><x-nav-link target="_blank" href="https://mojdt.slack.com/team/{{$tool->contact->slack}}">Slack IM</x-nav-link>
+                        <br>
+                        <x-nav-link target="_blank" href="https://mojdt.slack.com/team/{{$tool->contact->slack}}">Slack
+                            IM
+                        </x-nav-link>
                     @endif
                 </div>
             @endif
