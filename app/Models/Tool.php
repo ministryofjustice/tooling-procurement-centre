@@ -65,13 +65,28 @@ class Tool extends Model
         ]);
     }
 
-    public function events()
+    public function events(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Event::class, 'tool_id', 'id')->orderBy('created_at', 'desc');
     }
 
-    public function contact()
+    public function contact(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Contact::class, 'id', 'contact_id');
+    }
+
+    public function licences(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Licence::class, 'tool_id', 'id');
+    }
+
+    public function setLicenceTotalAttribute()
+    {
+        $total = 0;
+        foreach($this->licences() as $licence) {
+            $total = $total + $licence->annual_cost ?? 0;
+        }
+
+        return $total;
     }
 }

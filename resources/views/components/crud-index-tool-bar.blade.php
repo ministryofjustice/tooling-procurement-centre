@@ -2,7 +2,7 @@
     <div class="govuk-grid-column-two-thirds">
         <h3>{!! $title !!}</h3>
     </div>
-    <div class="alight-right govuk-!-padding-top-4 govuk-!-padding-right-3">
+    <div class="align-right govuk-!-padding-top-4 govuk-!-padding-right-3">
         <a class="govuk-button" href="{{ $edit }}" data-module="govuk-button">
             Edit
         </a>

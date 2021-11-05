@@ -12,9 +12,11 @@
 
 @isset ($id, $type)
     <div class="govuk-form-group">
-        <x-label class="govuk-label" for="{{ $id }}">
-            {{ $label }}
-        </x-label>
+        @if($type !== 'date')
+            <x-label class="govuk-label" for="{{ $id }}">
+                {{ $label }}
+            </x-label>
+        @endif
         @isset ($summary)
             <x-summary id="{{ $id }}-hint">
                 {!! $summary !!}
@@ -38,11 +40,12 @@
                 :value="$value"></x-input>
             @break
             @case('password')
-            <x-input id="{{ $id }}"
-                     type="password"
-                     name="{{ $id }}"
-                     :required="$required"
-                     :autocomplete="$autocomplete"></x-input>
+            <x-input
+                id="{{ $id }}"
+                type="password"
+                name="{{ $id }}"
+                :required="$required"
+                :autocomplete="$autocomplete"></x-input>
             @break
 
             @case('textarea')
@@ -52,6 +55,15 @@
                 class="{{ $class }}"
                 :value="$value"
                 :required="$required"></x-textarea>
+            @break
+
+            @case('date')
+            <x-date
+                id="{{ $id }}"
+                label="{!! $label !!}"
+                :value="$value"
+                :required="$required"
+            ></x-date>
             @break
         @endswitch
     </div>

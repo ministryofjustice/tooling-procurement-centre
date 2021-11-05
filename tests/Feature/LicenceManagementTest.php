@@ -23,6 +23,7 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_can_be_created()
     {
+        $this->authorisedUser();
         $tool = Tool::factory()->create();
 
         $this->post('/dashboard/licences', [
@@ -54,9 +55,10 @@ class LicenceManagementTest extends TestCase
         );
     }
 
-    public function test_a_licence_can_be_created_with_only_tool_id()
+    public function test_a_licence_with_only_tool_id_can_be_created()
     {
         $tool = Tool::factory()->create();
+        $this->authorisedUser();
 
         // add a licence and associate with the tool_id
         $response = $this->post('/dashboard/licences', [
@@ -73,6 +75,7 @@ class LicenceManagementTest extends TestCase
     public function test_a_licence_can_be_updated()
     {
         $tool = Tool::factory()->create();
+        $this->authorisedUser();
 
         $this->post('/dashboard/licences', [
             'tool_id' => $tool->id,
@@ -106,6 +109,7 @@ class LicenceManagementTest extends TestCase
     public function test_a_licence_description_cannot_be_boolean()
     {
         $tool = Tool::factory()->create();
+        $this->authorisedUser();
 
         // description: boolean
         $response = $this->post('/dashboard/licences', [
@@ -118,6 +122,7 @@ class LicenceManagementTest extends TestCase
     public function test_a_licence_description_cannot_be_an_integer()
     {
         $tool = Tool::factory()->create();
+        $this->authorisedUser();
 
         // description: integer
         $response = $this->post('/dashboard/licences', [
@@ -130,6 +135,7 @@ class LicenceManagementTest extends TestCase
     public function test_a_licence_currency_code_is_3_chars_max()
     {
         $tool = Tool::factory()->create();
+        $this->authorisedUser();
 
         // description: integer
         $response = $this->post('/dashboard/licences', [
@@ -141,8 +147,8 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_is_removed_if_tool_deleted()
     {
-        $this->authorisedUser();
         $tool = Tool::factory()->create();
+        $this->authorisedUser();
 
         $this->post('/dashboard/licences', [
             'tool_id' => $tool->id
@@ -151,5 +157,112 @@ class LicenceManagementTest extends TestCase
 
         $this->delete('/dashboard/tools/1');
         $this->assertCount(0, Licence::all());
+    }
+
+    public function test_a_licence_information_page_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $licence = Licence::factory()->create();
+        $response = $this->get('dashboard/licences/' . $licence->id);
+        $response->assertStatus(200);
+
+        $this->assertArrayHasKey('description', $response['licence']);
+    }
+
+    public function test_a_licence_edit_page_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $licence = Licence::factory()->create();
+        $response = $this->get('dashboard/licences/' . $licence->id . '/edit');
+        $response->assertStatus(200);
+
+        $this->assertArrayHasKey('description', $response['licence']);
+    }
+
+    public function test_a_licence_create_page_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $tool = Tool::factory()->create();
+        $response = $this->get('dashboard/tools/' . $tool->slug . '/licences/create');
+        $response->assertStatus(200);
+
+        $this->assertArrayHasKey('id', $response['tool']);
+    }
+
+    public function test_licences_can_be_listed_on_a_tooling_route()
+    {
+        $this->authorisedUser();
+
+        $licence = Licence::factory()->create();
+
+        $response = $this->get('dashboard/tools/' . $licence->tool->slug . '/licences');
+        $response->assertStatus(200);
+
+        $this->assertArrayHasKey('licences', $response['tool']);
+    }
+
+    public function test_a_licence_create_user_limit_input_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $tool = Tool::factory()->create();
+        $route = route('licences-create-part', [
+            'slug' => $tool->slug,
+            'part' => 'user_limit'
+        ]);
+        $response = $this->get($route);
+        $response->assertStatus(200);
+        $this->assertArrayHasKey('id', $response['tool']);
+        $this->assertEquals(strstr($route, '/dashboard'), $tool->path() . '/licences/create/user_limit');
+    }
+
+    public function test_a_licence_create_annual_cost_input_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $tool = Tool::factory()->create();
+        $route = route('licences-create-part', [
+            'slug' => $tool->slug,
+            'part' => 'annual_cost'
+        ]);
+        $response = $this->get($route);
+        $response->assertStatus(200);
+        $this->assertArrayHasKey('id', $response['tool']);
+        $this->assertEquals(strstr($route, '/dashboard'), $tool->path() . '/licences/create/annual_cost');
+    }
+
+    public function test_a_licence_create_cost_centre_input_can_be_rendered()
+    {
+        $this->authorisedUser();
+
+        $tool = Tool::factory()->create();
+        $route = route('licences-create-part', [
+            'slug' => $tool->slug,
+            'part' => 'cost_centre'
+        ]);
+        $response = $this->get($route);
+        $response->assertStatus(200);
+        $this->assertArrayHasKey('id', $response['tool']);
+        $this->assertEquals(strstr($route, '/dashboard'), $tool->path() . '/licences/create/cost_centre');
+    }
+
+    public function test_a_description_can_be_stored_in_a_session()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $tool = Tool::factory()->create();
+        $response = $this->post(
+            route('licences-store-session', ['part' => 'description']),
+            [
+                'tool_id' => $tool->id,
+                'description' => 'My great description'
+            ]
+        );
+        $response->assertSessionHas('licence');
+        $response->assertRedirect($tool->path() . '/licences/create/user_limit');
     }
 }

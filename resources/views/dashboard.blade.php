@@ -12,7 +12,7 @@
             <x-nav-link href="{{ route('business-cases') }}" class="govuk-link--no-visited-state">View all</x-nav-link>
         </x-card>
     </div>
-
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
     <div class="govuk-grid-row">
         <x-card title="Organisations" count="{{$data['organisations']['count']}}">
             <x-nav-link href="{{ route('organisations') }}" class="govuk-link--no-visited-state">View all</x-nav-link>

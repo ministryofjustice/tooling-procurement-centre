@@ -1,11 +1,10 @@
 <x-app-layout>
-    <h1 class="govuk-heading-xl">{{ __('Licences') }}</h1>
+    <h1 class="govuk-heading-xl">{{ __('Licences for ' . $tool->name) }}</h1>
 
     <table class="govuk-table">
         <caption class="govuk-table__caption govuk-table__caption--m">Licences</caption>
         <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Tooling</th>
             <th scope="col" class="govuk-table__header">Available</th>
             <th scope="col" class="govuk-table__header">Cost</th>
             <th scope="col" class="govuk-table__header">Expires</th>
@@ -13,24 +12,21 @@
         </tr>
         </thead>
         <tbody class="govuk-table__body">
-        @foreach($licences as $licence)
+        @foreach($tool->licences as $licence)
             @php
                 $start = ($licence->start ? $licence->start->format('r') : null);
                 $stop = ($licence->stop ? $licence->stop->format('r') : null);
 
             @endphp
             <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">
-                    <x-nav-link href="{{ $licence->path() }}"> {{ $licence->tool->name }} </x-nav-link>
-                </th>
                 @if(!$stop)
                     <td class="govuk-table__cell" colspan="3">
                         <strong class="govuk-tag govuk-tag--blue">
                             Incomplete
                         </strong> Please update to present data here.</td>
                 @else
-                    <td class="govuk-table__cell">{{ $licence->available }}</td>
-                    <td class="govuk-table__cell">{{ $licence->annual_cost }}</td>
+                    <td class="govuk-table__cell">{{ $licence->user_limit }}</td>
+                    <td class="govuk-table__cell">&pound; {{ $licence->user_limit * $licence->cost_per_user }}</td>
                     <td class="govuk-table__cell">{{ $stop }}</td>
                 @endif
                 <td class="govuk-table__cell align-right">

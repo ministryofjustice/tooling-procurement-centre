@@ -87,17 +87,6 @@ Route::post('dashboard/event/types/{type}/tag', 'App\Http\Controllers\EventTypeT
 // Tags
 Route::resource('dashboard/tags', TagController::class);
 
-// Licences
-$licence_controller = 'App\Http\Controllers\LicenceController@';
-$licence_base_path = 'dashboard/licences';
-Route::get($licence_base_path, $licence_controller . 'index')->name('licences');
-Route::post($licence_base_path, $licence_controller . 'store')->name('licences-add');
-Route::get($licence_base_path . '/{slug}/edit', $licence_controller . 'edit')->name('licences-edit');
-Route::get($licence_base_path . '/create', $licence_controller . 'create')->name('licences-create');
-Route::get($licence_base_path . '/{slug}', $licence_controller . 'show')->name('licence');
-Route::patch($licence_base_path . '/{licence}', $licence_controller . 'update')->name('licences-patch');
-Route::delete($licence_base_path . '/{contact}', $licence_controller . 'destroy')->name('licences-delete');
-
 // Tools
 $tool_controller = 'App\Http\Controllers\ToolController@';
 $tool_base_path = 'dashboard/tools';
@@ -118,3 +107,27 @@ Route::delete($tool_base_path . '/{tool}', $tool_controller .'destroy')->name('t
 
 Route::post($tool_base_path . '/{tool}/tag', 'App\Http\Controllers\TagToolController@store');
 Route::post($tool_base_path . '/{tool}/event', 'App\Http\Controllers\EventController@store');
+
+
+// Licences
+$licence_controller = 'App\Http\Controllers\LicenceController@';
+$licence_base_path = 'dashboard/licences';
+Route::get($licence_base_path, $licence_controller . 'index')->name('licences');
+Route::post($licence_base_path, $licence_controller . 'store')->name('licences-add');
+Route::post($licence_base_path . '/create/{part}', $licence_controller .'session')->name('licences-store-session');
+Route::get($licence_base_path . '/{licence}/edit', $licence_controller . 'edit')->name('licences-edit');
+Route::get($licence_base_path . '/{licence}', $licence_controller . 'show')->name('licence');
+Route::patch($licence_base_path . '/{licence}', $licence_controller . 'update')->name('licences-patch');
+Route::delete($licence_base_path . '/{licence}', $licence_controller . 'destroy')->name('licences-delete');
+
+// bind licences to tooling routes
+Route::get($tool_base_path . '/{slug}/licences', $licence_controller .'indexToolLicences')->name('licences-tools');
+Route::post($tool_base_path . '/{slug}/licences', $licence_controller .'storeFromSession')->name('licences-session-store');
+Route::get($tool_base_path . '/{slug}/licences/create', $licence_controller .'create')->name('licences-create');
+Route::get($tool_base_path . '/{slug}/licences/create/{part}', $licence_controller .'create')->name('licences-create-part');
+
+
+// cost centres
+$licence_controller = 'App\Http\Controllers\CostCentreController@';
+$licence_base_path = 'dashboard/cost-centres';
+Route::get($licence_base_path, $licence_controller . 'index')->name('cost-centres');

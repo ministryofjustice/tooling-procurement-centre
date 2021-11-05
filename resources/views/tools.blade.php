@@ -25,7 +25,7 @@
                 );
                 $approved_state = ($approved === 2
                     ? 'new'
-                    : (!$approved ? 'rejected' : 'approved'))
+                    : (!$approved ? 'rejected' : 'approved'));
             @endphp
             <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
@@ -43,8 +43,8 @@
                     </x-nav-link>
                 </th>
                 <td class="govuk-table__cell">{{ $tool->description }}</td>
-                <td class="govuk-table__cell alight-right">
-                    <x-nav-link href="{{ $tool->path() }}" class="govuk-button"> View</x-nav-link>
+                <td class="govuk-table__cell align-right">
+                    <x-nav-link href="{{ route('tool', $tool->slug) }}" class="govuk-button"> View</x-nav-link>
                 </td>
             </tr>
         @endforeach

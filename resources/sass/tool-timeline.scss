@@ -1,5 +1,20 @@
 .tooling-timeline {
 
+    tbody > tr:hover &__date {
+        position: relative;
+
+        &:before {
+            content: "\25ba";
+            font-size: 28px;
+            height: 42px;
+            position: absolute;
+            color: #2d70b7;
+            top: 23%;
+            right: -20px;
+        }
+    }
+
+
     &__item {
         position: relative;
         vertical-align: top !important;
@@ -25,6 +40,7 @@
         text-align: right;
         z-index: 1;
         line-height: 0.9;
+        min-width: 65px;
     }
 
     &__date-year {
