@@ -26,7 +26,7 @@ class ToolController extends Controller
      */
     public function index()
     {
-        return view('tools', ['tools' => Tool::orderBy('name')->get()]);
+        return view('tools', ['tools' => Tool::orderBy('approved', 'desc')->orderBy('name')->get()]);
     }
 
     /**
@@ -158,7 +158,7 @@ class ToolController extends Controller
         $tool = Tool::create(array_merge(request()->session()->get('tooling'), ['contact_id' => $user->id]));
         // fire the event
         $tool->action(
-            'Tooling procurement for ' . $tool->name . ' began by <small><a href="mailto:' . $user->email . '">' . $user->name . '</a></small>.',
+            'Tooling procurement for ' . $tool->name . ' was initiated by <small><a href="mailto:' . $user->email . '">' . $user->name . '</a></small>.',
             true
         );
 
@@ -166,7 +166,8 @@ class ToolController extends Controller
         $licence = Licence::create(['tool_id' => $tool->id]);
         // fire the event
         $tool->action('<strong class="govuk-tag govuk-tag--yellow">empty</strong> licence generated.
-            <a href="' . route('licences-edit', $licence->id) . '">Add information here.</a>');
+            <a href="' . route('licences-edit', $licence->id) . '">Add information here.</a>'
+        );
 
         // create a business case, if requested
         if ($business_case = request()->session()->get('business-case')) {

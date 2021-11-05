@@ -17,7 +17,7 @@
                 <td>
                     <x-crud-index-tool-bar
                         title="{{ __($organisation->name) }}"
-                        edit="organisations/edit/{{ $organisation->slug }}"
+                        edit="{{ route('organisations-edit', $organisation->slug) }}"
                     ></x-crud-index-tool-bar>
                 </td>
             </tr>

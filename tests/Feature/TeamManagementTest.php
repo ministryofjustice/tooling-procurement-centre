@@ -70,7 +70,7 @@ class TeamManagementTest extends TestCase
 
         $this->authorisedUser();
         $team = Team::factory()->create();
-        $response = $this->get('/dashboard/teams/edit/' . $team->slug);
+        $response = $this->get('/dashboard/teams/' . $team->slug . '/edit');
         $response->assertStatus(200);
     }
 

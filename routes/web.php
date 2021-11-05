@@ -24,6 +24,7 @@ Route::get('/dashboard', function () {
     $data = [
         'tooling' => ['count' => count(\App\Models\Tool::all())],
         'organisations' => ['count' => count(\App\Models\Organisation::all())],
+        'licences' => ['count' => count(\App\Models\Licence::all())],
         'teams' => ['count' => count(\App\Models\Team::all())],
         'business-cases' => ['count' => count(\App\Models\BusinessCase::all())],
         'contacts' => ['count' => count(\App\Models\Contact::all())],
@@ -40,7 +41,7 @@ $org_base_path = 'dashboard/organisations';
 Route::get($org_base_path, $org_controller . 'index')->name('organisations');
 Route::post($org_base_path, $org_controller . 'store')->name('organisation-add');
 Route::get($org_base_path . '/create', $org_controller . 'create')->name('organisations-create');
-Route::get($org_base_path . '/edit/{slug}', $org_controller . 'edit')->name('organisations-edit');
+Route::get($org_base_path . '/{slug}/edit', $org_controller . 'edit')->name('organisations-edit');
 Route::get($org_base_path . '/{slug}', $org_controller . 'show')->name('organisation');
 Route::patch($org_base_path . '/{org}', $org_controller . 'update')->name('organisations-patch');
 Route::delete($org_base_path . '/{contact}', $org_controller . 'destroy')->name('organisations-delete');
@@ -51,7 +52,7 @@ $team_base_path = 'dashboard/teams';
 Route::get($team_base_path, $team_controller . 'index')->name('teams');
 Route::post($team_base_path, $team_controller . 'store')->name('teams-add');
 Route::get($team_base_path . '/create', $team_controller . 'create')->name('teams-create');
-Route::get($team_base_path . '/edit/{slug}', $team_controller . 'edit')->name('teams-edit');
+Route::get($team_base_path . '/{slug}/edit', $team_controller . 'edit')->name('teams-edit');
 Route::get($team_base_path . '/{slug}', $team_controller . 'show')->name('team');
 Route::patch($team_base_path . '/{team}', $team_controller . 'update')->name('teams-patch');
 Route::delete($team_base_path . '/{contact}', $team_controller . 'destroy')->name('teams-delete');
@@ -73,7 +74,7 @@ $bcase_base_path = 'dashboard/business-cases';
 Route::get($bcase_base_path, $bcase_controller . 'index')->name('business-cases');
 Route::post($bcase_base_path, $bcase_controller . 'store')->name('business-cases-add');
 Route::get($bcase_base_path . '/create', $bcase_controller . 'create')->name('business-cases-create');
-Route::get($bcase_base_path . '/edit/{slug}', $bcase_controller . 'edit')->name('business-cases-edit');
+Route::get($bcase_base_path . '/{slug}/edit', $bcase_controller . 'edit')->name('business-cases-edit');
 Route::get($bcase_base_path . '/{slug}', $bcase_controller . 'show')->name('business-case');
 Route::patch($bcase_base_path . '/{case}', $bcase_controller . 'update')->name('business-cases-patch');
 Route::delete($bcase_base_path . '/{case}', $bcase_controller . 'destroy')->name('business-cases-delete');
@@ -85,17 +86,6 @@ Route::post('dashboard/event/types/{type}/tag', 'App\Http\Controllers\EventTypeT
 
 // Tags
 Route::resource('dashboard/tags', TagController::class);
-
-// Licences
-$licence_controller = 'App\Http\Controllers\LicenceController@';
-$licence_base_path = 'dashboard/licences';
-Route::get($licence_base_path, $licence_controller . 'index')->name('contacts');
-Route::post($licence_base_path, $licence_controller . 'store')->name('licences-add');
-Route::get($licence_base_path . '/edit/{slug}', $licence_controller . 'edit')->name('licences-edit');
-Route::get($licence_base_path . '/create', $licence_controller . 'create')->name('licences-create');
-Route::get($licence_base_path . '/{slug}', $licence_controller . 'show')->name('licence');
-Route::patch($licence_base_path . '/{licence}', $licence_controller . 'update')->name('licences-patch');
-Route::delete($licence_base_path . '/{contact}', $licence_controller . 'destroy')->name('licences-delete');
 
 // Tools
 $tool_controller = 'App\Http\Controllers\ToolController@';
@@ -117,3 +107,27 @@ Route::delete($tool_base_path . '/{tool}', $tool_controller .'destroy')->name('t
 
 Route::post($tool_base_path . '/{tool}/tag', 'App\Http\Controllers\TagToolController@store');
 Route::post($tool_base_path . '/{tool}/event', 'App\Http\Controllers\EventController@store');
+
+
+// Licences
+$licence_controller = 'App\Http\Controllers\LicenceController@';
+$licence_base_path = 'dashboard/licences';
+Route::get($licence_base_path, $licence_controller . 'index')->name('licences');
+Route::post($licence_base_path, $licence_controller . 'store')->name('licences-add');
+Route::post($licence_base_path . '/create/{part}', $licence_controller .'session')->name('licences-store-session');
+Route::get($licence_base_path . '/{licence}/edit', $licence_controller . 'edit')->name('licences-edit');
+Route::get($licence_base_path . '/{licence}', $licence_controller . 'show')->name('licence');
+Route::patch($licence_base_path . '/{licence}', $licence_controller . 'update')->name('licences-patch');
+Route::delete($licence_base_path . '/{licence}', $licence_controller . 'destroy')->name('licences-delete');
+
+// bind licences to tooling routes
+Route::get($tool_base_path . '/{slug}/licences', $licence_controller .'indexToolLicences')->name('licences-tools');
+Route::post($tool_base_path . '/{slug}/licences', $licence_controller .'storeFromSession')->name('licences-session-store');
+Route::get($tool_base_path . '/{slug}/licences/create', $licence_controller .'create')->name('licences-create');
+Route::get($tool_base_path . '/{slug}/licences/create/{part}', $licence_controller .'create')->name('licences-create-part');
+
+
+// cost centres
+$licence_controller = 'App\Http\Controllers\CostCentreController@';
+$licence_base_path = 'dashboard/cost-centres';
+Route::get($licence_base_path, $licence_controller . 'index')->name('cost-centres');

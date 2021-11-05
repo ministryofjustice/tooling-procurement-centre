@@ -16,8 +16,9 @@
     @endphp
 
     <x-tool-approved-banner
+        name="{{ $tool->name }}"
         approved="{{ $approved }}"
-        tool_id="{{$tool->id}}" />
+        tool_id="{{$tool->id}}"/>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -27,17 +28,22 @@
             <table class="govuk-table tooling-timeline">
                 <tbody class="govuk-table__body">
                 @foreach($tool->events as $event)
-                    @if($loop->index === 0 || ($event->created_at->format('Y') !== $tool->events[$loop->index-1]->created_at->format('Y')))
+                    @php
+                        $the_year = $event->created_at->format('Y');
+                    @endphp
+                    @if($loop->index === 0 || ($the_year !== $tool->events[$loop->index-1]->created_at->format('Y')))
                         <tr class="govuk-table__row">
                             <td class="govuk-table__cell tooling-timeline__item" colspan="2">
                                 <div class="tooling-timeline__date-year">
-                                    <strong class="govuk-!-font-size-27">{{$event->created_at->format('Y')}}</strong>
+                                    <strong class="govuk-!-font-size-27">{{$the_year}}</strong>
                                 </div>
                             </td>
                         </tr>
                     @endif
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell tooling-timeline__item">
+                        <td
+                            class="govuk-table__cell tooling-timeline__item"
+                            title="{{$event->created_at->format('r')}}">
                             <div class="tooling-timeline__date">
                                 <strong>{{$event->created_at->format('d M')}}</strong><br>
                                 <small>{{$event->created_at->format('H:i')}}</small>
@@ -58,17 +64,55 @@
                     @php
                         $image = md5( strtolower( trim( $tool->contact->email ) ) );
                     @endphp
-                    <img src="https://www.gravatar.com/avatar/{{$image}}" style="float:left;margin-right:10px" />
+                    <img src="https://www.gravatar.com/avatar/{{$image}}" style="float:left;margin-right:10px"/>
                     <strong>{{$tool->contact->name}}</strong><br>
                     <x-nav-link href="mailto:{{$tool->contact->email}}">Email</x-nav-link>
                     @if(!empty($tool->contact->slack))
-                        <br><x-nav-link target="_blank" href="https://mojdt.slack.com/team/{{$tool->contact->slack}}">Slack IM</x-nav-link>
+                        <br>
+                        <x-nav-link target="_blank" href="https://mojdt.slack.com/team/{{$tool->contact->slack}}">Slack
+                            IM
+                        </x-nav-link>
                     @endif
                 </div>
             @endif
 
-            <h2 id="licences" class="govuk-heading-m">Licences</h2>
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+            <h2 id="licences" class="govuk-heading-m">
+                Licences
+            </h2>
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+            @if(count($tool->licences) > 0)
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Cost</th>
+                        <th scope="col" class="govuk-table__header">Users</th>
+                        <th scope="col" class="govuk-table__header"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                    @foreach($tool->licences as $licence)
+                        <tr class="govuk-table__row">
+                            <td colspan="3" class="govuk-table__cell app-hint no-border">[COST_CENTRE_NAME]</td>
+                        </tr>
+                        <tr class="govuk-table__row">
+                            <th scope="row" class="govuk-table__header">&pound;{{$licence->user_limit * $licence->cost_per_user}}</th>
+                            <td class="govuk-table__cell">{{$licence->user_limit}}</td>
+                            <td class="govuk-table__cell">
+                                <x-nav-link href="{{ route('licence', $licence->id) }}">View</x-nav-link>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            @else
+                <p class="govuk-body">
+                    No licences could be found for {{ $tool->name }}.
+                </p>
+            @endif
+            <x-nav-link href="{{route('licences-create', $tool->slug)}}" class="govuk-button">
+                Add new licence
+            </x-nav-link>
         </div>
     </div>
 </x-app-layout>

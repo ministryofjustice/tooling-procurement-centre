@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Organisation;
 use App\Models\Team;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -16,7 +17,8 @@ class TeamController extends Controller
 
     public function index()
     {
-        return view('teams', ['teams' => Team::all()->sortByDesc('organisation_id')->sortBy("name")]);
+        $teams = Team::orderBy('organisation_id')->orderBy("name")->get();
+        return view('teams', ['teams' => $teams]);
     }
 
     public function create()

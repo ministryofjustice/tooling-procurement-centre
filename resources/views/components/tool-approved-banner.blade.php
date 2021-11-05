@@ -6,7 +6,7 @@
             $input_value = '1';
             $button = 'govuk-button--warning';
             $button_text = 'Approve';
-            $text_main = 'Tooling is newly added.';
+            $text_main = $name . ' is newly added.';
             $text_sub = '';
             break;
         case 'approved':
@@ -14,7 +14,7 @@
             $input_value = '0';
             $button = '';
             $button_text = 'Remove approval';
-            $text_main = 'Tooling has been evaluated and is approved.';
+            $text_main = $name . ' has been evaluated and approved.';
             $text_sub = 'View <a href="#licences" class="govuk-link govuk-link--no-visited-state">licences</a> below for further information';
             break;
         case 'rejected':
@@ -22,7 +22,7 @@
             $input_value = '1';
             $button = 'govuk-button--warning';
             $button_text = 'Approve';
-            $text_main = 'Tooling has been evaluated and rejected.';
+            $text_main = $name . ' has been evaluated and rejected.';
             $text_sub = 'Please <a href="#timeline" class="govuk-link govuk-link--no-visited-state">review the timeline</a> for further detail.';
             break;
     }

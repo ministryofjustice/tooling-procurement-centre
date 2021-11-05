@@ -39,7 +39,7 @@
                         <small class="italic">No tools under management</small>
                     @endif
                 </td>
-                <td class="govuk-table__cell alight-right">
+                <td class="govuk-table__cell align-right">
                     <x-nav-link href="{{ $contact->path() }}" class="govuk-button"> View</x-nav-link>
                     <x-nav-link href="{{ $contact->path() }}/edit" class="govuk-button"> Edit</x-nav-link>
                 </td>

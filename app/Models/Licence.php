@@ -19,8 +19,9 @@ class Licence extends Model
 
     public static array $createRules = [
         'tool_id' => 'required|numeric',
-        'description' => 'sometimes|required|string|nullable',
+        'description' => 'sometimes|string|nullable',
         'user_limit' => 'numeric|nullable',
+        'users_current' => 'numeric|nullable',
         'annual_cost' => 'numeric|nullable',
         'currency' => 'sometimes|required|alpha|nullable|max:3',
         'cost_per_user' => 'numeric|nullable',
@@ -30,7 +31,7 @@ class Licence extends Model
 
     public function path()
     {
-        return '/licences/' . $this->id;
+        return '/dashboard/licences/' . $this->id;
     }
 
     public function setStartAttribute($start)
@@ -41,5 +42,10 @@ class Licence extends Model
     public function setStopAttribute($stop)
     {
         $this->attributes['stop'] = Carbon::parse($stop);
+    }
+
+    public function tool()
+    {
+        return $this->hasOne(Tool::class, 'id', 'tool_id');
     }
 }

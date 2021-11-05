@@ -71,7 +71,7 @@ class OrganisationManagementTest extends TestCase
 
         $this->authorisedUser();
         $organisation = Organisation::factory()->create();
-        $response = $this->get('/dashboard/organisations/edit/' . $organisation->slug);
+        $response = $this->get('/dashboard/organisations/' . $organisation->slug . '/edit');
         $response->assertStatus(200);
     }
 

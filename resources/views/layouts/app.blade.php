@@ -24,9 +24,8 @@
 <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
 <x-header/>
-
 <div class="govuk-width-container">
-    {{ $backlink ?? '' }}
+    <x-breadcrumbs :paths="$breadcrumbs"></x-breadcrumbs>
     <!-- Page Content -->
     <main class="govuk-main-wrapper " id="main-content" role="main">
         {{ $slot }}
