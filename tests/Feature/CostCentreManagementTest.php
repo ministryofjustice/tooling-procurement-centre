@@ -24,9 +24,17 @@ class CostCentreManagementTest extends TestCase
         $response->assertForbidden();
     }
 
-    /*public function test_a_cost_centre_can_be_created()
+    public function test_a_cost_centre_can_be_created()
     {
         $this->withoutExceptionHandling();
         $this->authorisedUser();
-    }*/
+
+        $response = $this->post(route('cost-centres-add'), [
+            'name' => 'My Cost Centre',
+            'number' => '10044567'
+        ]);
+        $cost_centre = CostCentre::first();
+        $response->assertRedirect(route('cost-centre', $cost_centre->slug));
+        $this->assertEquals('10044567', $cost_centre->number);
+    }
 }

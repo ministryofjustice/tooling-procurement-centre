@@ -128,6 +128,8 @@ Route::get($tool_base_path . '/{slug}/licences/create/{part}', $licence_controll
 
 
 // cost centres
-$licence_controller = 'App\Http\Controllers\CostCentreController@';
-$licence_base_path = 'dashboard/cost-centres';
-Route::get($licence_base_path, $licence_controller . 'index')->name('cost-centres');
+$cost_centre_controller = 'App\Http\Controllers\CostCentreController@';
+$cost_centre_base_path = 'dashboard/cost-centres';
+Route::get($cost_centre_base_path, $cost_centre_controller . 'index')->name('cost-centres');
+Route::post($cost_centre_base_path, $cost_centre_controller . 'store')->name('cost-centres-add');
+Route::get($cost_centre_base_path . '/{slug}', $cost_centre_controller . 'show')->name('cost-centre');
