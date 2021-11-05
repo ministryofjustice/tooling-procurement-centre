@@ -26,7 +26,6 @@ class CostCentreManagementTest extends TestCase
 
     public function test_a_cost_centre_can_be_created()
     {
-        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $response = $this->post(route('cost-centres-add'), [
@@ -37,4 +36,12 @@ class CostCentreManagementTest extends TestCase
         $response->assertRedirect(route('cost-centre', $cost_centre->slug));
         $this->assertEquals('10044567', $cost_centre->number);
     }
+
+    /*public function test_a_cost_centre_can_be_updated()
+    {
+        $this->withoutExceptionHandling();
+        //$this->authorisedUser();
+
+        $this->patch(route(''))
+    }*/
 }
