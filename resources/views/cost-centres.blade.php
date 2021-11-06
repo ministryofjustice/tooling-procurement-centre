@@ -1,5 +1,5 @@
 <x-app-layout>
-    <h1 class="govuk-heading-xl">{{ __('Licences') }}</h1>
+    <h1 class="govuk-heading-xl">{{ __('Cost Centres') }}</h1>
 
     <table class="govuk-table">
         <caption class="govuk-table__caption govuk-table__caption--m">Licences</caption>

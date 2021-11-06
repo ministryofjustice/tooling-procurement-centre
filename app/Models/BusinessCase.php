@@ -22,4 +22,9 @@ class BusinessCase extends Model
     {
         return '/dashboard/business-cases/' . $this->slug;
     }
+
+    public function tool(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Tool::class, 'id', 'tool_id')->orderBy('created_at', 'desc');
+    }
 }

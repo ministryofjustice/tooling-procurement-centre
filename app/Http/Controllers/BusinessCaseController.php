@@ -17,11 +17,11 @@ class BusinessCaseController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
     public function index()
     {
-        //
+        return view('business-cases', ['business_cases' => BusinessCase::all()]);
     }
 
     /**

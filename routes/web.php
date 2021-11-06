@@ -133,3 +133,6 @@ $cost_centre_base_path = 'dashboard/cost-centres';
 Route::get($cost_centre_base_path, $cost_centre_controller . 'index')->name('cost-centres');
 Route::post($cost_centre_base_path, $cost_centre_controller . 'store')->name('cost-centres-add');
 Route::get($cost_centre_base_path . '/{slug}', $cost_centre_controller . 'show')->name('cost-centre');
+Route::patch($cost_centre_base_path . '/{cost_centre}', $cost_centre_controller . 'update')->name('cost-centres-patch');
+Route::delete($cost_centre_base_path . '/{cost_centre}', $cost_centre_controller . 'destroy')->name('cost-centres-delete');
+

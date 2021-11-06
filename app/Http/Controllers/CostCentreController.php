@@ -20,7 +20,7 @@ class CostCentreController extends Controller
      *
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         return view('cost-centres', ['cost_centres' => CostCentre::all()]);
     }
@@ -30,10 +30,46 @@ class CostCentreController extends Controller
      *
      * @return RedirectResponse
      */
-    public function store()
+    public function store(): RedirectResponse
     {
         $cost_centre = CostCentre::create($this->validateRequest());
         return redirect(route('cost-centre', $cost_centre->slug));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param CostCentre $cost_centre
+     * @return RedirectResponse
+     */
+    public function update(CostCentre $cost_centre): RedirectResponse
+    {
+        $data = $this->validateRequest();
+        $cost_centre->update($data);
+        $route = route('cost-centre', $data['slug']);
+        return redirect($route);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param CostCentre $cost_centre
+     * @return RedirectResponse
+     */
+    public function destroy(CostCentre $cost_centre)
+    {
+        $cost_centre->delete();
+        return redirect(route('cost-centres'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @return View
+     */
+    public function show($slug)
+    {
+        return view('cost-centre', ['cost_centre' => CostCentre::where('slug', 'LIKE', $slug)->first()]);
     }
 
     /**
