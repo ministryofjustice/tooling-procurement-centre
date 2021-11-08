@@ -15,6 +15,7 @@
                     id="name"
                     label="Cost Centre name"
                     type="text"
+                    value="{{ old('name') }}"
                     :required="true"
                     :autofocus="true"
                 />
@@ -25,6 +26,7 @@
                     label="Number"
                     summary="The allocation number assigned by the MoJ."
                     type="text"
+                    value="{{ old('number') }}"
                     :required="true"
                 />
 

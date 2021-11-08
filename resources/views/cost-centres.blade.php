@@ -18,13 +18,13 @@
             <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
                     <x-nav-link
-                        href="{{route('cost-centres-edit', $cost_centre->slug)}}">
+                        href="{{route('cost-centre', $cost_centre->slug)}}">
                         {!! $cost_centre->name !!}
                     </x-nav-link>
                 </th>
                 <td class="govuk-table__cell">{{ $cost_centre->number }}</td>
                 <td class="govuk-table__cell align-right">
-                    <x-nav-link href="{{route('cost-centres', $cost_centre->slug)}}" class="govuk-button"> View</x-nav-link>
+                    <x-nav-link href="{{route('cost-centre', $cost_centre->slug)}}" class="govuk-button"> View</x-nav-link>
                     <x-nav-link href="{{route('cost-centres-edit', $cost_centre->slug)}}" class="govuk-button"> Edit</x-nav-link>
                 </td>
             </tr>
