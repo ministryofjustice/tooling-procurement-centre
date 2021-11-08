@@ -12,8 +12,13 @@ class CostCentre extends Model
     protected $guarded = [];
 
     public static array $createRules = [
-        'name' => 'required|unique:contacts|max:80',
-        'number' => 'required|numeric'
+        'name' => 'required|unique:cost_centres|max:80',
+        'number' => 'required|alpha_num'
+    ];
+
+    public static array $editRules = [
+        'name' => 'required|max:80',
+        'number' => 'required|alpha_num'
     ];
 
     public function path()
