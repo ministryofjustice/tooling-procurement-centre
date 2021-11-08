@@ -64,7 +64,7 @@ class CostCentreController extends Controller
      */
     public function update(CostCentre $cost_centre): RedirectResponse
     {
-        $data = $this->validateRequest();
+        $data = $this->validateRequest('edit');
         $cost_centre->update($data);
         $route = route('cost-centre', $data['slug']);
         return redirect($route);
@@ -95,9 +95,13 @@ class CostCentreController extends Controller
     /**
      * @return array
      */
-    public function validateRequest(): array
+    public function validateRequest($action = 'create'): array
     {
-        $request = request()->validate(CostCentre::$createRules);
+        $request = request()->validate(($action === 'create'
+            ? CostCentre::$createRules
+            : CostCentre::$editRules
+        ));
+
         // add slug...
         $request['slug'] = Str::slug($request['name']);
         return $request;
