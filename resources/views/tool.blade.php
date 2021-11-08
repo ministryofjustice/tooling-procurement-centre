@@ -64,13 +64,13 @@
                     @php
                         $image = md5( strtolower( trim( $tool->contact->email ) ) );
                     @endphp
-                    <img src="https://www.gravatar.com/avatar/{{$image}}" style="float:left;margin-right:10px"/>
+                    <img alt="Gravatar image" src="https://www.gravatar.com/avatar/{{$image}}" style="float:left;margin-right:10px"/>
                     <strong>{{$tool->contact->name}}</strong><br>
                     <x-nav-link href="mailto:{{$tool->contact->email}}">Email</x-nav-link>
                     @if(!empty($tool->contact->slack))
                         <br>
-                        <x-nav-link target="_blank" href="https://mojdt.slack.com/team/{{$tool->contact->slack}}">Slack
-                            IM
+                        <x-nav-link target="_blank" href="https://mojdt.slack.com/team/{{$tool->contact->slack}}">
+                            Slack
                         </x-nav-link>
                     @endif
                 </div>

@@ -2,12 +2,11 @@
     <h1 class="govuk-heading-xl">{{ __('Business Cases') }}</h1>
     <div class="govuk-!-width-two-thirds">
         <p class="govuk-body">
-            Each tool requires a case defined to quantify it's use and budget allocation.
+            Each tool requires a case defined to help us quantify it's use and budget allocation.
         </p>
         <p class="govuk-body">
-            Business cases are useful when
-            determining how tooling will be used, the intended audience and how many licences are required to fulfill
-            department need.
+            Business cases are useful when determining how tooling will be used, the intended audience and how many
+            licences are required to satisfy department need.
         </p>
 
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">

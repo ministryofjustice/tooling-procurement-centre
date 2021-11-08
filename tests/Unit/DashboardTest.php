@@ -23,5 +23,6 @@ class DashboardTest extends TestCase
         $this->assertArrayHasKey('teams', $response['data']);
         $this->assertArrayHasKey('business-cases', $response['data']);
         $this->assertArrayHasKey('contacts', $response['data']);
+        $this->assertArrayHasKey('cost-centres', $response['data']);
     }
 }

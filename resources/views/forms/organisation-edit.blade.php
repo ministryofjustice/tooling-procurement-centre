@@ -1,7 +1,4 @@
 <x-app-layout>
-    <x-slot name="backlink">
-        <a href="{{ route('organisations') }}" class="govuk-back-link">Back</a>
-    </x-slot>
     <x-form-card>
         <x-slot name="title">
             Edit {!! $organisation->name !!}
@@ -30,7 +27,6 @@
                 type="text"
                 value="{!! $organisation->address !!}"
                 :required="true"
-                :autofocus="true"
             />
 
             {{-- Description --}}

@@ -1,7 +1,4 @@
 <x-app-layout>
-    <x-slot name="backlink">
-        <a href="{{ route('organisations') }}" class="govuk-back-link">Back</a>
-    </x-slot>
     <x-form-card>
         <x-slot name="title">
             Create an organisation
@@ -28,7 +25,6 @@
                 summary="The full textual address; 102 Petty France, London, SW1H 9AJ, United Kingdom."
                 type="text"
                 :required="true"
-                :autofocus="true"
             />
 
             {{-- Description --}}
