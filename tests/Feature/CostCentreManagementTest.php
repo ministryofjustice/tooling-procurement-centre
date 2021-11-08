@@ -98,4 +98,23 @@ class CostCentreManagementTest extends TestCase
         $response = $this->get(route('cost-centre', $cost_centre->slug));
         $response->assertStatus(200);
     }
+
+    public function test_a_cost_centre_create_form_can_be_rendered()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $response = $this->get(route('cost-centres-create'));
+        $response->assertStatus(200);
+    }
+
+    public function test_a_cost_centre_edit_form_can_be_rendered()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $contact = CostCentre::factory()->create();
+        $response = $this->get('dashboard/cost-centres/' . $contact->slug . '/edit');
+        $response->assertStatus(200);
+    }
 }

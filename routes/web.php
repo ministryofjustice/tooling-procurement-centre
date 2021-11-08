@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\LicenceController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +27,7 @@ Route::get('/dashboard', function () {
         'teams' => ['count' => count(\App\Models\Team::all())],
         'business-cases' => ['count' => count(\App\Models\BusinessCase::all())],
         'contacts' => ['count' => count(\App\Models\Contact::all())],
+        'cost-centres' => ['count' => count(\App\Models\CostCentre::all())]
     ];
     return view('dashboard', ['data' => $data]);
 })->middleware(['auth'])->name('dashboard');
@@ -132,7 +132,9 @@ $cost_centre_controller = 'App\Http\Controllers\CostCentreController@';
 $cost_centre_base_path = 'dashboard/cost-centres';
 Route::get($cost_centre_base_path, $cost_centre_controller . 'index')->name('cost-centres');
 Route::post($cost_centre_base_path, $cost_centre_controller . 'store')->name('cost-centres-add');
+Route::get($cost_centre_base_path . '/create', $cost_centre_controller . 'create')->name('cost-centres-create');
 Route::get($cost_centre_base_path . '/{slug}', $cost_centre_controller . 'show')->name('cost-centre');
 Route::patch($cost_centre_base_path . '/{cost_centre}', $cost_centre_controller . 'update')->name('cost-centres-patch');
 Route::delete($cost_centre_base_path . '/{cost_centre}', $cost_centre_controller . 'destroy')->name('cost-centres-delete');
+Route::get($cost_centre_base_path . '/{slug}/edit', $cost_centre_controller . 'edit')->name('cost-centres-edit');
 

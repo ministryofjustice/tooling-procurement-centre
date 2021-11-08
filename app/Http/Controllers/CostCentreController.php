@@ -37,6 +37,26 @@ class CostCentreController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return View
+     */
+    public function create()
+    {
+        return view('forms.cost-centre');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @return View
+     */
+    public function edit($slug)
+    {
+        return view('forms.cost-centre-edit', ['cost_centre' => CostCentre::where('slug', 'LIKE', $slug)->first()]);
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param CostCentre $cost_centre
