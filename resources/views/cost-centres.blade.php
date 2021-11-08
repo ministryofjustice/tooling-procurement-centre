@@ -26,6 +26,13 @@
                 <td class="govuk-table__cell align-right">
                     <x-nav-link href="{{route('cost-centre', $cost_centre->slug)}}" class="govuk-button"> View</x-nav-link>
                     <x-nav-link href="{{route('cost-centres-edit', $cost_centre->slug)}}" class="govuk-button"> Edit</x-nav-link>
+                    <form method="POST" action="{{ route('cost-centres-delete', $cost_centre->id) }}" class="govuk-!-display-inline">
+                        @csrf
+                        {!! method_field('delete') !!}
+                        <x-button class="govuk-button govuk-button--warning">
+                            {{ __('Delete') }}
+                        </x-button>
+                    </form>
                 </td>
             </tr>
         @endforeach

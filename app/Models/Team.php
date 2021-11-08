@@ -16,7 +16,8 @@ class Team extends Model
     public static array $createRules = [
         'name' => 'required|unique:organisations|max:120',
         'comms_url' => '',
-        'organisation_id' => 'required|integer|numeric'
+        'organisation_id' => 'required|integer|numeric',
+        'cost_centre_id' => 'sometimes|integer|numeric',
     ];
 
     public function path()

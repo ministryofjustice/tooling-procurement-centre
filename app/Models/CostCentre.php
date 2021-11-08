@@ -25,4 +25,9 @@ class CostCentre extends Model
     {
         return route('cost-centre', $this->slug);
     }
+
+    public function teams()
+    {
+        return $this->belongsToMany(\App\Models\Team::class);
+    }
 }
