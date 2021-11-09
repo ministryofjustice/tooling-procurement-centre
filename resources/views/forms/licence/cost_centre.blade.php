@@ -25,7 +25,8 @@
 
             <x-licence-form-buttons
                 back="users_current"
-                :licenceComplete="$licence_complete"
+                :tool="$tool"
+                :complete="$licence_complete"
             />
         </form>
     </x-form-card>

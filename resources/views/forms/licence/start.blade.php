@@ -29,7 +29,8 @@
 
             <x-licence-form-buttons
                 back="currency"
-                :licenceComplete="$licence_complete"
+                :tool="$tool"
+                :complete="$licence_complete"
             />
         </form>
     </x-form-card>

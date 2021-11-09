@@ -29,7 +29,8 @@
 
                 <x-licence-form-buttons
                     back="cost_centre"
-                    :licenceComplete="$licence_complete"
+                    :tool="$tool"
+                    :complete="$licence_complete"
                 />
             </form>
         </div>

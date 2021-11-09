@@ -30,7 +30,8 @@
 
                 <x-licence-form-buttons
                     back="description"
-                    :licenceComplete="$licence_complete"
+                    :tool="$tool"
+                    :complete="$licence_complete"
                 />
             </form>
         </div>

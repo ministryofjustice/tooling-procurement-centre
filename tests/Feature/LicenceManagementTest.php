@@ -183,6 +183,7 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_create_page_can_be_rendered()
     {
+        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $tool = Tool::factory()->create();
@@ -206,6 +207,7 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_create_user_limit_input_can_be_rendered()
     {
+        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $tool = Tool::factory()->create();
@@ -219,23 +221,25 @@ class LicenceManagementTest extends TestCase
         $this->assertEquals(strstr($route, '/dashboard'), $tool->path() . '/licences/create/user_limit');
     }
 
-    public function test_a_licence_create_annual_cost_input_can_be_rendered()
+    public function test_a_licence_create_start_input_can_be_rendered()
     {
+        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $tool = Tool::factory()->create();
         $route = route('licences-create-part', [
             'slug' => $tool->slug,
-            'part' => 'annual_cost'
+            'part' => 'start'
         ]);
         $response = $this->get($route);
         $response->assertStatus(200);
         $this->assertArrayHasKey('id', $response['tool']);
-        $this->assertEquals(strstr($route, '/dashboard'), $tool->path() . '/licences/create/annual_cost');
+        $this->assertEquals(strstr($route, '/dashboard'), $tool->path() . '/licences/create/start');
     }
 
     public function test_a_licence_create_cost_centre_input_can_be_rendered()
     {
+        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $tool = Tool::factory()->create();
