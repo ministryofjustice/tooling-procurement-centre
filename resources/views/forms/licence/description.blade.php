@@ -22,16 +22,11 @@
                 label="Description"
                 summary="Optionally describe the licence here."
                 type="textarea"
-                {{--value="{!! $licence['description'] ?? '' !!}}"--}}
+                value="{{ $licence['description'] ?? '' }}"
                 :autofocus="true"
             />
 
-            <div>
-                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                <x-button>
-                    {{ __('Continue') }}
-                </x-button>
-            </div>
+            <x-licence-form-buttons :licenceComplete="$licence_complete"></x-licence-form-buttons>
         </form>
     </x-form-card>
 </x-app-layout>

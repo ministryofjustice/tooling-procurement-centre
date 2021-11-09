@@ -27,12 +27,10 @@
                 :autofocus="true"
             />
 
-            <div>
-                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                <x-button>
-                    {{ __('Continue') }}
-                </x-button>
-            </div>
+            <x-licence-form-buttons
+                back="currency"
+                :licenceComplete="$licence_complete"
+            />
         </form>
     </x-form-card>
 </x-app-layout>

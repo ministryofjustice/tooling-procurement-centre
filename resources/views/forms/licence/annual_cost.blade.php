@@ -18,7 +18,10 @@
 
             <div>
                 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                <x-button>
+                <x-nav-link href="{{route('licences-create')}}">
+                    {{ __('Back') }}
+                </x-nav-link>
+                <x-button :withArrow="true">
                     {{ __('Continue') }}
                 </x-button>
             </div>

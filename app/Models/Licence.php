@@ -19,6 +19,7 @@ class Licence extends Model
 
     public static array $createRules = [
         'tool_id' => 'required|numeric',
+        'cost_centre_id' => 'sometimes|required|numeric',
         'description' => 'sometimes|string|nullable',
         'user_limit' => 'numeric|nullable',
         'users_current' => 'numeric|nullable',

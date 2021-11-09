@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CostCentre;
 use App\Models\Licence;
 use App\Models\Tool;
 use Carbon\Carbon;
@@ -44,10 +45,21 @@ class LicenceController extends Controller
      */
     public function create($slug, $part = 'description'): View
     {
-        return view('forms.licence.' . $part, [
+        $data = [
             'tool' => Tool::where(['slug' => $slug])->first(),
-            'licence' => request()->session()->get('licence')
-        ]);
+            'licence' => request()->session()->get('licence'),
+            'licence_complete' => $this->licenceComplete()
+        ];
+
+        if ($part === 'cost_centre') {
+            $data['cost_centres'] = CostCentre::all();
+        }
+
+        if ($part === 'summary') {
+            $data['cost_centre'] = CostCentre::find($data['licence']['cost_centre']);
+        }
+
+        return view('forms.licence.' . $part, $data);
     }
 
     /**
@@ -59,35 +71,37 @@ class LicenceController extends Controller
         $this->validateRequest();
 
         $licence = request()->session()->get('licence');
+        request()->session()->put('licence_complete', 'no');
         $licence[$part] = request()->{$part};
 
-        $redirectTo = null;
+        $redirectTo = (request()->get('save_summary') ? '/summary' : null);
         switch ($part) {
             case 'cost_centre':
-                $redirectTo = '/cost_per_user';
+                $redirectTo = $redirectTo ?? '/cost_per_user';
                 break;
             case 'description':
-                $redirectTo = '/user_limit';
+                $redirectTo = $redirectTo ?? '/user_limit';
                 break;
             case 'user_limit':
-                $redirectTo = '/users_current';
+                $redirectTo = $redirectTo ?? '/users_current';
                 break;
             case 'users_current':
-                $redirectTo = '/cost_centre';
+                $redirectTo = $redirectTo ?? '/cost_centre';
                 break;
             case 'cost_per_user':
-                $redirectTo = '/currency';
+                $redirectTo = $redirectTo ?? '/currency';
                 break;
             case 'currency':
-                $redirectTo = '/start';
+                $redirectTo = $redirectTo ?? '/start';
                 break;
             case 'start':
-                $redirectTo = '/stop';
+                $redirectTo = $redirectTo ?? '/stop';
                 $licence['start'] = $this->collectDate('start');
                 break;
             case 'stop':
                 $redirectTo = '/summary';
                 $licence['stop'] = $this->collectDate('stop');
+                request()->session()->put('licence_complete', 'yes');
                 break;
         }
 
@@ -125,7 +139,7 @@ class LicenceController extends Controller
         $licence['start'] = $start['year'] . '-' . $start['month'] . '-' . $start['day'] . ' 00:00:00';
         $licence['stop'] = $stop['year'] . '-' . $stop['month'] . '-' . $stop['day'] . ' 00:00:00';
 
-        $licence = array_merge(['tool_id' => request()->tool_id ], $licence);
+        $licence = array_merge(['tool_id' => request()->tool_id], $licence);
 
         $new_licence = Licence::create($licence);
 
@@ -203,6 +217,9 @@ class LicenceController extends Controller
 
         if (is_array($session_data)) {
             foreach ($session_data as $session_key => $value) {
+                if ($session_key === 'cost_centre') {
+                    $session_data['cost_centre_id'] = $value;
+                }
                 if (!array_key_exists($session_key, Licence::$createRules)) {
                     unset($session_data[$session_key]);
                 }
@@ -226,5 +243,49 @@ class LicenceController extends Controller
             'year' => $year,
             'date' => Carbon::parse($year . '-' . $month . '-' . $day)->format('l, jS F Y')
         ];
+    }
+
+    /**
+     * Determines the completed status of the licence session array.
+     * First we get the licence session data, and then we declare what good looks
+     * like in the $complete variable.
+     *
+     * Next we filter the session data with array_filter(), removing any null or empty
+     * array entries before running array_intersect_key() to check the array keys in
+     * the session data against our $complete array. The return from our check stored
+     * in $intersected will give us just the keys that are present in $complete.
+     *
+     * Next we compare the number of elements in $intersected and $complete to make
+     * sure they match before deciding
+     *
+     * @return string
+     */
+    protected function licenceComplete(): string
+    {
+        $licence_nodes = request()->session()->get('licence');
+
+        $isComplete = 'no'; // default
+        if (!$licence_nodes) {
+            return $isComplete;
+        }
+
+        $complete = [
+            'cost_centre' => 0,
+            'description' => 1,
+            'user_limit' => 2,
+            'users_current' => 3,
+            'currency' => 4,
+            'cost_per_user' => 5,
+            'start' => 6,
+            'stop' => 7
+        ];
+
+        $intersected = array_intersect_key(array_filter($licence_nodes), $complete);
+
+        if (count($intersected) === count($licence_nodes)) {
+            $isComplete = 'yes';
+        }
+
+        return $isComplete;
     }
 }

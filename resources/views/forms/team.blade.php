@@ -44,7 +44,7 @@
                                     Organisation
                                 </h2>
                             </legend>
-                            <x-summary>Please select one</x-summary>
+                            <x-summary>Select the organisation in which the team operates</x-summary>
                             <div class="govuk-radios" data-module="govuk-radios">
                                 @foreach($organisations as $organisation)
                                     <div class="govuk-radios__item">
@@ -63,30 +63,10 @@
                 </div>
                 @if(isset($cost_centres) && count($cost_centres) > 0)
                     <div class="govuk-grid-column-one-half">
-                        <div class="govuk-form-group govuk-!-margin-top-6">
-                            <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
-                                <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                                    <h2 class="govuk-fieldset__heading">
-                                        Cost Centre
-                                    </h2>
-                                </legend>
-                                <x-summary>Please select one</x-summary>
-                                <div class="govuk-radios" data-module="govuk-radios">
-                                    @foreach($cost_centres as $cost_centre)
-                                        <div class="govuk-radios__item">
-                                            <input class="govuk-radios__input" id="cost-centre-{{ $loop->index }}"
-                                                   name="cost_centre_id" type="radio"
-                                                   value="{{$cost_centre->id}}" required>
-                                            <label class="govuk-label govuk-radios__label"
-                                                   for="cost-centre-{{ $loop->index }}">
-                                                {{ $cost_centre->name }} &nbsp;&nbsp;
-                                                <small>{{$cost_centre->number}}</small>
-                                            </label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </fieldset>
-                        </div>
+                        <x-cost-centres
+                            summary="When purchases are made by this team, where are the costs allocated?"
+                            :costCentres="$cost_centres"
+                        ></x-cost-centres>
                     </div>
                 @endif
             </div>

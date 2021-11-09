@@ -16,7 +16,7 @@
             </x-card>
         </div>
     </div>
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row govuk-!-margin-top-9">
         <div class="govuk-grid-column-full">
             <h2 class="govuk-heading-l">Management</h2>
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
