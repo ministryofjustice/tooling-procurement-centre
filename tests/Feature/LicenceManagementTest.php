@@ -183,11 +183,10 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_create_page_can_be_rendered()
     {
-        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $tool = Tool::factory()->create();
-        $response = $this->get('dashboard/tools/' . $tool->slug . '/licences/create');
+        $response = $this->get(route('licences-create', $tool->slug));
         $response->assertStatus(200);
 
         $this->assertArrayHasKey('id', $response['tool']);
@@ -207,7 +206,6 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_create_user_limit_input_can_be_rendered()
     {
-        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $tool = Tool::factory()->create();
@@ -223,7 +221,6 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_create_start_input_can_be_rendered()
     {
-        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $tool = Tool::factory()->create();
@@ -239,7 +236,6 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_create_cost_centre_input_can_be_rendered()
     {
-        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $tool = Tool::factory()->create();
@@ -255,7 +251,6 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_description_can_be_stored_in_a_session()
     {
-        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $tool = Tool::factory()->create();
