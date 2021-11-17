@@ -246,7 +246,7 @@ class LicenceController extends Controller
     }
 
     /**
-     * Determines the completed status of the licence session array.
+     * Determines the completed status of the licence session array during creation.
      * First we get the licence session data, and then we declare what good looks
      * like in the $complete variable.
      *
@@ -256,7 +256,7 @@ class LicenceController extends Controller
      * in $intersected will give us just the keys that are present in $complete.
      *
      * Next we compare the number of elements in $intersected and $complete to make
-     * sure they match before deciding
+     * sure they match before deciding.
      *
      * @return string
      */
@@ -264,9 +264,10 @@ class LicenceController extends Controller
     {
         $licence_nodes = request()->session()->get('licence');
 
-        $isComplete = 'no'; // default
+        $is_complete = 'no'; // default
+
         if (!$licence_nodes) {
-            return $isComplete;
+            return $is_complete;
         }
 
         $complete = [
@@ -283,9 +284,9 @@ class LicenceController extends Controller
         $intersected = array_intersect_key(array_filter($licence_nodes), $complete);
 
         if (count($intersected) === count($licence_nodes)) {
-            $isComplete = 'yes';
+            $is_complete = 'yes';
         }
 
-        return $isComplete;
+        return $is_complete;
     }
 }
