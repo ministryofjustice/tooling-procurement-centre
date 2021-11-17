@@ -49,4 +49,9 @@ class Licence extends Model
     {
         return $this->hasOne(Tool::class, 'id', 'tool_id');
     }
+
+    public function costCentre()
+    {
+        return $this->hasOne(CostCentre::class, 'id', 'cost_centre_id');
+    }
 }

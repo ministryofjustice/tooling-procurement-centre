@@ -195,8 +195,7 @@ class ToolController extends Controller
      */
     public function show($slug): View
     {
-        $tool = Tool::where(['slug' => $slug])->first();
-        return view('tool', ['tool' => $tool]);
+        return view('tool', ['tool' => Tool::where(['slug' => $slug])->first()]);
     }
 
     /**
