@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CostCentre;
 use App\Models\Organisation;
 use App\Models\Team;
 use Auth;
@@ -24,7 +25,8 @@ class TeamController extends Controller
     public function create()
     {
         return view('forms.team', [
-            'organisations' => Organisation::all()->sortBy("name")
+            'organisations' => Organisation::all()->sortBy("name"),
+            'cost_centres' => CostCentre::all()->sortBy('name')
         ]);
     }
 

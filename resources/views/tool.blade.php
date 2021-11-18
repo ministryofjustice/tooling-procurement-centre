@@ -64,13 +64,14 @@
                     @php
                         $image = md5( strtolower( trim( $tool->contact->email ) ) );
                     @endphp
-                    <img src="https://www.gravatar.com/avatar/{{$image}}" style="float:left;margin-right:10px"/>
+                    <img alt="Gravatar image" src="https://www.gravatar.com/avatar/{{$image}}"
+                         style="float:left;margin-right:10px"/>
                     <strong>{{$tool->contact->name}}</strong><br>
                     <x-nav-link href="mailto:{{$tool->contact->email}}">Email</x-nav-link>
                     @if(!empty($tool->contact->slack))
                         <br>
-                        <x-nav-link target="_blank" href="https://mojdt.slack.com/team/{{$tool->contact->slack}}">Slack
-                            IM
+                        <x-nav-link target="_blank" href="https://mojdt.slack.com/team/{{$tool->contact->slack}}">
+                            Slack
                         </x-nav-link>
                     @endif
                 </div>
@@ -78,30 +79,44 @@
 
 
             <h2 id="licences" class="govuk-heading-m">
-                Licences
+                Licences <br>
+                <small class="app-hint">Total: &pound;{{$tool->licences_cost}}</small>
             </h2>
             <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
             @if(count($tool->licences) > 0)
                 <table class="govuk-table">
-                    <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                        <th scope="col" class="govuk-table__header">Cost</th>
-                        <th scope="col" class="govuk-table__header">Users</th>
-                        <th scope="col" class="govuk-table__header"></th>
-                    </tr>
-                    </thead>
                     <tbody class="govuk-table__body">
                     @foreach($tool->licences as $licence)
-                        <tr class="govuk-table__row">
-                            <td colspan="3" class="govuk-table__cell app-hint no-border">[COST_CENTRE_NAME]</td>
-                        </tr>
-                        <tr class="govuk-table__row">
-                            <th scope="row" class="govuk-table__header">&pound;{{$licence->user_limit * $licence->cost_per_user}}</th>
-                            <td class="govuk-table__cell">{{$licence->user_limit}}</td>
-                            <td class="govuk-table__cell">
-                                <x-nav-link href="{{ route('licence', $licence->id) }}">View</x-nav-link>
-                            </td>
-                        </tr>
+                        @if(!empty($licence->user_limit))
+                            <tr class="govuk-table__row">
+                                <td colspan="3" class="govuk-table__cell app-hint no-border">
+                                    <small><strong>Cost centre: </strong>{{$licence->costCentre->name ?? ''}}</small>
+                                </td>
+                            </tr>
+                            <tr class="govuk-table__row">
+                                <th scope="row" class="govuk-table__header">
+                                    <small class="app-hint"><strong>Cost</strong></small><br>
+                                    &pound;{{number_format($licence->user_limit * $licence->cost_per_user)}}
+                                </th>
+                                <td class="govuk-table__cell">
+                                    <small class="app-hint"><strong>Users</strong></small><br>
+                                    {{$licence->user_limit}}
+                                </td>
+                                <td class="govuk-table__cell">
+                                    &nbsp;<br>
+                                    <x-nav-link href="{{ route('licence', $licence->id) }}">View</x-nav-link>
+                                </td>
+                            </tr>
+                        @else
+                            <tr class="govuk-table__row">
+                                <td colspan="3" class="govuk-table__cell app-hint">
+                                    <small>Licence with ID {{$licence->id}} has not been completed.
+                                    <x-nav-link href="{{ route('licence', $licence->id) }}">Click to add detail
+                                    </x-nav-link>
+                                    </small><br><br>
+                                </td>
+                            </tr>
+                        @endif
                     @endforeach
                     </tbody>
                 </table>

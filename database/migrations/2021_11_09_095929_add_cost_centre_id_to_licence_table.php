@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCostCentresTable extends Migration
+class AddCostCentreIdToLicenceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateCostCentresTable extends Migration
      */
     public function up()
     {
-        Schema::create('cost_centres', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->string('number');
-            $table->timestamps();
+        Schema::table('licences', function (Blueprint $table) {
+            $table->bigInteger('cost_centre_id')->unsigned()->after('tool_id')->nullable();
         });
     }
 
@@ -29,6 +25,8 @@ class CreateCostCentresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cost_centres');
+        Schema::table('licences', function (Blueprint $table) {
+            $table->removeColumn('cost_centre_id');
+        });
     }
 }

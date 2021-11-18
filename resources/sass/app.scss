@@ -224,6 +224,12 @@ body {
     }
 }
 
+.govuk-label {
+    small {
+        color: #505a5f;
+    }
+}
+
 @media print {
     .app-masthead {
         &__description {

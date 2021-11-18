@@ -1,41 +1,32 @@
 <x-app-layout>
     <x-form-card>
         <x-slot name="title">
-            Edit {!! $organisation->name !!}
+            Edit {!! $cost_centre->name !!}
         </x-slot>
         {{-- Validation Errors --}}
         <x-auth-validation-errors class="govuk-body" :errors="$errors"/>
 
-        <form method="POST" action="{{ route('organisations-patch', $organisation->id) }}">
+        <form method="POST" action="{{ route('cost-centres-patch', $cost_centre->id) }}">
             @csrf
             {!! method_field('patch') !!}
             {{-- Name --}}
             <x-form-group
                 id="name"
-                label="Organisation"
+                label="Cost Centre name"
                 type="text"
-                value="{!! $organisation->name !!}"
+                value="{!! $cost_centre->name !!}"
                 :required="true"
                 :autofocus="true"
             />
 
             {{-- Address --}}
             <x-form-group
-                id="address"
-                label="Address"
-                summary="The full textual address; 102 Petty France, London, SW1H 9AJ, United Kingdom."
+                id="number"
+                label="Number"
+                summary="The allocation number assigned by the MoJ."
                 type="text"
-                value="{!! $organisation->address !!}"
+                value="{!! $cost_centre->number !!}"
                 :required="true"
-            />
-
-            {{-- Description --}}
-            <x-form-group
-                id="description"
-                label="Description"
-                summary="Optionally describe the organisation."
-                type="textarea"
-                value="{{ $organisation->description }}"
             />
 
             <div>

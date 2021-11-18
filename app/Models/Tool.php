@@ -77,16 +77,16 @@ class Tool extends Model
 
     public function licences(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Licence::class, 'tool_id', 'id');
+        return $this->hasMany(Licence::class, 'tool_id', 'id')->orderBy('user_limit', 'desc');
     }
 
-    public function setLicenceTotalAttribute()
+    public function getLicencesCostAttribute()
     {
         $total = 0;
-        foreach($this->licences() as $licence) {
-            $total = $total + $licence->annual_cost ?? 0;
+        foreach ($this->licences as $licence) {
+            $total = $total + ($licence->user_limit * $licence->cost_per_user) ?? 0;
         }
 
-        return $total;
+        return $this->attributes['licences_cost'] = number_format($total);
     }
 }

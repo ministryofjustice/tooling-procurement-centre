@@ -2,7 +2,7 @@
     <span class="govuk-caption-l"><strong>{{ $tool->name }}:</strong> create a new licence</span>
     <x-form-card>
         <x-slot name="title">
-            Allocate a cost centre
+            Cost centre
         </x-slot>
         {{-- Validation Errors --}}
         <x-auth-validation-errors class="govuk-body" :errors="$errors"/>
@@ -17,14 +17,17 @@
                 value="{{ $tool->id }}"
             ></x-input>
 
-            [COST_CENTRE]
+            <x-cost-centres
+                summary="When the licence is purchased, where are the costs allocated?"
+                :costCentres="$cost_centres"
+                :selected="$licence['cost_centre'] ?? ''"
+            ></x-cost-centres>
 
-            <div>
-                <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                <x-button>
-                    {{ __('Continue') }}
-                </x-button>
-            </div>
+            <x-licence-form-buttons
+                back="users_current"
+                :tool="$tool"
+                :complete="$licence_complete"
+            />
         </form>
     </x-form-card>
 </x-app-layout>

@@ -8,26 +8,20 @@
         <x-auth-validation-errors class="govuk-body" :errors="$errors"/>
 
         <p class="govuk-body govuk-!-width-two-thirds">
-            You may change answers as you please.
+            You may change your answers.
         </p>
 
         <dl class="govuk-summary-list govuk-!-width-two-thirds">
             {{-- Projected cost --}}
             <x-summary-list-row
-                title="Projected annual cost"
-                value="{{ $licence['user_limit'] * $licence['cost_per_user']}}"
-            ></x-summary-list-row>
-            {{-- Description --}}
-            <x-summary-list-row
-                title="Description"
-                value="{{$licence['description'] ?? ''}}"
-                route="{{ route('licences-create', $tool->slug) }}"
+                title="Annual cost"
+                value="{!! number_format($licence['user_limit'] * $licence['cost_per_user']) !!}"
             ></x-summary-list-row>
 
             {{-- Available, single licences --}}
             <x-summary-list-row
                 title="Available"
-                value="{{$licence['user_limit'] ?? ''}}"
+                value="{{number_format($licence['user_limit'] ?? '')}}"
                 route="{{ route('licences-create-part', [$tool->slug, 'user_limit']) }}"
             ></x-summary-list-row>
 
@@ -64,6 +58,20 @@
                 title="Expires date"
                 value="{{$licence['stop']['date'] ?? ''}}"
                 route="{{ route('licences-create-part', [$tool->slug, 'stop']) }}"
+            ></x-summary-list-row>
+
+            {{-- Cost Centre --}}
+            <x-summary-list-row
+                title="Cost Centre"
+                value="{!! $cost_centre ? $cost_centre->name . ', ' . $cost_centre->number : '' !!}"
+                route="{{ route('licences-create-part', [$tool->slug, 'cost_centre']) }}"
+            ></x-summary-list-row>
+
+            {{-- Description --}}
+            <x-summary-list-row
+                title="Description"
+                value="{!! $licence['description'] ?? '' !!}"
+                route="{{ route('licences-create', $tool->slug) }}"
             ></x-summary-list-row>
         </dl>
 

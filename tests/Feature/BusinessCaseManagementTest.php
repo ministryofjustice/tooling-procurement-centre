@@ -17,8 +17,18 @@ class BusinessCaseManagementTest extends TestCase
         $this->withoutExceptionHandling();
         $this->authorisedUser();
 
-        $response = $this->get('/dashboard/business-cases');
+        BusinessCase::factory()->create();
+        BusinessCase::factory()->create();
+        $this->assertCount(2, BusinessCase::all());
+
+        $response = $this->get(route('business-cases'));
         $response->assertStatus(200);
+
+        // check response data exists and contains only the records we
+        // created above with factory
+        $this->assertArrayHasKey('0', $response['business_cases']);
+        $this->assertArrayHasKey('1', $response['business_cases']);
+        $this->assertArrayNotHasKey('2', $response['business_cases']);
     }
 
     public function test_a_business_case_can_be_added()

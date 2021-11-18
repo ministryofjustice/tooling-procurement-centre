@@ -1,8 +1,4 @@
 <x-app-layout>
-    <x-slot name="backlink">
-        <a href="{{ route('dashboard') }}" class="govuk-back-link">Back</a>
-    </x-slot>
-
     <x-crud-index-header route="{{ route('contacts-create') }}" title="{{ __('Contacts') }}"></x-crud-index-header>
 
     <table class="govuk-table">
