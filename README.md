@@ -9,7 +9,7 @@
 ---
 
 # Tooling Procurement Centre
-<img src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px-7026afebba9918a0830ebf68cf496cbb0b81f3514b884dc2c32904780baa3368.png" width="18">&nbsp;&nbsp;**Ministry of Justice, Digital & Technology**
+<img alt="MoJ logo" src="https://www.gov.uk/assets/collections/govuk_publishing_components/crests/org_crest_18px-7026afebba9918a0830ebf68cf496cbb0b81f3514b884dc2c32904780baa3368.png" width="18">&nbsp;&nbsp;**Ministry of Justice, Digital & Technology**
 
 The core purpose of the TPC (Tooling Procurement Centre) is to aggregate data related to tooling within government digital teams and display exploratory reports and structured data for administrative review, financial quantification and high-confidence decision-making.
 
@@ -31,8 +31,15 @@ The configuration uses multiple Docker containers and volumes to manage ephemera
 
 Nb. steps 5 and 6 are necessary and fix a bug that occurs due to Laravel's APP_KEY being generated on the fly, and the systems' inability to read environment variables that change after init. When we restart the containers the newly generated APP_KEY loads correctly.  
 
+### Useful commands
+
+- Monitor asset compilation output from the node container. Output is produced by `mix watch`. The terminal view will update when changes are made to any file tracked in `webpack.mix.js` 
+```
+docker compose logs node -f
+```
+
 ## Laravel inside...
-<img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="200">
+<img alt="Laravel logo" src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="200">
 
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
