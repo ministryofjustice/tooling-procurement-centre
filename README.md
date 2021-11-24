@@ -33,7 +33,7 @@ Nb. steps 5 and 6 are necessary and fix a bug that occurs due to Laravel's APP_K
 
 ### Useful commands
 
-- Monitor asset compilation output from the node container. Output is produced by `mix watch`. The terminal view will update when changes are made to any file tracked in `webpack.mix.js` 
+Monitor asset compilation output from the node container. Output is produced by `mix watch`. The terminal view will update when changes are made to any file tracked in `webpack.mix.js` 
 ```
 docker compose logs node -f
 ```
