@@ -34,8 +34,7 @@ clean:
 
 node-assets:
 	npm install
-	npm run dev
-	npm run watch
+	npx mix watch
 
 bash-nginx:
 	docker compose exec --workdir /var/www/html nginx bash
