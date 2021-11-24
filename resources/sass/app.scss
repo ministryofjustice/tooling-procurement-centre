@@ -183,6 +183,12 @@ body {
     float:none;
 }
 
+.clearfix:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
 .tooling-new {
     color:#00703c !important;
 }
