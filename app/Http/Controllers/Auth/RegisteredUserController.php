@@ -12,7 +12,9 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules;
+use View;
 
 class RegisteredUserController extends Controller
 {
@@ -48,7 +50,7 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      *
-     * @return \Illuminate\View\View
+     * @return View|RedirectResponse
      */
     public function create(Request $request)
     {
@@ -90,6 +92,11 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
+
+        Log::channel('slackNotification')->info('A new application user has been created', [
+            'name' => $user->name,
+            'email' => $user->email
+        ]);
 
         return redirect(RouteServiceProvider::HOME);
     }
