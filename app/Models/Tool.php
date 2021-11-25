@@ -16,9 +16,7 @@ class Tool extends Model
     public static array $createRules = [
         'name' => 'required|unique:tools|max:80',
         'description' => 'required',
-        'link' => 'required',
-        'approved' => 'sometimes|boolean',
-        'approved_reason' => ''
+        'link' => 'required'
     ];
 
     public function path()

@@ -60,7 +60,7 @@
             @if($tool->contact)
                 <h2 id="main-contact" class="govuk-heading-m">Main contact</h2>
                 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-                <div class="govuk-inset-text">
+                <div class="govuk-inset-text clearfix">
                     @php
                         $image = md5( strtolower( trim( $tool->contact->email ) ) );
                     @endphp
