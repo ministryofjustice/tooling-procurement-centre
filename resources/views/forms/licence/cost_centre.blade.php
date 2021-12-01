@@ -20,7 +20,7 @@
             <x-cost-centres
                 summary="When the licence is purchased, where are the costs allocated?"
                 :costCentres="$cost_centres"
-                :selected="$licence['cost_centre'] ?? ''"
+                :selected="$licence['cost_centre_id'] ?? ''"
             ></x-cost-centres>
 
             <x-licence-form-buttons

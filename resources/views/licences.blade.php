@@ -6,6 +6,7 @@
         <thead class="govuk-table__head">
         <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Tooling</th>
+            <th scope="col" class="govuk-table__header">Usage</th>
             <th scope="col" class="govuk-table__header">Available</th>
             <th scope="col" class="govuk-table__header">Cost</th>
             <th scope="col" class="govuk-table__header">Expires</th>
@@ -24,13 +25,14 @@
                     <x-nav-link href="{{ $licence->path() }}"> {{ $licence->tool->name }} </x-nav-link>
                 </th>
                 @if(!$stop)
-                    <td class="govuk-table__cell" colspan="3">
+                    <td class="govuk-table__cell" colspan="4">
                         <strong class="govuk-tag govuk-tag--blue">
                             Incomplete
-                        </strong> Please update to present data here.</td>
+                        </strong> Add data to present information here.</td>
                 @else
-                    <td class="govuk-table__cell">{{ $licence->available }}</td>
-                    <td class="govuk-table__cell">{{ $licence->annual_cost }}</td>
+                    <td class="govuk-table__cell">{{ $licence->usage }}%</td>
+                    <td class="govuk-table__cell">{{ $licence->user_limit - $licence->users_current }} <small>({{$licence->user_limit}})</small></td>
+                    <td class="govuk-table__cell">&pound;{{ number_format($licence->users_current * $licence->cost_per_user) }}</td>
                     <td class="govuk-table__cell">{{ $stop }}</td>
                 @endif
                 <td class="govuk-table__cell align-right">

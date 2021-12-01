@@ -17,19 +17,6 @@ class Licence extends Model
         'stop'
     ];
 
-    public static array $createRules = [
-        'tool_id' => 'required|numeric',
-        'cost_centre_id' => 'sometimes|required|numeric',
-        'description' => 'sometimes|string|nullable',
-        'user_limit' => 'numeric|nullable',
-        'users_current' => 'numeric|nullable',
-        'annual_cost' => 'numeric|nullable',
-        'currency' => 'sometimes|required|alpha|nullable|max:3',
-        'cost_per_user' => 'numeric|nullable',
-        'start' => 'sometimes|required|date|nullable',
-        'stop' => 'sometimes|required|date|nullable'
-    ];
-
     public function path()
     {
         return '/dashboard/licences/' . $this->id;
@@ -53,5 +40,26 @@ class Licence extends Model
     public function costCentre()
     {
         return $this->hasOne(CostCentre::class, 'id', 'cost_centre_id');
+    }
+
+    public function businessCases()
+    {
+        return $this->hasMany(BusinessCase::class, 'tool_id', 'id')->orderBy('created_at', 'desc');
+    }
+
+    /**
+     * Usage of licences for a given tool
+     * This method will return a percentage value that is representative of the overall
+     * use of the tool.
+     *
+     * @return int|null
+     */
+    public function getUsageAttribute()
+    {
+        if ($this->user_limit === null) {
+            return 0;
+        }
+
+        return $this->attributes['usage'] = (int)(($this->users_current / $this->user_limit) * 100);
     }
 }
