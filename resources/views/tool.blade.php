@@ -20,6 +20,128 @@
         approved="{{ $approved }}"
         tool_id="{{$tool->id}}"/>
 
+    <div class="govuk-tabs" data-module="govuk-tabs">
+        <h2 class="govuk-tabs__title">
+            Contents
+        </h2>
+        <ul class="govuk-tabs__list">
+            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+                <a class="govuk-tabs__tab" href="#licences">
+                    Licences
+                </a>
+            </li>
+            <li class="govuk-tabs__list-item">
+                <a class="govuk-tabs__tab" href="#business-cases">
+                    Business Cases
+                </a>
+            </li>
+            <li class="govuk-tabs__list-item">
+                <a class="govuk-tabs__tab" href="#tooling-reviews">
+                    Tooling Reviews
+                </a>
+            </li>
+        </ul>
+        <div class="govuk-tabs__panel" id="licences">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-half">
+                    <h2 class="govuk-heading-m">
+                        Licences <br>
+                        <small class="app-hint">Total cost:&nbsp; </small>
+                        <strong class="govuk-tag">
+                            &pound;{{$tool->licences_cost}}
+                        </strong>
+                    </h2>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+                    @if(count($tool->licences) > 0)
+                        <table class="govuk-table">
+                            <tbody class="govuk-table__body">
+                            @foreach($tool->licences as $licence)
+                                @if(!empty($licence->user_limit))
+                                    <tr class="govuk-table__row">
+                                        <th scope="row" class="govuk-table__header no-border">
+                                            <small class="app-hint"><strong>Cost</strong></small><br>
+                                            &pound;{{number_format($licence->user_limit * $licence->cost_per_user)}}
+                                        </th>
+                                        <td class="govuk-table__cell no-border">
+                                            <small class="app-hint"><strong>Users</strong></small><br>
+                                            {{$licence->user_limit}}
+                                        </td>
+                                        <td class="govuk-table__cell no-border">
+                                            &nbsp;<br>
+                                            <x-nav-link href="{{ route('licence', $licence->id) }}">View</x-nav-link>
+                                        </td>
+                                    </tr>
+                                    <tr class="govuk-table__row">
+                                        <td colspan="3" class="govuk-table__cell app-hint">
+                                            @if($licence->costCentre)
+                                                <small><strong>Cost centre: </strong>
+                                                    <x-nav-link
+                                                        href="{{route('cost-centre', $licence->costCentre->slug)}}"
+                                                        title="">{{$licence->costCentre->number}}</x-nav-link><br>
+                                                    {{$licence->costCentre->name}}
+                                                </small>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @else
+                                    <tr class="govuk-table__row">
+                                        <td colspan="3" class="govuk-table__cell app-hint">
+                                            <small>Licence with ID {{$licence->id}} has not been completed.
+                                                <x-nav-link href="{{ route('licences-edit', $licence->id) }}">Click to
+                                                    add
+                                                    detail
+                                                </x-nav-link>
+                                            </small><br><br>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        <p class="govuk-body">
+                            No licences could be found for {{ $tool->name }}.
+                        </p>
+                    @endif
+                    <x-nav-link href="{{route('licences-create', $tool->slug)}}" class="govuk-button">
+                        Add new licence
+                    </x-nav-link>
+                </div>
+                <div class="govuk-grid-column-one-half">
+                    <h2 class="govuk-heading-m">
+                        Usage <br>
+                        <small class="app-hint">Available:&nbsp; </small>
+                        <strong class="govuk-tag govuk-tag--red">
+                            {{$tool->available_users}}
+                        </strong>
+                    </h2>
+                    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
+                    <x-percent-chart-simple percentage="{{$tool->licence_usage}}"/>
+                    <div class="govuk-!-margin-9"></div>
+                </div>
+            </div>
+        </div>
+        <div class="govuk-tabs__panel" id="business-cases">
+            @if($tool->businessCases && count($tool->businessCases) > 0)
+                {{-- for loop over cases --}}
+            @else
+                <p class="govuk-body">
+                    There are currently no business cases registered for {{$tool->name}}.
+                </p>
+                <x-nav-link class="govuk-button" href="{{route('business-cases-create')}}">Add Business Case</x-nav-link>
+            @endif
+        </div>
+        <div class="govuk-tabs__panel" id="tooling-reviews">
+            @if($tool->toolingReviews && count($tool->toolingReviews) > 0)
+                {{-- for loop over reviews --}}
+            @else
+                <p class="govuk-body">
+                    There are currently no reviews logged for {{$tool->name}}.
+                </p>
+                <x-nav-link class="govuk-button" href="#">Add Tooling Review</x-nav-link>
+            @endif
+        </div>
+    </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             <h2 id="timeline" class="govuk-heading-m">Timeline</h2>
@@ -65,7 +187,7 @@
                         $image = md5( strtolower( trim( $tool->contact->email ) ) );
                     @endphp
                     <img alt="Gravatar image" src="https://www.gravatar.com/avatar/{{$image}}"
-                         style="float:left;margin-right:10px"/>
+                         class="contact__image contact__image__with-content"/>
                     <strong>{{$tool->contact->name}}</strong><br>
                     <x-nav-link href="mailto:{{$tool->contact->email}}">Email</x-nav-link>
                     @if(!empty($tool->contact->slack))
@@ -76,58 +198,6 @@
                     @endif
                 </div>
             @endif
-
-
-            <h2 id="licences" class="govuk-heading-m">
-                Licences <br>
-                <small class="app-hint">Total: &pound;{{$tool->licences_cost}}</small>
-            </h2>
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"/>
-            @if(count($tool->licences) > 0)
-                <table class="govuk-table">
-                    <tbody class="govuk-table__body">
-                    @foreach($tool->licences as $licence)
-                        @if(!empty($licence->user_limit))
-                            <tr class="govuk-table__row">
-                                <td colspan="3" class="govuk-table__cell app-hint no-border">
-                                    <small><strong>Cost centre: </strong>{{$licence->costCentre->name ?? ''}}</small>
-                                </td>
-                            </tr>
-                            <tr class="govuk-table__row">
-                                <th scope="row" class="govuk-table__header">
-                                    <small class="app-hint"><strong>Cost</strong></small><br>
-                                    &pound;{{number_format($licence->user_limit * $licence->cost_per_user)}}
-                                </th>
-                                <td class="govuk-table__cell">
-                                    <small class="app-hint"><strong>Users</strong></small><br>
-                                    {{$licence->user_limit}}
-                                </td>
-                                <td class="govuk-table__cell">
-                                    &nbsp;<br>
-                                    <x-nav-link href="{{ route('licence', $licence->id) }}">View</x-nav-link>
-                                </td>
-                            </tr>
-                        @else
-                            <tr class="govuk-table__row">
-                                <td colspan="3" class="govuk-table__cell app-hint">
-                                    <small>Licence with ID {{$licence->id}} has not been completed.
-                                    <x-nav-link href="{{ route('licence', $licence->id) }}">Click to add detail
-                                    </x-nav-link>
-                                    </small><br><br>
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
-                    </tbody>
-                </table>
-            @else
-                <p class="govuk-body">
-                    No licences could be found for {{ $tool->name }}.
-                </p>
-            @endif
-            <x-nav-link href="{{route('licences-create', $tool->slug)}}" class="govuk-button">
-                Add new licence
-            </x-nav-link>
         </div>
     </div>
 </x-app-layout>

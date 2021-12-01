@@ -10,6 +10,7 @@
         <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Status</th>
             <th scope="col" class="govuk-table__header">Tool</th>
+            <th scope="col" class="govuk-table__header">Usage</th>
             <th scope="col" class="govuk-table__header">Description</th>
             <th scope="col" class="govuk-table__header"></th>
         </tr>
@@ -18,7 +19,7 @@
         @foreach($tools as $tool)
             @php
                 // 3 states: NEW = 2; APPROVED = 1; REJECTED = 0
-                $now = \Carbon\Carbon::now();
+                $now = Carbon\Carbon::now();
                 $approved = (!$tool->approved && $tool->created_at->diff($now)->days < 3
                     ? 2
                     : $tool->approved
@@ -42,6 +43,9 @@
                         {{ $tool->name }}
                     </x-nav-link>
                 </th>
+                <td class="govuk-table__cell">
+                    {{ $tool->licence_usage ?? 0 }}%
+                </td>
                 <td class="govuk-table__cell">{{ $tool->description }}</td>
                 <td class="govuk-table__cell align-right">
                     <x-nav-link href="{{ route('tool', $tool->slug) }}" class="govuk-button"> View</x-nav-link>

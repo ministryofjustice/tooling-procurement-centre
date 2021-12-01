@@ -78,6 +78,16 @@ class Tool extends Model
         return $this->hasMany(Licence::class, 'tool_id', 'id')->orderBy('user_limit', 'desc');
     }
 
+    public function businessCases(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(BusinessCase::class, 'tool_id', 'id');
+    }
+
+    /*public function toolingReviews(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(ToolingReviews::class, 'tool_id', 'id');
+    }*/
+
     public function getLicencesCostAttribute()
     {
         $total = 0;
@@ -86,5 +96,40 @@ class Tool extends Model
         }
 
         return $this->attributes['licences_cost'] = number_format($total);
+    }
+
+    public function getAvailableUsersAttribute()
+    {
+        $total_users = 0;
+        $total_current = 0;
+        foreach ($this->licences as $licence) {
+            $total_users += $licence->user_limit ?? 0;
+            $total_current += $licence->users_current ?? 0;
+        }
+
+        return $this->attributes['available_users'] = ($total_users - $total_current);
+    }
+
+    /**
+     * Usage of licences for a given tool
+     * This method will return a percentage value that is representative of the overall
+     * use of the tool.
+     *
+     * @return int|null
+     */
+    public function getLicenceUsageAttribute()
+    {
+        $total_users = 0;
+        $total_current = 0;
+        foreach ($this->licences as $licence) {
+            $total_users += $licence->user_limit ?? 0;
+            $total_current += $licence->users_current ?? 0;
+        }
+
+        if ($total_users === 0) {
+            return 0;
+        }
+
+        return $this->attributes['licence_usage'] = (int)(($total_current / $total_users) * 100);
     }
 }
