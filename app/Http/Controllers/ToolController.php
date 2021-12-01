@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactsRequest;
 use App\Models\BusinessCase;
 use App\Models\Contact;
 use App\Models\Licence;
 use App\Models\Tool;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -91,14 +93,18 @@ class ToolController extends Controller
         return redirect('/dashboard/tools/create/contact');
     }
 
-    public function storeContact(Request $request)
+    /**
+     * @param ContactsRequest $request
+     * @return RedirectResponse
+     */
+    public function storeContact(ContactsRequest $request)
     {
-        if ($request->get('contact') === 'yes') {
+        if ($request->get('skip_contact') === 'yes') {
             $request->session()->forget('contact');
             return redirect(route('tools-create-business-case'));
         }
 
-        $contact = $request->validate(Contact::$createRules);
+        $contact = $request->validated();
         $contact['slug'] = Str::slug($contact['name']);
 
         $request->session()->put('contact', $contact);
@@ -229,7 +235,6 @@ class ToolController extends Controller
     public function destroy(Tool $tool)
     {
         $tool->delete();
-
         return redirect('/dashboard/tools');
     }
 

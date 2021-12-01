@@ -202,7 +202,6 @@ class ToolingManagementTest extends TestCase
         $this->authorisedUser();
 
         $response = $this->post('dashboard/tools/contact', [
-            'contact' => 'no',
             'name' => 'Tooling Contact',
             'email' => 'tooling.contact@justice.gov.uk',
             'slack' => 'BL4HBL4H'
@@ -214,10 +213,11 @@ class ToolingManagementTest extends TestCase
 
     public function test_a_tooling_contact_can_be_skipped()
     {
+        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $response = $this->post('dashboard/tools/contact', [
-            'contact' => 'yes'
+            'skip_contact' => 'yes'
         ]);
 
         $response->assertSessionMissing('contact');
