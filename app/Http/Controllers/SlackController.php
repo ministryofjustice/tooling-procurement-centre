@@ -76,7 +76,7 @@ class SlackController extends Controller
      */
     public function update(Slack $slack)
     {
-        $slack->update($this->validateRequest());
+        $slack->update($this->validateRequest(false));
         return redirect($slack->path());
     }
 
@@ -93,11 +93,17 @@ class SlackController extends Controller
     }
 
     /**
+     * @param bool $validate
      * @return array
      */
-    public function validateRequest(): array
+    public function validateRequest(bool $is_create = true): array
     {
-        $request = request()->validate(Slack::$createRules);
+        if ($is_create) {
+            $request = request()->validate(Slack::$createRules);
+        } else {
+            $request = request()->validate(Slack::$editRules);
+        }
+
         // add slug...
         $request['slug'] = Str::slug($request['name']);
         return $request;

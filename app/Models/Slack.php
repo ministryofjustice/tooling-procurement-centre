@@ -16,6 +16,11 @@ class Slack extends Model
         'webhook_url' => 'required|unique:slacks'
     ];
 
+    public static array $editRules = [
+        'name' => 'required|max:80',
+        'webhook_url' => 'required'
+    ];
+
     public function path(): string
     {
         return '/dashboard/slack-notification-settings/' . $this->slug;

@@ -16,7 +16,7 @@
                 <th scope="row" class="govuk-table__header">
                     <x-nav-link href="{{ $setting->path() }}"> {{ $setting->name }} </x-nav-link>
                 </th>
-                <td class="govuk-table__cell">{{ $setting->webhook_url }}</td>
+                <td class="govuk-table__cell">{{ substr($setting->webhook_url, 33, 90) }}</td>
                 <td class="govuk-table__cell align-right">
                     <x-nav-link href="{{ $setting->path() }}" class="govuk-button"> View</x-nav-link>
                     <x-nav-link href="{{ $setting->path() }}/edit" class="govuk-button"> Edit</x-nav-link>
