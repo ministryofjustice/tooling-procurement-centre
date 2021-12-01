@@ -14,6 +14,8 @@
 
 @import "crud"; // contains CRUD related styling for application
 @import "tool-timeline";
+@import "licence-usage";
+@import "contacts";
 
 body {
     margin: 0;
@@ -200,6 +202,8 @@ body {
     border: none;
 }
 .app-hint {
+    @extend .govuk-body;
+    font-size: inherit;
     color: #505a5f;
 }
 

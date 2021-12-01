@@ -23,7 +23,7 @@ class RegisteredUserController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function selectOrgTeam()
+    public function selectOrgTeam(): \Illuminate\View\View
     {
         return view('auth.create-an-account', [
             'organisations' => Organisation::with('teams')->get()
@@ -33,9 +33,10 @@ class RegisteredUserController extends Controller
     /**
      * Post Request to store step1 info in session
      *
-     * @param  Request $request
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function storeOrgteam(Request $request)
+    public function storeOrgTeam(Request $request): RedirectResponse
     {
         $data = $request->validate([
             'organisation' => 'required|numeric',
@@ -50,7 +51,7 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      *
-     * @return View|RedirectResponse
+     * @return \Illuminate\View\View|RedirectResponse
      */
     public function create(Request $request)
     {
@@ -92,11 +93,6 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         Auth::login($user);
-
-        Log::channel('slackNotification')->info('A new application user has been created', [
-            'name' => $user->name,
-            'email' => $user->email
-        ]);
 
         return redirect(RouteServiceProvider::HOME);
     }
