@@ -27,7 +27,8 @@ Route::get('/dashboard', function () {
         'teams' => ['count' => count(\App\Models\Team::all())],
         'business-cases' => ['count' => count(\App\Models\BusinessCase::all())],
         'contacts' => ['count' => count(\App\Models\Contact::all())],
-        'cost-centres' => ['count' => count(\App\Models\CostCentre::all())]
+        'cost-centres' => ['count' => count(\App\Models\CostCentre::all())],
+        'slack-settings' => ['count' => count(\App\Models\Slack::all())]
     ];
     return view('dashboard', ['data' => $data]);
 })->middleware(['auth'])->name('dashboard');
@@ -67,17 +68,6 @@ Route::get($contact_base_path . '/{slug}/edit', $contact_controller . 'edit')->n
 Route::get($contact_base_path . '/{slug}', $contact_controller . 'show')->name('contact');
 Route::patch($contact_base_path . '/{contact}', $contact_controller . 'update')->name('contacts-patch');
 Route::delete($contact_base_path . '/{contact}', $contact_controller . 'destroy')->name('contacts-delete');
-
-// Business Cases
-$bcase_controller = 'App\Http\Controllers\BusinessCaseController@';
-$bcase_base_path = 'dashboard/business-cases';
-Route::get($bcase_base_path, $bcase_controller . 'index')->name('business-cases');
-Route::post($bcase_base_path, $bcase_controller . 'store')->name('business-cases-add');
-Route::get($bcase_base_path . '/create', $bcase_controller . 'create')->name('business-cases-create');
-Route::get($bcase_base_path . '/{slug}/edit', $bcase_controller . 'edit')->name('business-cases-edit');
-Route::get($bcase_base_path . '/{slug}', $bcase_controller . 'show')->name('business-case');
-Route::patch($bcase_base_path . '/{case}', $bcase_controller . 'update')->name('business-cases-patch');
-Route::delete($bcase_base_path . '/{case}', $bcase_controller . 'destroy')->name('business-cases-delete');
 
 // Events
 Route::resource('dashboard/events', EventController::class);
@@ -119,7 +109,6 @@ Route::delete($tool_base_path . '/{tool}', $tool_controller . 'destroy')->name('
 Route::post($tool_base_path . '/{tool}/tag', 'App\Http\Controllers\TagToolController@store');
 Route::post($tool_base_path . '/{tool}/event', 'App\Http\Controllers\EventController@store');
 
-
 // Licences
 $licence_controller = 'App\Http\Controllers\LicenceController@';
 $licence_base_path = 'dashboard/licences';
@@ -136,6 +125,24 @@ Route::get($tool_base_path . '/{slug}/licences', $licence_controller . 'indexToo
 Route::post($tool_base_path . '/{slug}/licences', $licence_controller . 'storeFromSession')->name('licences-session-store');
 Route::get($tool_base_path . '/{slug}/licences/create', $licence_controller . 'create')->name('licences-create');
 Route::get($tool_base_path . '/{slug}/licences/create/{part}', $licence_controller . 'create')->name('licences-create-part');
+
+
+// Business Cases
+$bcase_controller = 'App\Http\Controllers\BusinessCaseController@';
+$bcase_base_path = 'dashboard/business-cases';
+Route::get($bcase_base_path, $bcase_controller . 'index')->name('business-cases');
+Route::post($bcase_base_path, $bcase_controller . 'store')->name('business-cases-add');
+Route::get($bcase_base_path . '/{slug}/edit', $bcase_controller . 'edit')->name('business-cases-edit');
+Route::get($bcase_base_path . '/{slug}', $bcase_controller . 'show')->name('business-case');
+Route::patch($bcase_base_path . '/{case}', $bcase_controller . 'update')->name('business-cases-patch');
+Route::delete($bcase_base_path . '/{case}', $bcase_controller . 'destroy')->name('business-cases-delete');
+
+$tool_base_path .= '/{slug}/business-cases';
+// bind business cases to tooling routes
+Route::get($tool_base_path, $bcase_controller . 'indexToolLicences')->name('business-cases-tools');
+Route::post($tool_base_path , $bcase_controller . 'storeFromSession')->name('business-cases-session-store');
+Route::get($tool_base_path . '/create', $bcase_controller . 'create')->name('business-cases-create');
+Route::get($tool_base_path . '/create/{part}', $bcase_controller . 'create')->name('business-cases-create-part');
 
 
 // cost centres
