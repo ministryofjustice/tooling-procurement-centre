@@ -8,20 +8,20 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 
-class NoToolingContactDefined extends Notification
+class LicenceHasCloseExpiryDate extends Notification
 {
     use Queueable;
 
-    private $tools;
+    private $licences;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($tools)
+    public function __construct($licences)
     {
-        $this->tools = $tools;
+        $this->licences = $licences;
     }
 
     /**
@@ -38,16 +38,16 @@ class NoToolingContactDefined extends Notification
     public function toSlack($notifiable)
     {
         $content = '';
-        foreach ($this->tools as $tool) {
-            $content .= "<" . route('tool', $tool->slug) . "|" . $tool->name . ">\n";
+        foreach ($this->licences as $licence) {
+            $content .= "<" . route('licence', $licence->id) . "|" . $licence->tool->name . ">\n";
         }
 
         return (new SlackMessage)
             ->from(config('app.name'))
-            ->content('Tooling contacts are missing or invalid.')
+            ->content('Licences are soon to expire.')
             ->to('#digital-tooling-management-test')
             ->attachment(function($attachment) use ($content) {
-                $attachment->title('Please assign a valid contact for the following:')
+                $attachment->title('The following tools are affected, please investigate:')
                     ->content($content);
             });
     }
