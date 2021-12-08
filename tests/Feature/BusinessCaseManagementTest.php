@@ -90,4 +90,16 @@ class BusinessCaseManagementTest extends TestCase
         $response = $this->get(route('business-cases-create'));
         $response->assertStatus(200);
     }
+
+    public function test_a_business_case_can_be_removed()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $business_case = BusinessCase::factory()->create();
+        $response = $this->delete('dashboard/business-cases/' . $business_case->id);
+        $response->assertRedirect('dashboard/business-cases');
+
+        $this->assertCount(0, BusinessCase::all());
+    }
 }

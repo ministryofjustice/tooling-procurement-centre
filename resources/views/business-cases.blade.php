@@ -32,11 +32,18 @@
                     <td class="govuk-table__cell">{{ $business_case->link }}</td>
                     <td class="govuk-table__cell">{{ substr($business_case->text, 0, 150) }}</td>
                     <td class="govuk-table__cell align-right">
-                        <x-nav-link href="{{ route('business-case', $business_case->id) }}" class="govuk-button"> View
-                        </x-nav-link>
-                        <x-nav-link href="{{ route('business-cases-edit', $business_case->id) }}" class="govuk-button">
-                            Edit
-                        </x-nav-link>
+                        <form method="post" action="{{route('business-cases-delete', $business_case->id)}}">
+                            @csrf
+                            {!! method_field('delete') !!}
+                            <x-nav-link href="{{ route('business-case', $business_case->id) }}" class="govuk-button">
+                                View
+                            </x-nav-link>
+                            <x-nav-link href="{{ route('business-cases-edit', $business_case->id) }}"
+                                        class="govuk-button">
+                                Edit
+                            </x-nav-link>
+                            <x-button class="govuk-button govuk-button--warning">Delete</x-button>
+                        </form>
                     </td>
                 </tr>
             @endforeach
@@ -46,7 +53,7 @@
         <div class="govuk-!-width-two-thirds">
             <p class="govuk-body">
                 There are currently no business cases in the system to display. You may add a business case by visiting
-                a tool and choosing to create a case from the Tooling Reviews section.
+                a tool and choosing to create a case from the Business Cases section.
             </p>
             <p>
                 <x-nav-link href="{{route('tools')}}" class="govuk-button">All Tools</x-nav-link>

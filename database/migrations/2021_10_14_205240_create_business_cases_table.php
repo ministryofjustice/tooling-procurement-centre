@@ -20,7 +20,7 @@ class CreateBusinessCasesTable extends Migration
             $table->string('link')->nullable();
             $table->longText('text')->nullable();
             $table->unsignedBigInteger('tool_id')->nullable();
-            $table->foreign('tool_id')->references('id')->on('tools')->onDelete('cascade');
+            $table->foreign('tool_id')->references('id')->on('tools');
             $table->timestamps();
         });
     }

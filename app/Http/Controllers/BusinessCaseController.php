@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\BusinessCase;
+use App\Models\Tool;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -27,20 +29,21 @@ class BusinessCaseController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param $slug
      * @return View
      */
-    public function create()
+    public function create($slug): View
     {
-        return view('forms.business-case');
+        return view('forms.business-case', ['tool' => Tool::where('name', 'LIKE', $slug)->first()]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param  Request  $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         BusinessCase::create($this->validateRequest());
         return redirect(route('business-cases'));
@@ -49,7 +52,7 @@ class BusinessCaseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\BusinessCase  $businessCase
+     * @param BusinessCase $businessCase
      * @return \Illuminate\Http\Response
      */
     public function show(BusinessCase $businessCase)
@@ -60,7 +63,7 @@ class BusinessCaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\BusinessCase  $businessCase
+     * @param BusinessCase $businessCase
      * @return \Illuminate\Http\Response
      */
     public function edit(BusinessCase $businessCase)
@@ -72,7 +75,7 @@ class BusinessCaseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\BusinessCase  $businessCase
+     * @param BusinessCase $businessCase
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, BusinessCase $businessCase)
@@ -83,12 +86,13 @@ class BusinessCaseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\BusinessCase  $businessCase
-     * @return \Illuminate\Http\Response
+     * @param BusinessCase $case
+     * @return RedirectResponse
      */
-    public function destroy(BusinessCase $businessCase)
+    public function destroy(BusinessCase $case): RedirectResponse
     {
-        //
+        $case->delete();
+        return redirect(route('business-cases'));
     }
 
     /**
