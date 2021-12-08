@@ -1,8 +1,8 @@
 .PHONY: dshell
 
 d-compose:
-	docker compose up -d nginx phpmyadmin
-	docker compose run --service-ports --rm --entrypoint=bash php
+	docker-compose up -d nginx phpmyadmin
+	docker-compose run --service-ports --rm --entrypoint=bash php
 
 dshell:
 	[ -f "./.env" ] || cp .env.example .env
@@ -17,7 +17,7 @@ setup:
 	php artisan notify:restart
 
 restart:
-	docker compose down
+	docker-compose down
 	make d-compose
 
 db-migrate:
