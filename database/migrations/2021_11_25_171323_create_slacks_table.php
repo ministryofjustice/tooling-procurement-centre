@@ -17,6 +17,7 @@ class CreateSlacksTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->string('channel');
             $table->string('webhook_url');
             $table->timestamps();
         });

@@ -26,7 +26,8 @@ class SlackFactory extends Factory
         return [
             'name' => $name,
             'slug' => Str::slug($name),
-            'webhook_url' => $this->faker->url()
+            'webhook_url' => $this->faker->url(),
+            'channel' => '#channel'
         ];
     }
 }

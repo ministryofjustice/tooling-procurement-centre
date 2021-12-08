@@ -22,8 +22,10 @@ class SlackSettingsManagementTest extends TestCase
 
         $response = $this->post($this->feature_path, [
             'webhook_url' => $url,
-            'name' => 'default'
+            'name' => 'default',
+            'channel' => '#channel'
         ]);
+
         $slack = Slack::first();
         $response->assertRedirect($slack->path());
         $this->assertEquals($url, $slack->webhook_url);
@@ -40,7 +42,8 @@ class SlackSettingsManagementTest extends TestCase
         $patch_webhook = 'https://updated-slack.webhook.example.com/37468392092';
         $response = $this->patch($this->feature_path . '/' . $slack->id, [
             'name' => $patch_name,
-            'webhook_url' => $patch_webhook
+            'webhook_url' => $patch_webhook,
+            'channel' => '#channel'
         ]);
 
         $slack = Slack::first();

@@ -87,7 +87,9 @@ class BusinessCaseManagementTest extends TestCase
 
         $this->authorisedUser();
 
-        $response = $this->get(route('business-cases-create'));
+        $tool = Tool::factory()->create();
+
+        $response = $this->get(route('business-cases-create', $tool->slug));
         $response->assertStatus(200);
     }
 

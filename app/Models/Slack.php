@@ -13,12 +13,14 @@ class Slack extends Model
 
     public static array $createRules = [
         'name' => 'required|unique:slacks|max:80',
-        'webhook_url' => 'required|unique:slacks'
+        'webhook_url' => 'required|unique:slacks',
+        'channel' => 'required'
     ];
 
     public static array $editRules = [
         'name' => 'required|max:80',
-        'webhook_url' => 'required'
+        'webhook_url' => 'required',
+        'channel' => 'required'
     ];
 
     public function path(): string
