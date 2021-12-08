@@ -46,7 +46,9 @@
                 <div class="govuk-grid-column-one-half">
                     <h2 class="govuk-heading-m">
                         Licences <br>
-                        <small class="app-hint">Total cost:&nbsp; </small>
+                        <span class="app-hint">
+                            <small>Total cost:&nbsp; </small>
+                        </span>
                         <strong class="govuk-tag">
                             &pound;{{$tool->licences_cost}}
                         </strong>
@@ -110,7 +112,9 @@
                 <div class="govuk-grid-column-one-half">
                     <h2 class="govuk-heading-m">
                         Usage <br>
-                        <small class="app-hint">Available:&nbsp; </small>
+                        <span class="app-hint">
+                            <small>Available:&nbsp; </small>
+                        </span>
                         <strong class="govuk-tag govuk-tag--red">
                             {{$tool->available_users}}
                         </strong>
@@ -128,7 +132,7 @@
                 <p class="govuk-body">
                     There are currently no business cases registered for {{$tool->name}}.
                 </p>
-                <x-nav-link class="govuk-button" href="{{route('business-cases-create')}}">Add Business Case</x-nav-link>
+                <x-nav-link class="govuk-button" href="{{route('business-cases-create', $tool->slug)}}">Add Business Case</x-nav-link>
             @endif
         </div>
         <div class="govuk-tabs__panel" id="tooling-reviews">
@@ -180,7 +184,7 @@
         </div>
         <div class="govuk-grid-column-one-third tooling-meta-column">
             @if($tool->contact)
-                <h2 id="main-contact" class="govuk-heading-m">Main contact</h2>
+                <h2 id="main-contact" class="govuk-heading-m">Main contacts</h2>
                 <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
                 <div class="govuk-inset-text clearfix">
                     @php

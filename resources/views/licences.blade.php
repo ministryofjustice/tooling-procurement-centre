@@ -16,13 +16,21 @@
         <tbody class="govuk-table__body">
         @foreach($licences as $licence)
             @php
-                $start = ($licence->start ? $licence->start->format('r') : null);
-                $stop = ($licence->stop ? $licence->stop->format('r') : null);
+                $format = 'F jS, Y';
+                $start = ($licence->start ? $licence->start->format($format) : null);
+                $stop = ($licence->stop ? $licence->stop->format($format) : null);
 
             @endphp
             <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
-                    <x-nav-link href="{{ $licence->path() }}"> {{ $licence->tool->name }} </x-nav-link>
+                    <x-nav-link href="{{ $licence->path() }}"
+                                class="govuk-link--no-visited-state"
+                    >
+                        {{ $licence->tool->name }}
+                    </x-nav-link>
+                    <div class="app-hint" title="{{ $licence->costCentre->name ?? '' }}">
+                        <small>CC: {{$licence->costCentre->number ?? ''}}</small>
+                    </div>
                 </th>
                 @if(!$stop)
                     <td class="govuk-table__cell" colspan="4">
@@ -30,7 +38,10 @@
                             Incomplete
                         </strong> Add data to present information here.</td>
                 @else
-                    <td class="govuk-table__cell">{{ $licence->usage }}%</td>
+                    <td class="govuk-table__cell">
+                        <strong class="govuk-tag govuk-tag--purple">
+                            {{ $licence->usage ?? 0 }}%
+                        </strong>
                     <td class="govuk-table__cell">{{ $licence->user_limit - $licence->users_current }} <small>({{$licence->user_limit}})</small></td>
                     <td class="govuk-table__cell">&pound;{{ number_format($licence->users_current * $licence->cost_per_user) }}</td>
                     <td class="govuk-table__cell">{{ $stop }}</td>

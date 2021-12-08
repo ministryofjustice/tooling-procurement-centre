@@ -8,8 +8,8 @@
     <table class="govuk-table">
         <thead class="govuk-table__head">
         <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Name</th>
             <th scope="col" class="govuk-table__header">Status</th>
-            <th scope="col" class="govuk-table__header">Tool</th>
             <th scope="col" class="govuk-table__header">Usage</th>
             <th scope="col" class="govuk-table__header">Description</th>
             <th scope="col" class="govuk-table__header"></th>
@@ -29,11 +29,6 @@
                     : (!$approved ? 'rejected' : 'approved'));
             @endphp
             <tr class="govuk-table__row">
-                <td class="govuk-table__cell">
-                    <strong class="govuk-tag govuk-tag--{{$approved === 2 ? 'green' : (!$approved ? 'red' : 'turquoise')}}">
-                        {{ $approved_state }}
-                    </strong>
-                </td>
                 <th scope="row" class="govuk-table__header">
                     <x-nav-link
                         href="{{ $tool->path() }}"
@@ -44,7 +39,14 @@
                     </x-nav-link>
                 </th>
                 <td class="govuk-table__cell">
-                    {{ $tool->licence_usage ?? 0 }}%
+                    <strong class="govuk-tag govuk-tag--{{$approved === 2 ? 'green' : (!$approved ? 'red' : 'turquoise')}}">
+                        {{ $approved_state }}
+                    </strong>
+                </td>
+                <td class="govuk-table__cell">
+                    <strong class="govuk-tag govuk-tag--purple">
+                        {{ $tool->licence_usage ?? 0 }}%
+                    </strong>
                 </td>
                 <td class="govuk-table__cell">{{ $tool->description }}</td>
                 <td class="govuk-table__cell align-right">

@@ -64,8 +64,10 @@
                 @if(isset($cost_centres) && count($cost_centres) > 0)
                     <div class="govuk-grid-column-one-half">
                         <x-cost-centres
+                            showTitle="true"
                             summary="When purchases are made by this team, where are the costs allocated?"
                             :costCentres="$cost_centres"
+                            selected=""
                         ></x-cost-centres>
                     </div>
                 @endif

@@ -21,6 +21,15 @@
                     :autofocus="true"
                 />
 
+                {{-- Channel --}}
+                <x-form-group
+                    id="channel"
+                    label="Channel"
+                    summary="Using the format: #channel-name"
+                    type="text"
+                    :required="true"
+                />
+
                 {{-- webhook_url --}}
                 <x-form-group
                     id="webhook_url"

@@ -5,18 +5,23 @@
                 <h2 class="govuk-visually-hidden">Support links</h2>
                 <ul class="govuk-footer__inline-list">
                     <li class="govuk-footer__inline-list-item">
-                        <a class="govuk-footer__link" href="#1">
-                            Item 1
+                        <a class="govuk-footer__link" href="#">
+                            About
                         </a>
                     </li>
                     <li class="govuk-footer__inline-list-item">
-                        <a class="govuk-footer__link" href="#2">
-                            Item 2
+                        <a class="govuk-footer__link" href="#">
+                            Privacy
                         </a>
                     </li>
                     <li class="govuk-footer__inline-list-item">
-                        <a class="govuk-footer__link" href="#3">
-                            Item 3
+                        <a class="govuk-footer__link" href="#">
+                            Accessibility
+                        </a>
+                    </li>
+                    <li class="govuk-footer__inline-list-item">
+                        <a class="govuk-footer__link" href="#">
+                            Cookies
                         </a>
                     </li>
                 </ul>

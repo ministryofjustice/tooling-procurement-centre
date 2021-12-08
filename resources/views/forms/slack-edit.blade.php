@@ -20,6 +20,16 @@
                     :autofocus="true"
                 />
 
+                {{-- Channel --}}
+                <x-form-group
+                    id="channel"
+                    label="Channel"
+                    summary="Using the format: #channel-name"
+                    type="text"
+                    value="{!! $settings->channel !!}"
+                    :required="true"
+                />
+
                 {{-- Email --}}
                 <x-form-group
                     id="webhook_url"
