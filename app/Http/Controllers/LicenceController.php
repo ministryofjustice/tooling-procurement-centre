@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LicencesRequest;
 use App\Models\CostCentre;
 use App\Models\Licence;
 use App\Models\Tool;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
@@ -56,7 +56,7 @@ class LicenceController extends Controller
         }
 
         if ($part === 'summary') {
-            $data['cost_centre'] = CostCentre::find($data['licence']['cost_centre']);
+            $data['cost_centre'] = CostCentre::find($data['licence']['cost_centre_id']);
         }
 
         return view('forms.licence.' . $part, $data);
@@ -64,15 +64,21 @@ class LicenceController extends Controller
 
     /**
      * Store form data in a session ready for summary and DB storage later
+     * If valid, redirect browser to next session page
      *
+     * @param $part
+     * @param LicencesRequest $request
+     * @return RedirectResponse
      */
-    public function session($part)
+    public function session($part, LicencesRequest $request): RedirectResponse
     {
-        $this->validateRequest();
-
         $licence = request()->session()->get('licence');
         request()->session()->put('licence_complete', 'no');
         $licence[$part] = request()->{$part};
+
+        if ($part === "cost_centre") {
+            $licence['cost_centre_id'] = request()->cost_centre_id;
+        }
 
         $redirectTo = (request()->get('save_summary') ? '/summary' : null);
         switch ($part) {
@@ -115,31 +121,31 @@ class LicenceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param LicencesRequest $request
      * @return Response
      */
-    public function store()
+    public function store(LicencesRequest $request)
     {
-        return Licence::create($this->validateRequest());
+        return Licence::create($request->validated());
     }
 
     /**
      * Store a newly created resource in storage.
      *
+     * @param LicencesRequest $request
      * @return RedirectResponse
      */
-    public function storeFromSession(): RedirectResponse
+    public function storeFromSession(LicencesRequest $request): RedirectResponse
     {
-        $licence = $this->validateSession('licence');
-
         // clean stuff up
-        $start = $licence['start'];
-        $stop = $licence['stop'];
+        $start = $request->start;
+        $stop = $request->stop;
 
         // normalise
-        $licence['start'] = $start['year'] . '-' . $start['month'] . '-' . $start['day'] . ' 00:00:00';
-        $licence['stop'] = $stop['year'] . '-' . $stop['month'] . '-' . $stop['day'] . ' 00:00:00';
+        $request->start = $start['year'] . '-' . $start['month'] . '-' . $start['day'] . ' 00:00:00';
+        $request->stop = $stop['year'] . '-' . $stop['month'] . '-' . $stop['day'] . ' 00:00:00';
 
-        $licence = array_merge(['tool_id' => request()->tool_id], $licence);
+        $licence = array_merge(['tool_id' => request()->tool_id], $request);
 
         $new_licence = Licence::create($licence);
 
@@ -147,7 +153,7 @@ class LicenceController extends Controller
 
         $tool = Tool::find($licence['tool_id']);
         $tool->action(
-            '<strong class="govuk-tag govuk-tag--green">New</strong> licence created and allocated to the [COST_CENTRE].
+            '<strong class="govuk-tag govuk-tag--green">New</strong> licence created and allocated to the ' . $new_licence->costCentre->name . ' cost centre.
             <a href="' . route('licence', $new_licence->id) . '">View licence</a>.'
         );
 
@@ -173,19 +179,31 @@ class LicenceController extends Controller
      */
     public function edit(Licence $licence)
     {
-        return view('forms.licence-edit', ['licence' => Licence::find($licence->id)]);
+        $licence = Licence::find($licence->id);
+
+        return view('forms.licence-edit', [
+            'licence' => $licence,
+            'cost_centres' => CostCentre::all(),
+            'start' => $this->collectDate('start', $licence->start),
+            'stop' => $this->collectDate('stop', $licence->stop)
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
+     * @param LicencesRequest $request
      * @param Licence $licence
      * @return RedirectResponse
      */
-    public function update(Request $request, Licence $licence)
+    public function update(Licence $licence, LicencesRequest $request): RedirectResponse
     {
-        $licence->update($this->validateRequest());
+        $data = $request->validated();
+        $data['start'] = $this->normaliseDate('start');
+        $data['stop'] = $this->normaliseDate('stop');
+
+        $licence->update($data);
+
         return redirect($licence->path());
     }
 
@@ -193,19 +211,12 @@ class LicenceController extends Controller
      * Remove the specified resource from storage.
      *
      * @param Licence $licence
-     * @return Response
+     * @return RedirectResponse
      */
-    public function destroy(Licence $licence)
+    public function destroy(Licence $licence): RedirectResponse
     {
-        //
-    }
-
-    /**
-     * @return array
-     */
-    protected function validateRequest(): array
-    {
-        return request()->validate(Licence::$createRules);
+        $licence->delete();
+        return redirect(route('licences'));
     }
 
     /**
@@ -232,17 +243,36 @@ class LicenceController extends Controller
         trigger_error('Session validation has failed');
     }
 
-    protected function collectDate($when): array
+    protected function collectDate($when, $is_carbon = false)
     {
-        $day = request()->{$when . '_day'};
-        $month = request()->{$when . '_month'};
-        $year = request()->{$when . '_year'};
+        if (!$is_carbon) {
+            // test if we can process
+            $day = request()->{$when . '_day'};
+            if (!$day) {
+                return null;
+            }
+
+            $month = request()->{$when . '_month'};
+            $year = request()->{$when . '_year'};
+            $carbon = Carbon::parse($year . '-' . $month . '-' . $day);
+        } else {
+            $day = $is_carbon->format('d');
+            $month = $is_carbon->format('m');
+            $year = $is_carbon->format('Y');
+            $carbon = $is_carbon;
+        }
+
         return [
             'day' => $day,
             'month' => $month,
             'year' => $year,
-            'date' => Carbon::parse($year . '-' . $month . '-' . $day)->format('l, jS F Y')
+            'date' => $carbon->format('l, jS F Y')
         ];
+    }
+
+    public function normaliseDate($when): string
+    {
+        return request()->{$when . '_year'} . '-' . request()->{$when . '_month'} . '-' . request()->{$when . '_day'} . ' 00:00:00';
     }
 
     /**
@@ -271,7 +301,7 @@ class LicenceController extends Controller
         }
 
         $complete = [
-            'cost_centre' => 0,
+            'cost_centre_id' => 0,
             'description' => 1,
             'user_limit' => 2,
             'users_current' => 3,

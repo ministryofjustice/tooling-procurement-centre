@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\CostCentre;
 use App\Models\Licence;
 use App\Models\Tool;
 use Carbon\Carbon;
@@ -23,6 +24,7 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_can_be_created()
     {
+        $this->withoutExceptionHandling();
         $this->authorisedUser();
         $tool = Tool::factory()->create();
 
@@ -30,7 +32,6 @@ class LicenceManagementTest extends TestCase
             'tool_id' => $tool->id,
             'description' => 'hello',
             'user_limit' => 1000,
-            'annual_cost' => 24140,
             'currency' => 'GB',
             'cost_per_user' => 10.99,
             'start' => '2021-09-12 00:00:00',
@@ -74,8 +75,10 @@ class LicenceManagementTest extends TestCase
 
     public function test_a_licence_can_be_updated()
     {
-        $tool = Tool::factory()->create();
+        $this->withoutExceptionHandling();
         $this->authorisedUser();
+        $tool = Tool::factory()->create();
+        $cost_centre = CostCentre::factory()->create();
 
         $this->post('/dashboard/licences', [
             'tool_id' => $tool->id,
@@ -85,24 +88,29 @@ class LicenceManagementTest extends TestCase
         $licence = Licence::first();
         $this->assertEquals('Hello', $licence->description);
 
-        $response = $this->patch('/dashboard/licences/1', [
+        $response = $this->patch('/dashboard/licences/' . $licence->id, [
             'tool_id' => $tool->id,
+            'cost_centre_id' => $cost_centre->id,
             'description' => 'This description is now a great description',
             'user_limit' => 2000,
-            'annual_cost' => 24140,
             'currency' => 'GBP',
             'cost_per_user' => 5.99,
-            'start' => '2021-09-12 00:00:00',
-            'stop' => '2022-09-11 23:59:59'
+            'start_day' => '12',
+            'start_month' => '09',
+            'start_year' => '2021',
+            'stop_day' => '11',
+            'stop_month' => '09',
+            'stop_year' => '2022'
         ]);
 
         $licence = Licence::first();
 
         $this->assertEquals('This description is now a great description', $licence->description);
         $this->assertEquals(2000, $licence->user_limit);
-        $this->assertEquals(24140, $licence->annual_cost);
         $this->assertEquals('GBP', $licence->currency);
         $this->assertEquals(5.99, $licence->cost_per_user);
+        $this->assertInstanceOf(Carbon::class, $licence->start);
+        $this->assertInstanceOf(Carbon::class, $licence->stop);
         $response->assertRedirect($licence->fresh()->path());
     }
 
@@ -143,6 +151,17 @@ class LicenceManagementTest extends TestCase
             'currency' => 'GBPL'
         ]);
         $response->assertSessionHasErrors('currency');
+    }
+
+    public function test_a_licence_can_be_deleted()
+    {
+        $licence = Licence::factory()->create();
+        $this->authorisedUser();
+
+        $this->assertCount(1, Licence::all());
+
+        $this->delete('/dashboard/licences/' . $licence->id);
+        $this->assertCount(0, Licence::all());
     }
 
     public function test_a_licence_is_removed_if_tool_deleted()

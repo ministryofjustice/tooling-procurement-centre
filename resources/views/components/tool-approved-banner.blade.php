@@ -43,7 +43,7 @@
                         <div class="govuk-checkboxes" data-module="govuk-checkboxes">
                             <div class="govuk-checkboxes__item">
                                 <input class="govuk-checkboxes__input" id="approved" name="approved" type="checkbox"
-                                       value="{{ $input_value }}" data-aria-controls="conditional-approved">
+                                       value="{{ $input_value }}" data-aria-controls="conditional-approved" />
                                 <label class="govuk-label govuk-checkboxes__label" for="approved">
                                     {{ $button_text }}
                                 </label>

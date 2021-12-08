@@ -14,6 +14,7 @@ class ContactManagementTest extends TestCase
 
     public function test_a_contact_can_be_added()
     {
+        $this->withoutExceptionHandling();
         $this->authorisedUser();
 
         $response = $this->post('dashboard/contacts', [
@@ -69,6 +70,33 @@ class ContactManagementTest extends TestCase
         $this->assertEquals($patch_name, $contact->name);
         $this->assertEquals($patch_email, $contact->email);
         $this->assertEquals($patch_slack, $contact->slack);
+
+        $response->assertRedirect($contact->path());
+    }
+
+    /**
+     * This particular test focuses on the ability to update a record using
+     * both old data and new data. For instance; we leave the name and slack as
+     * they were but change the email address, thus mimicking behaviour in the app.
+     */
+    public function test_a_contact_email_can_be_updated()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $contact = Contact::factory()->create();
+        $this->assertCount(1, Contact::all());
+
+        $patch_email = 'tooling.contact@justice.gov.uk';
+        $response = $this->patch('dashboard/contacts/' . $contact->id, [
+            'id' => $contact->id,
+            'name' => $contact->name,
+            'email' => $patch_email,
+            'slack' => $contact->slack
+        ]);
+
+        $contact = Contact::first();
+        $this->assertEquals($patch_email, $contact->email);
 
         $response->assertRedirect($contact->path());
     }

@@ -17,6 +17,13 @@
                     value="{{ $tool->id }}"
                 ></x-input>
 
+                {{-- users_limit --}}
+                <x-input
+                    name="user_limit"
+                    type="hidden"
+                    value="{{ $licence['user_limit'] }}"
+                ></x-input>
+
                 {{-- define currently used licences --}}
                 <x-form-group
                     id="users_current"

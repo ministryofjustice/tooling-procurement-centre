@@ -5,7 +5,7 @@
 <div class="govuk-breadcrumbs govuk-breadcrumbs--collapse-on-mobile">
     <ol class="govuk-breadcrumbs__list">
         <li class="govuk-breadcrumbs__list-item">
-            <a href="{{ $build_url }}">Home</a>
+            <a href="{{ $build_url }}">Dashboard</a>
         </li>
         @foreach ($paths as $path)
             @if(!empty($path))

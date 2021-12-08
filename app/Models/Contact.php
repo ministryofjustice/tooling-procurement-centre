@@ -11,12 +11,6 @@ class Contact extends Model
 
     protected $guarded = [];
 
-    public static array $createRules = [
-        'name' => 'required|unique:contacts|max:80',
-        'email' => 'required|email:rfc,dns',
-        'slack' => ''
-    ];
-
     public function path()
     {
         return '/dashboard/contacts/' . $this->slug;

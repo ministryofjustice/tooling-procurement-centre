@@ -12,7 +12,7 @@
             @foreach($costCentres as $cost_centre)
                 <div class="govuk-radios__item">
                     <input class="govuk-radios__input" id="cost-centre-{{ $loop->index }}"
-                           name="cost_centre" type="radio"
+                           name="cost_centre_id" type="radio"
                            value="{{ $cost_centre->id }}"
                            {{ $selected == $cost_centre->id ? 'checked="checked"' : '' }}
                            required>

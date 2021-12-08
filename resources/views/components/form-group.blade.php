@@ -28,6 +28,7 @@
                 id="{{ $id }}"
                 type="text"
                 name="{{ $id }}"
+                class="{{ $class }}"
                 :value="$value"
                 :required="$required"
                 :autofocus="$autofocus"></x-input>
@@ -37,6 +38,7 @@
                 id="{{ $id }}"
                 type="hidden"
                 name="{{ $id }}"
+                class="{{ $class }}"
                 :value="$value"></x-input>
             @break
             @case('password')
@@ -44,6 +46,7 @@
                 id="{{ $id }}"
                 type="password"
                 name="{{ $id }}"
+                class="{{ $class }}"
                 :required="$required"
                 :autocomplete="$autocomplete"></x-input>
             @break

@@ -1,7 +1,4 @@
 <x-app-layout>
-    <x-slot name="backlink">
-        <a href="{{ route('contacts') }}" class="govuk-back-link">Back</a>
-    </x-slot>
     <x-form-card>
         <x-slot name="title">
             Create a contact
@@ -15,9 +12,10 @@
             {{-- Select a team --}}
             <x-form-group
                 id="name"
-                label="Team"
+                label="Name"
                 summary="What is the contacts name?"
                 type="text"
+                value="{{ old('name', '') }}"
                 :required="true"
                 :autofocus="true"
             />
@@ -28,6 +26,7 @@
                 label="Email"
                 summary="Please enter the contacts email address."
                 type="text"
+                value="{{ old('email', '') }}"
                 :required="true"
             />
 
@@ -37,6 +36,7 @@
                 label="Slack ID"
                 summary="Enter a Slack member ID for this contact."
                 type="text"
+                value="{{ old('slack', '') }}"
             />
 
             <div>

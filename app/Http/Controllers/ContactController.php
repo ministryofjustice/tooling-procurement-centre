@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactsRequest;
 use App\Models\Contact;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -40,9 +42,9 @@ class ContactController extends Controller
      *
      * @return Collection
      */
-    public function store()
+    public function store(ContactsRequest $request)
     {
-        return Contact::create($this->validateRequest());
+        return Contact::create($this->validateRequest($request));
     }
 
     /**
@@ -68,18 +70,20 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Models\Contact $contact
+     * @param Contact $contact
+     * @param ContactsRequest $request
+     * @return RedirectResponse
      */
-    public function update(Contact $contact)
+    public function update(Contact $contact, ContactsRequest $request): RedirectResponse
     {
-        $contact->update($this->validateRequest());
+        $contact->update($this->validateRequest($request));
         return redirect($contact->path());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Contact $contact
+     * @param Contact $contact
      */
     public function destroy(Contact $contact)
     {
@@ -88,13 +92,14 @@ class ContactController extends Controller
     }
 
     /**
+     * @param ContactsRequest $request
      * @return array
      */
-    public function validateRequest(): array
+    public function validateRequest(ContactsRequest $request): array
     {
-        $request = request()->validate(Contact::$createRules);
+        $validated = $request->validated();
         // add slug...
-        $request['slug'] = Str::slug($request['name']);
-        return $request;
+        $validated['slug'] = Str::slug($validated['name']);
+        return $validated;
     }
 }
