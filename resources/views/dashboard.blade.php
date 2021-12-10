@@ -22,7 +22,9 @@
     </div>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <x-card-chart chart-id="tooling-dashboard-chart" aria-label="Tool"></x-card-chart>
+            <x-card-chart chart-id="tooling-dashboard-chart" aria-label="Tooling rate"></x-card-chart>
+            <x-card-chart chart-id="licence-dashboard-chart" aria-label="Licencing rates"></x-card-chart>
+            <x-card-chart chart-id="business-case-dashboard-chart" aria-label="Business Case rates"></x-card-chart>
         </div>
     </div>
     <div class="govuk-grid-row govuk-!-margin-top-9">
