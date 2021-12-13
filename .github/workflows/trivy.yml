@@ -1,4 +1,4 @@
-name: vulnerabilities
+name: Vulnerability
 on: [ push, workflow_dispatch ]
 jobs:
   build:
