@@ -13,7 +13,7 @@ jobs:
         with:
           php_version: 8.0
 
-      - name: PHPUnit Tests
+      - name: Launch TDD process using PHPUnit
         uses: php-actions/phpunit@v3
         with:
           bootstrap: vendor/autoload.php
