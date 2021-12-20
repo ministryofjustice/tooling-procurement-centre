@@ -139,7 +139,7 @@ Route::delete($bcase_base_path . '/{case}', $bcase_controller . 'destroy')->name
 
 $tool_base_path .= '/{slug}/business-cases';
 // bind business cases to tooling routes
-Route::get($tool_base_path, $bcase_controller . 'indexToolLicences')->name('business-cases-tools');
+Route::get($tool_base_path, $bcase_controller . 'indexToolBusinessCases')->name('business-cases-tools');
 Route::post($tool_base_path , $bcase_controller . 'storeFromSession')->name('business-cases-session-store');
 Route::get($tool_base_path . '/create', $bcase_controller . 'create')->name('business-cases-create');
 Route::get($tool_base_path . '/create/{part}', $bcase_controller . 'create')->name('business-cases-create-part');
