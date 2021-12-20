@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\BusinessCase;
+use App\Models\Licence;
 use App\Models\Tool;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -29,7 +30,8 @@ class BusinessCaseFactory extends Factory
             'slug' => Str::slug($name),
             'link' => $this->faker->url,
             'text' => $this->faker->sentences(5, true),
-            'tool_id' => Tool::factory()->create()->id
+            'tool_id' => Tool::factory()->create()->id,
+            'licence_id' => Licence::factory()->create()->id
         ];
     }
 }

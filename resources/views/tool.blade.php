@@ -1,8 +1,4 @@
 <x-app-layout>
-    <x-slot name="backlink">
-        <a href="{{ route('tools') }}" class="govuk-back-link">Back</a>
-    </x-slot>
-
     <span class="govuk-caption-@if(strlen($tool->description) > 60)l @else()xl @endif">{{ $tool->description }}</span>
     <h1 class="govuk-heading-xl">{{ $tool->name }} </h1>
     @php
@@ -144,7 +140,7 @@
                             <td class="govuk-table__cell">{{ $business_case->link }}</td>
                             <td class="govuk-table__cell">{{ $business_case->created_at->format('l, jS F Y') }}</td>
                             <td class="govuk-table__cell align-right">
-                                <x-nav-link href="{{ route('business-case', $business_case->id) }}" class="govuk-button">
+                                <x-nav-link href="{{ route('business-case', $business_case->slug) }}" class="govuk-button">
                                     View
                                 </x-nav-link>
                             </td>
