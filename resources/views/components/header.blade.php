@@ -47,5 +47,10 @@
 </header>
 
 <x-phase-banner phase="beta">
-    This is a new service – your <x-nav-link href="#">feedback</x-nav-link> will help us to improve it.
+    This is a new service – your
+    <x-nav-link
+        href="https://docs.google.com/forms/d/e/1FAIpQLScrG7uqRNWtGbqFlJ9lgFjOEV31VMPsv5A1peIdS3SA420e5g/viewform">
+        feedback
+    </x-nav-link>
+    will help us to improve it.
 </x-phase-banner>

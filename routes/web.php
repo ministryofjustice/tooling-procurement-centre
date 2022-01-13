@@ -132,6 +132,7 @@ $bcase_controller = 'App\Http\Controllers\BusinessCaseController@';
 $bcase_base_path = 'dashboard/business-cases';
 Route::get($bcase_base_path, $bcase_controller . 'index')->name('business-cases');
 Route::post($bcase_base_path, $bcase_controller . 'store')->name('business-cases-add');
+Route::post($bcase_base_path . '/{id}/clone', $bcase_controller . 'clone')->name('business-cases-clone');
 Route::get($bcase_base_path . '/{slug}/edit', $bcase_controller . 'edit')->name('business-cases-edit');
 Route::get($bcase_base_path . '/{slug}', $bcase_controller . 'show')->name('business-case');
 Route::patch($bcase_base_path . '/{case}', $bcase_controller . 'update')->name('business-cases-patch');

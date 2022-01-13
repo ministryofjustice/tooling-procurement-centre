@@ -30,8 +30,8 @@
 
                     {{-- Email --}}
                     <x-form-group
-                        id="email"
-                        label="Email"
+                        id="link"
+                        label="Link"
                         type="text"
                         value="{!! $business_case->link !!}"
                         :required="true"

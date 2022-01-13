@@ -143,4 +143,31 @@ class BusinessCaseManagementTest extends TestCase
         $this->assertCount(1, $response['tool']->businessCases);
         $response->assertStatus(200);
     }
+
+    public function test_a_business_case_can_be_cloned_to_a_licence()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $case = BusinessCase::factory()->create();
+        $licence = Licence::factory()->create();
+        $response = $this->post('dashboard/business-cases/' . $case->id . '/clone', [
+            'licence_id' => $licence->id,
+            'tool_id' => 2
+        ]);
+        $this->assertCount(2, BusinessCase::all());
+        $response->assertRedirect(route('business-cases'));
+    }
+
+    public function test_a_business_case_clone_fails_without_licence_id()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $this->expectException('Symfony\Component\HttpKernel\Exception\HttpException');
+
+        $case = BusinessCase::factory()->create();
+        $response = $this->post('dashboard/business-cases/' . $case->id . '/clone');
+        $response->assertStatus(500);
+    }
 }
