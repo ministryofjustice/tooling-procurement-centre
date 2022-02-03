@@ -194,6 +194,12 @@ body {
 
 .tooling-approve {
     float:none;
+
+    .govuk-checkboxes {
+        &__item {
+            min-width: 225px
+        }
+    }
 }
 
 .clearfix:after {

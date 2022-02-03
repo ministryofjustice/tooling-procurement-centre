@@ -4,7 +4,7 @@
             <span class="govuk-caption-l">
                 Modifying licence #{{ $licence->id }}
                 {!! !empty($licence->costCentre->name)
-                        ? '<br>Allocated to: <strong>' . $licence->costCentre->name . '</strong>'
+                        ? '<br>Allocated to: <strong title="' . $licence->costCentre->name . '">' . $licence->costCentre->number . '</strong>'
                         :''
                 !!}
             </span>

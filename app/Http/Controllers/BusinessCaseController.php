@@ -6,6 +6,7 @@ use App\Models\BusinessCase;
 use App\Models\Tool;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -27,6 +28,16 @@ class BusinessCaseController extends Controller
     }
 
     /**
+     * Display a listing of the resource filtered by tool.
+     *
+     * @return View
+     */
+    public function indexToolBusinessCases($slug): View
+    {
+        return view('tool-business-cases', ['tool' => Tool::where('slug', 'LIKE', $slug)->first()]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @param $slug
@@ -40,7 +51,7 @@ class BusinessCaseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
@@ -52,35 +63,35 @@ class BusinessCaseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param BusinessCase $businessCase
-     * @return \Illuminate\Http\Response
+     * @param $businessCase
+     * @return View
      */
-    public function show(BusinessCase $businessCase)
+    public function show($businessCase)
     {
-        //
+        return view('business-case', ['business_case' => BusinessCase::where('slug', 'LIKE', $businessCase)->first()]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param BusinessCase $businessCase
-     * @return \Illuminate\Http\Response
+     * @param $businessCase
+     * @return View
      */
-    public function edit(BusinessCase $businessCase)
+    public function edit($businessCase)
     {
-        //
+        return view('forms.business-case-edit', ['business_case' => BusinessCase::where('slug', 'LIKE', $businessCase)->first()]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param BusinessCase $businessCase
-     * @return \Illuminate\Http\Response
+     * @param BusinessCase $case
+     * @return RedirectResponse
      */
-    public function update(Request $request, BusinessCase $businessCase)
+    public function update(BusinessCase $case): RedirectResponse
     {
-        //
+        $case->update($this->validateRequest());
+        return redirect($case->path());
     }
 
     /**
@@ -93,6 +104,29 @@ class BusinessCaseController extends Controller
     {
         $case->delete();
         return redirect(route('business-cases'));
+    }
+
+    /**
+     *
+     */
+    public function clone(BusinessCase $case, Request $request)
+    {
+        if ($request->licence_id > 0) {
+            // get the complete business case
+            $business_case = $case->first();
+            $name = $business_case->name . ' Cloned to licence ' . $request->get('licence_id');
+            BusinessCase::create([
+                'name' => $name,
+                'slug' => Str::slug($name),
+                'link' => $business_case->link,
+                'text' => $business_case->text,
+                'tool_id' => $request->tool_id ?? $business_case->tool_id,
+                'licence_id' => $request->get('licence_id')
+            ]);
+            return redirect(route('business-cases'));
+        }
+
+        return abort(500, 'Licence ID is required.');
     }
 
     /**

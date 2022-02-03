@@ -14,7 +14,7 @@ if (toolingChart) {
                 data: {
                     "2019": 9,
                     "2020": 5,
-                    "2021": 12
+                    "2021": 32
                 },
                 backgroundColor: [
                     'rgba(75, 192, 192, 0.7)',
@@ -26,7 +26,7 @@ if (toolingChart) {
                     'rgba(153, 102, 255, 1)',
                     'rgba(255, 159, 64, 1)'
                 ],
-                borderWidth: 1
+                borderWidth: 5
             }]
         },
         options: {

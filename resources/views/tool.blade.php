@@ -1,8 +1,4 @@
 <x-app-layout>
-    <x-slot name="backlink">
-        <a href="{{ route('tools') }}" class="govuk-back-link">Back</a>
-    </x-slot>
-
     <span class="govuk-caption-@if(strlen($tool->description) > 60)l @else()xl @endif">{{ $tool->description }}</span>
     <h1 class="govuk-heading-xl">{{ $tool->name }} </h1>
     @php
@@ -79,7 +75,8 @@
                                                 <small><strong>Cost centre: </strong>
                                                     <x-nav-link
                                                         href="{{route('cost-centre', $licence->costCentre->slug)}}"
-                                                        title="">{{$licence->costCentre->number}}</x-nav-link><br>
+                                                        title="">{{$licence->costCentre->number}}</x-nav-link>
+                                                    <br>
                                                     {{$licence->costCentre->name}}
                                                 </small>
                                             @endif
@@ -127,13 +124,38 @@
         </div>
         <div class="govuk-tabs__panel" id="business-cases">
             @if($tool->businessCases && count($tool->businessCases) > 0)
-                {{-- for loop over cases --}}
+                <table class="govuk-table">
+                    <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                        <th scope="col" class="govuk-table__header">Name</th>
+                        <th scope="col" class="govuk-table__header">Documents</th>
+                        <th scope="col" class="govuk-table__header">Created</th>
+                        <th scope="col" class="govuk-table__header"></th>
+                    </tr>
+                    </thead>
+                    <tbody class="govuk-table__body">
+                    @foreach($tool->businessCases as $business_case)
+                        <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">{{ $business_case->name }}</td>
+                            <td class="govuk-table__cell">{{ $business_case->link }}</td>
+                            <td class="govuk-table__cell">{{ $business_case->created_at->format('l, jS F Y') }}</td>
+                            <td class="govuk-table__cell align-right">
+                                <x-nav-link href="{{ route('business-case', $business_case->slug) }}" class="govuk-button">
+                                    View
+                                </x-nav-link>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
             @else
                 <p class="govuk-body">
                     There are currently no business cases registered for {{$tool->name}}.
                 </p>
-                <x-nav-link class="govuk-button" href="{{route('business-cases-create', $tool->slug)}}">Add Business Case</x-nav-link>
             @endif
+            <x-nav-link class="govuk-button" href="{{route('business-cases-create', $tool->slug)}}">
+                Add Business Case
+            </x-nav-link>
         </div>
         <div class="govuk-tabs__panel" id="tooling-reviews">
             @if($tool->toolingReviews && count($tool->toolingReviews) > 0)

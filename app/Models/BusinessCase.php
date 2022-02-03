@@ -27,4 +27,9 @@ class BusinessCase extends Model
     {
         return $this->hasOne(Tool::class, 'id', 'tool_id');
     }
+
+    public function licence(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Licence::class, 'id', 'licence_id');
+    }
 }

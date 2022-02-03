@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\BusinessCase;
+use App\Models\Licence;
 use App\Models\Tool;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use phpDocumentor\Reflection\TypeResolver;
 use Tests\TestCase;
 use Tests\WithAuthUser;
 
@@ -103,5 +105,69 @@ class BusinessCaseManagementTest extends TestCase
         $response->assertRedirect('dashboard/business-cases');
 
         $this->assertCount(0, BusinessCase::all());
+    }
+
+    public function test_a_business_case_can_be_viewed()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $case = BusinessCase::factory()->create();
+        $this->assertCount(1, BusinessCase::all());
+        $this->assertEquals($case->slug, BusinessCase::first()->slug);
+
+        $response = $this->get('/dashboard/business-cases/' . $case->slug);
+        $this->assertArrayHasKey('id', $response['business_case']);
+        $response->assertStatus(200);
+    }
+
+    public function test_a_business_case_edit_form_can_be_rendered()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $case = BusinessCase::factory()->create();
+        $response = $this->get('dashboard/business-cases/' . $case->slug . '/edit');
+        $this->assertArrayHasKey('id', $response['business_case']);
+        $response->assertStatus(200);
+    }
+
+    public function test_a_list_of_business_cases_can_be_filtered_by_tool_and_indexed()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $case = BusinessCase::factory()->create();
+        $response = $this->get('dashboard/tools/' . $case->tool->slug . '/business-cases');
+        $this->assertArrayHasKey('id', $response['tool']);
+        $this->assertCount(1, $response['tool']->businessCases);
+        $response->assertStatus(200);
+    }
+
+    public function test_a_business_case_can_be_cloned_to_a_licence()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $case = BusinessCase::factory()->create();
+        $licence = Licence::factory()->create();
+        $response = $this->post('dashboard/business-cases/' . $case->id . '/clone', [
+            'licence_id' => $licence->id,
+            'tool_id' => 2
+        ]);
+        $this->assertCount(2, BusinessCase::all());
+        $response->assertRedirect(route('business-cases'));
+    }
+
+    public function test_a_business_case_clone_fails_without_licence_id()
+    {
+        $this->withoutExceptionHandling();
+        $this->authorisedUser();
+
+        $this->expectException('Symfony\Component\HttpKernel\Exception\HttpException');
+
+        $case = BusinessCase::factory()->create();
+        $response = $this->post('dashboard/business-cases/' . $case->id . '/clone');
+        $response->assertStatus(500);
     }
 }

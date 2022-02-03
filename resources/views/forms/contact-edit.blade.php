@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-form-card>
         <x-slot name="title">
-            Edit: {!! $contact->name !!}
+            Edit: {!! $contact->name ?? '' !!}
         </x-slot>
         {{-- Validation Errors --}}
         <x-auth-validation-errors class="govuk-body" :errors="$errors"/>

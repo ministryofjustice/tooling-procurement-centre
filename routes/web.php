@@ -132,6 +132,7 @@ $bcase_controller = 'App\Http\Controllers\BusinessCaseController@';
 $bcase_base_path = 'dashboard/business-cases';
 Route::get($bcase_base_path, $bcase_controller . 'index')->name('business-cases');
 Route::post($bcase_base_path, $bcase_controller . 'store')->name('business-cases-add');
+Route::post($bcase_base_path . '/{id}/clone', $bcase_controller . 'clone')->name('business-cases-clone');
 Route::get($bcase_base_path . '/{slug}/edit', $bcase_controller . 'edit')->name('business-cases-edit');
 Route::get($bcase_base_path . '/{slug}', $bcase_controller . 'show')->name('business-case');
 Route::patch($bcase_base_path . '/{case}', $bcase_controller . 'update')->name('business-cases-patch');
@@ -139,7 +140,7 @@ Route::delete($bcase_base_path . '/{case}', $bcase_controller . 'destroy')->name
 
 $tool_base_path .= '/{slug}/business-cases';
 // bind business cases to tooling routes
-Route::get($tool_base_path, $bcase_controller . 'indexToolLicences')->name('business-cases-tools');
+Route::get($tool_base_path, $bcase_controller . 'indexToolBusinessCases')->name('business-cases-tools');
 Route::post($tool_base_path , $bcase_controller . 'storeFromSession')->name('business-cases-session-store');
 Route::get($tool_base_path . '/create', $bcase_controller . 'create')->name('business-cases-create');
 Route::get($tool_base_path . '/create/{part}', $bcase_controller . 'create')->name('business-cases-create-part');
